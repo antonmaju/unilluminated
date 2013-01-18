@@ -1,0 +1,11 @@
+extends ../layout
+
+block privateCss
+    != html.cssLoader(['/stylesheets/home.css'])
+
+block content
+    #main
+        h2
+            img(alt='Unilluminated', src='/images/game/title.png')
+            div
+                a.btn(href='/start') Start
