@@ -1,2 +1,24 @@
-@import "normalize.css";
+body{background-color: #333;}
 
+#home
+{
+  width:600px;
+  height:350px;
+  position:absolute;
+  left:50%;top:50%;
+  margin-left:-300px;
+  margin-top:-175px;
+  text-align:center;
+  background-color:#000;
+
+  #logo {margin-top:25px;}
+
+  .button{
+    border:0 none; color: white; font-size:0.9em;padding:0.3em 1em;border-radius:0.2em;background-color: #006DCC;
+    text-decoration: none;
+    background-image: linear-gradient(to bottom, #0088CC, #0044CC);
+    background-repeat: repeat-x;
+
+    &:hover{ background-image: linear-gradient(to bottom, #0077CC, #0033CC); }
+  }
+}

@@ -4,8 +4,8 @@ block privateCss
     != html.cssLoader(['/stylesheets/home.css'])
 
 block content
-    #main
+    #home
         h2
-            img(alt='Unilluminated', src='/images/game/title.png')
+            img#logo(alt='Unilluminated', src='#{config.assetsUrl}/images/game/title.png')
             div
-                a.btn(href='/start') Start
+                a.button(href='/start') Start
