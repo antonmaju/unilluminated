@@ -17,3 +17,5 @@ dummy
 node_modules
 home.css
 site.css
+/.bundle
+/db/*.sqlite3

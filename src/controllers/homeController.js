@@ -11,12 +11,20 @@ module.exports = {
             resp.render('home/index', model);
         }
     },
-    start: {
-        route:'/start',
+    main :{
+        route :'/main-menu',
         method: 'get',
         handler: function(req, resp, next){
-            var model =controllerHelper.buildModel({}, req);
-            resp.render('home/start', model);
+            var model = controllerHelper.buildModel({}, req);
+            resp.render('home/main', model);
+        }
+    },
+    selection: {
+        route:'/selection/:mode',
+        method: 'get',
+        handler: function(req, resp, next){
+            var model = controllerHelper.buildModel({}, req);
+            resp.render('home/selection', model);
         }
     }
 };

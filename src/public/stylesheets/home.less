@@ -1,24 +1,105 @@
 body{background-color: #333;}
 
+.main-screen
+{
+    position:absolute;
+    left:50%;top:50%;
+    text-align:center;
+    background-color:#000;
+
+    #logo {margin-top:25px;}
+}
+
 #home
 {
-  width:600px;
-  height:350px;
-  position:absolute;
-  left:50%;top:50%;
-  margin-left:-300px;
-  margin-top:-175px;
-  text-align:center;
-  background-color:#000;
+    width:600px;
+    height:350px;
+    margin-left:-300px;
+    margin-top:-175px;
 
-  #logo {margin-top:25px;}
+    .button{
+        border:0 none; color: white; font-size:0.9em;padding:0.3em 1em;border-radius:0.2em;background-color: #006DCC;
+        text-decoration: none;
+        background-image: linear-gradient(to bottom, #0088CC, #0044CC);
+        background-repeat: repeat-x;
 
-  .button{
-    border:0 none; color: white; font-size:0.9em;padding:0.3em 1em;border-radius:0.2em;background-color: #006DCC;
-    text-decoration: none;
-    background-image: linear-gradient(to bottom, #0088CC, #0044CC);
-    background-repeat: repeat-x;
+        &:hover{ background-image: linear-gradient(to bottom, #0077CC, #0033CC); }
+    }
+}
 
-    &:hover{ background-image: linear-gradient(to bottom, #0077CC, #0033CC); }
-  }
+#main-menu
+{
+    width:600px;
+    height:450px;
+    margin-left:-300px;
+    margin-top:-225px;
+
+    a{
+        font-weight: bold;
+        font-size: 1.2em;
+        text-decoration: none;
+        color: blue;
+
+        &:hover
+        {
+            color:#99f;
+        }
+    }
+}
+
+#selection
+{
+    width:600px;
+    height:450px;
+    margin-left:-300px;
+    margin-top:-225px;
+
+    padding: 25px;
+
+    h2
+    {
+        color:white;
+        margin: 10px auto;
+    }
+
+    .char{
+        float:left;
+        width:285px;
+        text-decoration:none;
+        color: white;
+        padding: 20px 0;
+
+        img{
+            width: 225px;
+            height: 225px;
+            margin:auto;
+        }
+        &:hover
+        {
+            background-color:#333;
+        }
+
+        .title
+        {
+            text-transform: uppercase;
+            margin: 20px auto;
+        }
+
+        .desc{
+            padding: 10px;
+        }
+    }
+
+    .left
+    {
+        margin-right: 15px;
+    }
+    .right
+    {
+        margin-left: 15px;
+    }
+
+
+
+
 }

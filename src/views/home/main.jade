@@ -1,0 +1,17 @@
+extends ../layout
+
+block privateCss
+    != html.cssLoader(['/stylesheets/home.css'])
+
+block content
+    #main-menu.main-screen
+        h2
+            img#logo(alt='Unilluminated', src='#{config.assetsUrl}/images/game/title.png')
+        div
+            a.button(href='/selection/1p') New 1P Game
+        div
+            a.button(href='/selection/2p') New 2P Game
+        div
+            a.button(href='#') Settings
+        div
+            a.button(href='#') Credits
