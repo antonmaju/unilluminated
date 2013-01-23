@@ -1,4 +1,6 @@
 module.exports = {
     config: require('./config'),
-    controllerHelper: require('./utils/controllerHelper')
+    controllerHelpers : require('./utils/controllerHelpers'),
+    dbHelpers : require('./utils/dbHelpers'),
+    htmlHelpers : require('./utils/htmlHelpers')
 }

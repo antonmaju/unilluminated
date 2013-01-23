@@ -11,6 +11,7 @@
     "jade": "*",
 	"socket.io": "= 0.9.10",
 	"less-middleware": "= 0.1.8",
-	"mongodb": "= 1.1.11"
+	"mongodb": "= 1.1.11",
+    "should" : ">= 1.2.1"
   }
 }

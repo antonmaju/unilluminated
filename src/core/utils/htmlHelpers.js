@@ -1,5 +1,10 @@
 var config = require('../config');
 
+/***
+ * Returns  link tags in HTML string
+ * @param {Array}files Collection of relative css paths
+ * @return {String} Link tags
+ */
 exports.cssLoader = function(files){
     if(!files)
         return '';
@@ -15,6 +20,11 @@ exports.cssLoader = function(files){
     return str;
 };
 
+/**
+ * Return script tags in string
+ * @param {Array} files  Collection od relative js path
+ * @return {String} Script tags
+ */
 exports.jsLoader = function (files){
     if(! files)
         return '';
