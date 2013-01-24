@@ -26,5 +26,3 @@ exports.getClient = function(callback){
         }
     });
 }
-
-
