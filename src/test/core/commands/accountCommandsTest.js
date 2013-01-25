@@ -28,7 +28,7 @@ describe('AccountCommands', function(){
             var dummy = {name: 'ozma'};
             testHelpers.create(collName, dummy, function(cb1){
                 accountCommands.create(dummy.name, function(cb2){
-                    should.exist(cb.error);
+                    should.exist(cb2.error);
                     testHelpers.find(collName, {name:dummy.name}, function(cb3){
                         cb3.docs.length.should.equal(1);
                         done();
@@ -54,7 +54,7 @@ describe('AccountCommands', function(){
             var dummy = {name: 'ozma'};
             testHelpers.create(collName, dummy, function(cb1){
                 accountCommands.delete(dummy.name, function(cb2){
-                    should.not.exist(cb.error);
+                    should.not.exist(cb2.error);
                     testHelpers.find(collName, {name:dummy.name}, function(cb3){
                         cb3.docs.length.should.equal(0);
                         done();

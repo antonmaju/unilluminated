@@ -23,7 +23,7 @@ module.exports = {
         route:'/selection/:mode',
         method: 'get',
         handler: function(req, resp, next){
-            var model = controllerHelper.buildModel({}, req);
+            var model = controllerHelper.buildModel({mode:req.params.mode}, req);
             resp.render('home/selection', model);
         }
     }

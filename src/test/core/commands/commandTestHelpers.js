@@ -7,7 +7,7 @@ var coreServices = require('../../../core/coreServices'),
  * @param {function} callback
  */
 exports.clear = function(collName, callback){
-    getClient(function(err0, client){
+    dbHelpers.getClient(function(err0, client){
         if(err0){
             client.close();
             callback({err: err0});
@@ -30,7 +30,7 @@ exports.clear = function(collName, callback){
  * @param callback
  */
 exports.create = function(collName, model, callback){
-    getClient(function(err0, client){
+    dbHelpers.getClient(function(err0, client){
         if(err0){
             client.close();
             callback({err: err0});
@@ -47,7 +47,7 @@ exports.create = function(collName, model, callback){
 };
 
 exports.find = function(collName, query, callback){
-    getClient(function(err0, client){
+    dbHelpers.getClient(function(err0, client){
         if(err0){
             client.close();
             callback({err: err0});
@@ -55,7 +55,7 @@ exports.find = function(collName, query, callback){
         }
 
         client.collection(collName, function(cerr, coll){
-            coll.find(query, {}, function(err, docs){
+            coll.find(query).toArray(function(err, docs){
                 client.close();
                 callback({docs : docs})
             });
