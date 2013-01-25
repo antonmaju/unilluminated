@@ -1,0 +1,16 @@
+extends ../layout
+
+block privateCss
+    != html.cssLoader(['/stylesheets/home.css'])
+
+block content
+    #naming.main-screen
+        h2
+            img#logo(alt='Unilluminated', src='#{config.assetsUrl}/images/game/title.png')
+
+        form
+            label Please input your character name
+            input(type='text', name='name')
+
+            div
+                input(type='submit', value='Register')

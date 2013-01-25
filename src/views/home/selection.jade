@@ -8,13 +8,13 @@ block content
         h2
             |Please select a character
 
-        a.char.left(href='#')
+        a.char.left(href='/naming/#{model.mode}/heroine')
             img#logo(alt='Heroine', src='#{config.assetsUrl}/images/game/girl_front.png')
             .title Heroine
             .desc
                 |As a heroine, you will need to find a way to get the sacred flower.
 
-        a.char.right(href='#')
+        a.char.right(href='/naming/#{model.mode}/guardian')
             img#logo(alt='Guardian',src='#{config.assetsUrl}/images/game/monster_front.png')
             .title Guardian
             .desc

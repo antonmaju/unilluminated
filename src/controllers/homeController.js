@@ -1,6 +1,7 @@
 var coreServices = require('../core/coreServices'),
-    controllerHelper = coreServices.controllerHelper,
+    controllerHelper = coreServices.controllerHelpers,
     filters = coreServices.filters;
+
 
 module.exports = {
     index: {
@@ -20,11 +21,22 @@ module.exports = {
         }
     },
     selection: {
-        route:'/selection/:mode',
+        route:'/selection/:mode(1p|2p)',
         method: 'get',
         handler: function(req, resp, next){
             var model = controllerHelper.buildModel({mode:req.params.mode}, req);
             resp.render('home/selection', model);
+        }
+    },
+    naming : {
+        route : '/naming/:mode(1p|2p)/:char(heroine|guardian)',
+        method: 'get',
+        handler: function(req, resp, next){
+            var model = controllerHelper.buildModel({
+                mode : req.params.mode,
+                char : req.params.heroine
+            }, req);
+            resp.render('home/naming',model);
         }
     }
 };
