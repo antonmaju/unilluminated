@@ -1,5 +1,25 @@
 body{background-color: #333;}
 
+fieldset
+{
+    border: none 0 transparent;
+}
+
+.button{
+    border:0 none; color: white; font-size:0.9em;padding:0.3em 1em;border-radius:0.2em;background-color: #006DCC;
+    text-decoration: none;
+    background-image: linear-gradient(to bottom, #0088CC, #0044CC);
+    background-repeat: repeat-x;
+
+    &:hover{ background-image: linear-gradient(to bottom, #0077CC, #0033CC); }
+}
+
+.error
+{
+    color: red;
+    margin-bottom: 20px;
+}
+
 .main-screen
 {
     position:absolute;
@@ -16,15 +36,6 @@ body{background-color: #333;}
     height:350px;
     margin-left:-300px;
     margin-top:-175px;
-
-    .button{
-        border:0 none; color: white; font-size:0.9em;padding:0.3em 1em;border-radius:0.2em;background-color: #006DCC;
-        text-decoration: none;
-        background-image: linear-gradient(to bottom, #0088CC, #0044CC);
-        background-repeat: repeat-x;
-
-        &:hover{ background-image: linear-gradient(to bottom, #0077CC, #0033CC); }
-    }
 }
 
 #main-menu
@@ -106,4 +117,19 @@ body{background-color: #333;}
     height:350px;
     margin-left:-300px;
     margin-top:-175px;
+    text-align: center;
+
+    .label {color:white;}
+    padding:20px;
+
+    fieldset{ margin: 120px auto; }
+
+    #name {
+        padding:10px;
+        width: 400px;
+        margin: 20px;
+        font-weight:bold;
+        font-size:1.2em;
+
+    }
 }

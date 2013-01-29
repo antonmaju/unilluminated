@@ -5,12 +5,17 @@ block privateCss
 
 block content
     #naming.main-screen
-        h2
-            img#logo(alt='Unilluminated', src='#{config.assetsUrl}/images/game/title.png')
 
-        form
-            label Please input your character name
-            input(type='text', name='name')
+        form(method='post')
 
-            div
-                input(type='submit', value='Register')
+            fieldset
+                .label Please input your character name
+
+                input#name(type='text', name='name')
+
+                - if (locals.errors && locals.errors.length > 0)
+                    .error
+                        = locals.errors[0].message
+
+                div
+                    input.button(type='submit', value='Register')

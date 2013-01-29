@@ -20,7 +20,7 @@ function hasError(client, err, callback){
 exports.create = function(name, callback){
     if(!name)
     {
-        callback({error:'Name is required!'});
+        callback({error:{message:'Name is required!'}});
         return;
     }
 
@@ -34,7 +34,7 @@ exports.create = function(name, callback){
                 if(hasError(client, err1, callback)) return;
                 if(doc){
                     client.close();
-                    callback({error:'Duplicate id'});
+                    callback({error: {message:'Duplicate id'}});
                     return;
                 }
 

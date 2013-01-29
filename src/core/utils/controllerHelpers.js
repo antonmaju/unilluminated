@@ -13,6 +13,6 @@ exports.buildModel = function(model, req){
     locals.req = req;
     locals.config = config;
     locals.html = htmlHelpers;
-    locals.modelErrors = req.modelErrors || [];
+    locals.errors = req.errors || [];
     return locals;
 }

@@ -38,5 +38,35 @@ module.exports = {
             }, req);
             resp.render('home/naming',model);
         }
+    },
+    register: {
+        route: '/naming/:mode(1p|2p)/:char(heroine|guardian)',
+        method: 'post',
+        handler: function(req, resp, next){
+            var errors = [];
+            var model = null;
+
+            if(! req.body.name){
+                errors.push({ message: 'Name is required'});
+            }
+
+            console.log(errors.length);
+            if(errors.length >  0){
+                req.errors = errors;
+                model = controllerHelper.buildModel({
+                    name: req.body.name,
+                    mode:req.params.mode
+                }, req);
+                resp.render('home/naming', model);
+                return;
+            }
+
+            model = controllerHelper.buildModel({
+                name: req.body.name,
+                mode:req.params.mode
+            }, req);
+
+            resp.render('home/naming', model);
+        }
     }
 };
