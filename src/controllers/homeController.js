@@ -1,6 +1,7 @@
 var coreServices = require('../core/coreServices'),
     controllerHelper = coreServices.controllerHelpers,
-    filters = coreServices.filters;
+    filters = coreServices.filters,
+    accountCommands = require('../core/commands/accountCommands');
 
 
 module.exports = {
@@ -50,7 +51,7 @@ module.exports = {
                 errors.push({ message: 'Name is required'});
             }
 
-            console.log(errors.length);
+
             if(errors.length >  0){
                 req.errors = errors;
                 model = controllerHelper.buildModel({
@@ -61,12 +62,25 @@ module.exports = {
                 return;
             }
 
+            /*
+            accountCommands.create(req.body.name, function(result){
+
+
+            });
+            */
+
+
+            req.session.name = req.body.name;
+
             model = controllerHelper.buildModel({
                 name: req.body.name,
-                mode:req.params.mode
+                mode: req.params.mode
             }, req);
 
             resp.render('home/naming', model);
+
+
+
         }
     }
 };

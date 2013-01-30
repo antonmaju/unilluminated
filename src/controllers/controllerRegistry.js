@@ -5,7 +5,9 @@
 
 exports.register = (function(){
 
-    var homeController = require('./homeController');
+    var homeController = require('./homeController'),
+        gameController = require('./gameController');
+
 
     function registerController(app, controller){
 
@@ -31,12 +33,17 @@ exports.register = (function(){
             if(afterFilters)
                 pipeline.push.apply(pipeline, afterFilters);
             app[action.method](action.route, pipeline);
+
+
+            //app.get('/items', [cookieParser, ])
         }
     }
 
     function register(app){
 
         registerController(app, homeController);
+        registerController(app, gameController);
+
     }
 
     return register;
