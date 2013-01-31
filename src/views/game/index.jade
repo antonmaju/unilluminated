@@ -1,6 +1,12 @@
+extends ../layout
+
 block privateCss
     != html.cssLoader(['/stylesheets/game.css'])
 
-#container
-    canvas#canvas
-        |Your browser does not support canvas
+block privateJs
+    != html.jsLoader(['/js/gameClientBundle.js'])
+
+block content
+    #container
+        canvas#canvas
+            |Your browser does not support canvas

@@ -17,8 +17,8 @@ function hasError(client, err, callback){
  * @param {string} name
  * @param {function} callback
  */
-exports.create = function(name, callback){
-    if(!name)
+exports.create = function(model, callback){
+    if(! model || !model.name)
     {
         callback({error:{message:'Name is required!'}});
         return;
@@ -30,7 +30,7 @@ exports.create = function(name, callback){
         client.collection(collName, function(cerr, coll){
             if(hasError(client, cerr, callback)) return;
 
-            coll.findOne({name : name }, function(err1, doc){
+            coll.findOne({name : model.name }, function(err1, doc){
                 if(hasError(client, err1, callback)) return;
                 if(doc){
                     client.close();
@@ -38,9 +38,9 @@ exports.create = function(name, callback){
                     return;
                 }
 
-                var data = {name:name, created: new Date()};
+                model.createdDate = new Date();
 
-                coll.insert(data, {safe:true}, function(err2, docs){
+                coll.insert(model, {safe:true}, function(err2, docs){
                     if(hasError(client, err2, callback)) return;
                     client.close();
                     callback({doc: docs[0]});
@@ -49,6 +49,8 @@ exports.create = function(name, callback){
         });
     });
 };
+
+
 
 /**
  * Delete an account by its id

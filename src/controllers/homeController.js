@@ -51,36 +51,34 @@ module.exports = {
                 errors.push({ message: 'Name is required'});
             }
 
+            var  model = {
+                name : req.body.name,
+                mode : req.params.mode,
+                char : req.params.char
+            };
 
             if(errors.length >  0){
                 req.errors = errors;
-                model = controllerHelper.buildModel({
-                    name: req.body.name,
-                    mode:req.params.mode
-                }, req);
+                model = controllerHelper.buildModel(model, req);
                 resp.render('home/naming', model);
                 return;
             }
 
-            /*
-            accountCommands.create(req.body.name, function(result){
+            accountCommands.create(model, function(result){
 
+                if(result.error) {
+                    req.errors = [result.error];
+                    model = controllerHelper.buildModel(model, req);
+                    resp.render('home/naming', model);
+                    return;
+                }
+
+                req.session.name = req.body.name;
+                req.session.id = result.doc._id.toString();
+
+                resp.redirect('/game/'+result.doc._id.toString());
 
             });
-            */
-
-
-            req.session.name = req.body.name;
-
-            model = controllerHelper.buildModel({
-                name: req.body.name,
-                mode: req.params.mode
-            }, req);
-
-            resp.render('home/naming', model);
-
-
-
         }
     }
 };

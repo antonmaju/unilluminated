@@ -18,7 +18,7 @@ describe('AccountCommands', function(){
         });
 
         it('wont add empty user name', function(done){
-            accountCommands.create('',function(cb){
+            accountCommands.create({},function(cb){
                 should.exist(cb.error);
                 done();
             });
@@ -27,7 +27,7 @@ describe('AccountCommands', function(){
         it('cant create duplicate user name', function(done){
             var dummy = {name: 'ozma'};
             testHelpers.create(collName, dummy, function(cb1){
-                accountCommands.create(dummy.name, function(cb2){
+                accountCommands.create(dummy, function(cb2){
                     should.exist(cb2.error);
                     testHelpers.find(collName, {name:dummy.name}, function(cb3){
                         cb3.docs.length.should.equal(1);
@@ -39,9 +39,10 @@ describe('AccountCommands', function(){
         });
 
         it('can add unique user name', function(done){
-            accountCommands.create('jake', function(cb){
+            var dummy = {name:'jake'};
+            accountCommands.create(dummy, function(cb){
                 should.not.exist(cb.error);
-                testHelpers.find(collName, {name:'jake'}, function(cb2){
+                testHelpers.find(collName, {name:dummy.name}, function(cb2){
                     should.exist(cb2.docs);
                     done();
                 });

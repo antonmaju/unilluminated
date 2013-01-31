@@ -40,10 +40,8 @@ exports.register = (function(){
     }
 
     function register(app){
-
         registerController(app, homeController);
         registerController(app, gameController);
-
     }
 
     return register;
