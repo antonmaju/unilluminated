@@ -1,7 +1,12 @@
 var coreServices = require('../core/coreServices'),
-    controllerHelper = coreServices.controllerHelpers;
+    controllerHelper = coreServices.controllerHelpers,
+    filters = coreServices.filters;
 
 module.exports ={
+    settings: {
+        beforeFilters : [filters.authorize()]
+    },
+
     index: {
         route: '/game/:id',
         method:'get',
