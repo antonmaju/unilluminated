@@ -1,10 +1,21 @@
 module.exports = (function(){
 
     var GameTypes = require('./GameTypes'),
+        GameStates = require('./GameStates'),
+        GameUtils = require('./commonUtils'),
         event = require('events');
 
     var Game = function(options){
         event.EventEmitter.call(this);
+
+        var defaults = {
+            gameType: GameTypes.SinglePlayer,
+            state : GameStates.Stopped
+        };
+
+
+        this.options = GameUtils.extends({}, defaults, options);
+        this._init();
 
     }
 
