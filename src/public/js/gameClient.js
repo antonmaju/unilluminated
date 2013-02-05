@@ -1,10 +1,16 @@
 jQuery(function(){
 
+    var GameSystem = require('../../core/game/client/clientRegistry');
+    var viewManager =  new GameSystem.ViewManager();
+    var imageManager = new GameSystem.ImageManager();
+
     var canvas = document.getElementById('canvas'),
         context = canvas.getContext('2d');
 
     var $container = $('#container');
     var widthRatio =4/3;
+
+    var socket = io.connect('http://localhost:3000');
 
     //this resize function is from HTML5Rocks.com
     function resizeArea(){
@@ -24,6 +30,13 @@ jQuery(function(){
         $(canvas).attr('width',newWidth).attr('height', newHeight);
     }
 
+    var game = new GameSystem.Game({
+        viewManager : viewManager,
+        imageManager : imageManager,
+        context:context,
+        socket: socket
+    });
+
 
     $(window).resize(function(evt){
         resizeArea();
@@ -33,5 +46,6 @@ jQuery(function(){
 
     $container.show();
     resizeArea();
+    game.emit('initializing');
 
 });

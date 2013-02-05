@@ -15,5 +15,6 @@ module.exports ={
             var model =controllerHelper.buildModel({}, req);
             resp.render('game/index', model);
         }
-    }
+    },
+
 };

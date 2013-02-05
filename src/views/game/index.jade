@@ -4,7 +4,7 @@ block privateCss
     != html.cssLoader(['/stylesheets/game.css'])
 
 block privateJs
-    != html.jsLoader(['/js/gameClientBundle.js'])
+    != html.jsLoader(['/js/requestNextAnimationFrame.js','/socket.io/socket.io.js','/js/gameClientBundle.js'])
 
 block content
     #container

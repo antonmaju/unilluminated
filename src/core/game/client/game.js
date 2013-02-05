@@ -1,13 +1,20 @@
 var Game = require('../game');
 
 
-Game.prototype._init = function()
-{
-
-};
 
 Game.prototype._initEventHandlers = function(){
+    var socket = this.options.socket;
 
+    this.on('initializing', function(data){
+
+        socket.emit('resourceRequest');
+
+    });
+
+    socket.on('resourceResponse', function(data){
+        alert(JSON.stringify(data, null, 4));
+        //console.log(data);
+    });
 };
 
 Game.prototype._initViews = function(){
@@ -41,5 +48,10 @@ Game.prototype.render = function(){
 
 };
 
+Game.prototype._init = function()
+{
+    this._initEventHandlers();
+};
 
+module.exports = Game;
 

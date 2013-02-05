@@ -21,4 +21,6 @@ exports.extends = function(obj1, obj2, obj3){
         if(obj3)
             merge(obj1, obj3);
     }
+
+    return obj1;
 };

@@ -35,6 +35,8 @@ module.exports = (function(){
 
     LoadingView.prototype.resize = function(){
 
+
+
     };
 
     LoadingView.prototype.animate = function(time){

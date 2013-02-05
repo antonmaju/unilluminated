@@ -15,7 +15,8 @@ module.exports = (function(){
 
 
         this.options = GameUtils.extends({}, defaults, options);
-        this._init();
+        if(this._init)
+            this._init();
 
     }
 

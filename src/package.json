@@ -12,6 +12,7 @@
 	"socket.io": "= 0.9.10",
 	"less-middleware": "= 0.1.8",
 	"mongodb": "= 1.1.11",
-    "should" : ">= 1.2.1"
+    "should" : ">= 1.2.1",
+    "optimist": "0.3.5"
   }
 }
