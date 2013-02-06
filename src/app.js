@@ -24,6 +24,7 @@ app.configure(function(){
         src: __dirname + '/public',
         compress: true
     }));
+    app.use(express.compress());
     app.use(express.favicon());
     app.use(express.logger('dev'));
     app.use(express.bodyParser());
@@ -45,6 +46,10 @@ app.configure('development', function(){
 
 var server = http.createServer(app);
 var io = require('socket.io').listen(server);
+
+io.enable('browser client minification');
+io.enable('browser client etag');          
+io.enable('browser client gzip');
 
 controllerRegistry.register(app);
 GameEngine.start(app, io);
