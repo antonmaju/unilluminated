@@ -1,7 +1,7 @@
 module.exports = (function(){
 
-    var GameTypes = require('./GameTypes'),
-        GameStates = require('./GameStates'),
+    var GameTypes = require('./gameTypes'),
+        GameStates = require('./gameStates'),
         GameUtils = require('./commonUtils'),
         event = require('events');
 

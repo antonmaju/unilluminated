@@ -1,0 +1,9 @@
+{
+    "mongoServer"   : "your mongo server",
+    "mongoPort"     : "your mongo port",
+    "mongoDatabase" : "unilluminated",
+    "mongoUser"     : "your mongo User if any",
+    "mongoPassword" : "your mongo password if any",
+    "assetsUrl"     : "your asset url",
+    "webUrl"        : "your web url"
+}

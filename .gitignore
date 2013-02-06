@@ -18,6 +18,7 @@ node_modules
 home.css
 site.css
 game.css
+config.json
 gameClientBundle.js
 /.bundle
 /db/*.sqlite3

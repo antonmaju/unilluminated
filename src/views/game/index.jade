@@ -4,7 +4,13 @@ block privateCss
     != html.cssLoader(['/stylesheets/game.css'])
 
 block privateJs
-    != html.jsLoader(['/js/requestNextAnimationFrame.js','/socket.io/socket.io.js','/js/gameClientBundle.js'])
+    script(src='/socket.io/socket.io.js')
+    script(type='text/javascript')
+        var settings ={
+            webUrl : '!{config.webUrl}'
+        }
+    != html.jsLoader(['/js/requestNextAnimationFrame.js','/js/gameClientBundle.js'])
+
 
 block content
     #container

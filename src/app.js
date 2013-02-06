@@ -9,12 +9,15 @@ var express = require('express'),
     lessMiddleware = require('less-middleware'),
     controllerRegistry = require('./controllers/controllerRegistry') ,
     GameEngine = require('./core/game/server/engine'),
-    argv = require('optimist').argv;
+    nconf = require('nconf');
 
 var app = express();
 
+
+
+
 app.configure(function(){
-    app.set('port', argv.port || process.env.PORT ||   3000);
+    app.set('port', nconf.get('port') ||   3000);
     app.set('views', __dirname + '/views');
     app.set('view engine', 'jade');
     app.use(lessMiddleware({

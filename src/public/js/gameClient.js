@@ -1,5 +1,4 @@
-jQuery(function(){
-
+$(function(){
     var GameSystem = require('../../core/game/client/clientRegistry');
     var viewManager =  new GameSystem.ViewManager();
     var imageManager = new GameSystem.ImageManager();
@@ -10,7 +9,7 @@ jQuery(function(){
     var $container = $('#container');
     var widthRatio =4/3;
 
-    var socket = io.connect('http://localhost:3000');
+    var socket = io.connect(settings.webUrl);
 
     //this resize function is from HTML5Rocks.com
     function resizeArea(){
@@ -41,11 +40,12 @@ jQuery(function(){
     $(window).resize(function(evt){
         resizeArea();
     }).bind('orientationchange', function(){
-        resizeArea();
-    });
+            resizeArea();
+        });
 
     $container.show();
     resizeArea();
     game.emit('initializing');
 
 });
+

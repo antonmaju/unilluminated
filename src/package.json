@@ -13,6 +13,6 @@
 	"less-middleware": "= 0.1.8",
 	"mongodb": "= 1.1.11",
     "should" : ">= 1.2.1",
-    "optimist": "0.3.5"
+    "nconf" : ">= 0.6.7"
   }
 }
