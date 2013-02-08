@@ -9,39 +9,32 @@ module.exports = {
         route: '/',
         method: 'get',
         handler: function(req, resp, next){
-            var model =controllerHelper.buildModel({}, req);
-            resp.render('home/index', model);
+            controllerHelper.renderView('home/index',{}, req, resp);
         }
     },
     main :{
         route :'/main-menu',
         method: 'get',
         handler: function(req, resp, next){
-            var model = controllerHelper.buildModel({}, req);
-            resp.render('home/main', model);
+            controllerHelper.renderView('home/main',{}, req, resp);
         }
     },
     selection: {
         route:'/selection/:mode(1p|2p)',
         method: 'get',
         handler: function(req, resp, next){
-            var model = controllerHelper.buildModel({mode:req.params.mode}, req);
-            resp.render('home/selection', model);
+            controllerHelper.renderView('home/selection',{mode:req.params.mode}, req, resp);
         }
     },
     naming : {
-        route : '/naming/:mode(1p|2p)/:char(heroine|guardian)',
+        route : '/register',
         method: 'get',
         handler: function(req, resp, next){
-            var model = controllerHelper.buildModel({
-                mode : req.params.mode,
-                char : req.params.heroine
-            }, req);
-            resp.render('home/naming',model);
+            controllerHelper.renderView('home/register',{}, req, resp);
         }
     },
     register: {
-        route: '/naming/:mode(1p|2p)/:char(heroine|guardian)',
+        route: '/register',
         method: 'post',
         handler: function(req, resp, next){
             var errors = [];
@@ -51,16 +44,11 @@ module.exports = {
                 errors.push({ message: 'Name is required'});
             }
 
-            var  model = {
-                name : req.body.name,
-                mode : req.params.mode,
-                char : req.params.char
-            };
+            var  model = { name : req.body.name };
 
             if(errors.length >  0){
                 req.errors = errors;
-                model = controllerHelper.buildModel(model, req);
-                resp.render('home/naming', model);
+                controllerHelper.renderView('home/register',model, req, resp);
                 return;
             }
 
@@ -68,15 +56,13 @@ module.exports = {
 
                 if(result.error) {
                     req.errors = [result.error];
-                    model = controllerHelper.buildModel(model, req);
-                    resp.render('home/naming', model);
+                    controllerHelper.renderView('home/register',model, req, resp);
                     return;
                 }
 
                 req.session.name = req.body.name;
                 req.session.id = result.doc._id.toString();
-
-                resp.redirect('/game/'+result.doc._id.toString());
+                controllerHelper.renderView('home/main',{}, req, resp);
 
             });
         }

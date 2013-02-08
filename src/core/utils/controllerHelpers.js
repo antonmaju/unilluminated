@@ -8,11 +8,16 @@ var config = require('../config'),
  * @param {Object} req
  */
 
-exports.buildModel = function(model, req){
+exports.buildModel = buildModel = function(model, req){
     var locals = { model: model};
     locals.req = req;
     locals.config = config;
     locals.html = htmlHelpers;
     locals.errors = req.errors || [];
     return locals;
-}
+};
+
+exports.renderView = function(view, model, req, resp){
+    var locals = buildModel(model, req);
+    resp.render(view, locals);
+};

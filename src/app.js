@@ -48,7 +48,7 @@ var server = http.createServer(app);
 var io = require('socket.io').listen(server);
 
 io.enable('browser client minification');
-io.enable('browser client etag');          
+io.enable('browser client etag');
 io.enable('browser client gzip');
 
 controllerRegistry.register(app);
