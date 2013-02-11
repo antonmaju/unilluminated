@@ -11,7 +11,7 @@ module.exports = (function(){
             minInterval : 500
         };
 
-        this.options = GameUtils.extend({},defaults,options);
+        this.options = GameUtils.extends({},defaults,options);
         this._init();
     }
 

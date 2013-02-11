@@ -19,7 +19,6 @@ $(function(){
         if (newWidthRatio > widthRatio) {
             newWidth = newHeight * widthRatio;
             $container.css('height', newHeight + 'px').css('width', newWidth + 'px');
-
         } else { // window height is too high relative to desired game height
             newHeight = newWidth / widthRatio;
             $container.css('width',  newWidth + 'px').css('height', newHeight +'px');
@@ -40,8 +39,8 @@ $(function(){
     $(window).resize(function(evt){
         resizeArea();
     }).bind('orientationchange', function(){
-            resizeArea();
-        });
+        resizeArea();
+    });
 
     $container.show();
     resizeArea();

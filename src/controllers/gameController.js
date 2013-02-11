@@ -14,8 +14,7 @@ module.exports ={
         route: '/game/:id',
         method:'get',
         handler: function(req, resp, next){
-            controllerHelper.renderView('game/index',{}, req, resp);
-
+            controllerHelper.renderView('game/index',{id: req.params._id}, req, resp);
         }
     },
     create : {

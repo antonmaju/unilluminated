@@ -7,7 +7,8 @@ block privateJs
     script(src='/socket.io/socket.io.js')
     script(type='text/javascript')
         var settings ={
-            webUrl : '!{config.webUrl}'
+            webUrl : '!{config.webUrl}',
+            id     : '!{model.id}'
         }
     != html.jsLoader(['/js/requestNextAnimationFrame.js','/js/gameClientBundle.js'])
 

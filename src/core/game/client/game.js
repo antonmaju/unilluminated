@@ -1,23 +1,49 @@
-var Game = require('../game');
+var Game = require('../game'),
+    LoadingView = require('./views/loadingView'),
+    MapView = require('./views/mapView'),
+    imageSource = require('../imageSource');
 
+Game.prototype._initIntervalCanvas = function(){
+    this._internalCanvas = document.createElement('canvas');
+    this._internalContext = this._internalCanvas.getContext('2d');
+    this.options.mapRenderer.options.internalContext = this.internalContext;
+};
 
 
 Game.prototype._initEventHandlers = function(){
     var socket = this.options.socket;
+    var self = this;
 
     this.on('initializing', function(data){
+        this.options.viewManager.setView('loading');
+        this.render(+ new Date);
 
-        socket.emit('resourceRequest');
+        socket.emit('resourceRequest', {
+            id: self.options.gameId,
+            userId: self.options.userId
+        });
 
     });
 
     socket.on('resourceResponse', function(data){
-        alert(JSON.stringify(data, null, 4));
-        //console.log(data);
+
+        self._initPlayers();
+        self.options.viewManager.setView('map');
     });
 };
 
 Game.prototype._initViews = function(){
+    var mgr = this.options.viewManager;
+
+    mgr.addView(new LoadingView({
+        context: this.options.context
+    }));
+
+    mgr.addView(new MapView({
+        context: this.options.context,
+        mapRenderer: this.options.mapRenderer
+    }));
+
 
 };
 
@@ -31,27 +57,70 @@ Game.prototype._initPlayers = function(){
  * @param time current timestamp
  * @return {Number} fps number
  */
-Game.prototype.getFps = function(time){
+Game.prototype._getFps = function(time){
     var fps =0;
-    if(this.lastTime)
-        fps = 1000/ (time - this.lastTime);
-    this.lastTime = time;
+    if(this._lastFpsTime)
+        fps = 1000/ (time - this._lastFpsTime);
+    this._lastFpsTime = time;
     return fps;
 
 };
 
-Game.prototype._initAssets = function(){
 
+Game.prototype._initAssets = function(){
+    this.options.imageManager.queueItems(imageSource);
 };
 
-Game.prototype.render = function(){
+Game.prototype.render = function(time){
+    var self = this;
+    self.fps = self._getFps(time);
+    var context = self.options.context;
 
+    if(time - this._lastDrawTime >= this.drawInterval)
+    {
+        self.options.viewManager.currentView.animate(time);
+
+        if(self.options.viewManager.currentView.id == 'map')
+        {
+            if(self.currentPlayer)
+                self.currentPlayer.paint(time);
+
+            if(self.enemyPlayer)
+            {
+                self.enemyPlayer.process(time);
+                self.enemyPlayer.paint(time);
+            }
+        }
+
+        context.restore();
+        this._lastDrawTime = time;
+    }
+
+    requestNextAnimationFrame(function(tm){self.render(tm);});
 };
 
 Game.prototype._init = function()
 {
     this._initEventHandlers();
+    this._initViews();
+    this._initAssets();
+    this._drawInterval = 150;
+    this._lastDrawTime = + new Date;
+
+
+};
+
+Game.prototype.resize = function(){
+    if(this.options.viewManager.currentView)
+        this.options.viewManager.currentView.resize();
+
+
+    if(this._internalCanvas)
+    {
+        var canvas = this.options.context.canvas;
+        this._internalCanvas.width = canvas.width;
+        this._internalCanvas.height= canvas.height;
+    }
 };
 
 module.exports = Game;
-
