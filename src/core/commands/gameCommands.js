@@ -1,4 +1,5 @@
-var dbHelpers = require('../utils/dbHelpers');
+var dbHelpers = require('../utils/dbHelpers'),
+    typeConverter=require('../utils/typeConverter');
 
 var collName = 'Game';
 
@@ -54,12 +55,33 @@ exports.create = function(model, callback){
     });
 };
 
+/**
+ * get game information by its id
+ * @param {ObjectId} id
+ * @param {function} callback
+ */
+exports.getById = function(id, callback){
+    var gameId = id;
+
+    if(typeof gameId == 'string')
+        gameId = typeConverter.fromString.toObjectId(gameId);
+
+    if(! gameId)
+        callback();
 
 
+    dbHelpers.getClient(function(err, client){
+        if(hasError(client, err, callback)) return;
 
+        client.collection(collName, function(cerr, coll){
+            if(hasError(client, cerr, callback)) return;
 
+            coll.findOne({_id: id}, function(err,doc){
+                client.close();
+                callback({err: err, doc: doc});
+            });
 
+        });
+    });
 
-
-
-
+};

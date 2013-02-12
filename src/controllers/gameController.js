@@ -2,6 +2,7 @@ var coreServices = require('../core/coreServices'),
     controllerHelper = coreServices.controllerHelpers,
     gameCommands = require('../core/commands/gameCommands'),
     GameSystem = require('../core/game/server/serverRegistry'),
+    PlayerDirections = GameSystem.PlayerDirections,
     filters = coreServices.filters;
 
 
@@ -24,11 +25,25 @@ module.exports ={
 
             var game = {
                 mode : req.params.mode,
-                player1 : req.session.id,
-                player1Type: req.params.type == 'heroine' ?
-                    GameSystem.PlayerTypes.Girl : GameSystem.PlayerTypes.Guardian,
                 created : new Date()
             };
+
+            if(req.params.type == 'heroine'){
+                game.player1 = {
+                    id : req.session.id,
+                    type : GameSystem.PlayerTypes.Girl,
+                    direction: PlayerDirections.Right,
+                    map : 'Map1'
+                };
+            }else{
+                game.player1 = {
+                    id: req.session.id,
+                    type: GameSystem.PlayerTypes.Guardian,
+                    direction: PlayerDirections.Left,
+                    map : 'Map7'
+                };
+            }
+
 
             gameCommands.create(game, function(result){
                 if(result.error){
