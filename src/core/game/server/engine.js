@@ -1,5 +1,7 @@
 exports.start = function(app, io){
 
+
+
     io.sockets.on('connection', function(socket){
 
         function onResourceRequest(data){

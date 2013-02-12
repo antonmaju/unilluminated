@@ -2,6 +2,7 @@ $(function(){
     var GameSystem = require('../../core/game/client/clientRegistry');
     var viewManager =  new GameSystem.ViewManager();
     var imageManager = new GameSystem.ImageManager();
+    var mapRenderer = new GameSystem.MapRenderer();
 
     var canvas = document.getElementById('canvas'),
         context = canvas.getContext('2d');
@@ -32,7 +33,8 @@ $(function(){
         viewManager : viewManager,
         imageManager : imageManager,
         context:context,
-        socket: socket
+        socket: socket,
+        mapRenderer: mapRenderer
     });
 
 

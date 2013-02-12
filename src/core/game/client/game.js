@@ -15,18 +15,20 @@ Game.prototype._initEventHandlers = function(){
     var self = this;
 
     this.on('initializing', function(data){
+
         this.options.viewManager.setView('loading');
         this.render(+ new Date);
 
-        socket.emit('resourceRequest', {
-            id: self.options.gameId,
-            userId: self.options.userId
+        this.options.imageManager.download(function(){
+            socket.emit('resourceRequest', {
+                id: self.options.gameId,
+                userId: self.options.userId
+            });
         });
 
     });
 
     socket.on('resourceResponse', function(data){
-
         self._initPlayers();
         self.options.viewManager.setView('map');
     });
@@ -76,23 +78,9 @@ Game.prototype.render = function(time){
     self.fps = self._getFps(time);
     var context = self.options.context;
 
-    if(time - this._lastDrawTime >= this.drawInterval)
+    if(time - this._lastDrawTime >= this._drawInterval)
     {
         self.options.viewManager.currentView.animate(time);
-
-        if(self.options.viewManager.currentView.id == 'map')
-        {
-            if(self.currentPlayer)
-                self.currentPlayer.paint(time);
-
-            if(self.enemyPlayer)
-            {
-                self.enemyPlayer.process(time);
-                self.enemyPlayer.paint(time);
-            }
-        }
-
-        context.restore();
         this._lastDrawTime = time;
     }
 

@@ -1,4 +1,5 @@
 module.exports = {
+    typeConverter: require('./utils/typeConverter'),
     config: require('./config'),
     controllerHelpers : require('./utils/controllerHelpers'),
     dbHelpers : require('./utils/dbHelpers'),
