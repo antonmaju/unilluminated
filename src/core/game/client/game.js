@@ -1,12 +1,12 @@
 var Game = require('../game'),
     LoadingView = require('./views/loadingView'),
     MapView = require('./views/mapView'),
-    imageSource = require('../imageSource');
+    imageSource = require('../imageSource'),
+    playerFactory = require('./playerFactory');
 
-Game.prototype._initIntervalCanvas = function(){
+Game.prototype._initInternalCanvas = function(){
     this._internalCanvas = document.createElement('canvas');
     this._internalContext = this._internalCanvas.getContext('2d');
-    this.options.mapRenderer.options.internalContext = this.internalContext;
 };
 
 
@@ -21,7 +21,7 @@ Game.prototype._initEventHandlers = function(){
 
         this.options.imageManager.download(function(){
             socket.emit('resourceRequest', {
-                id: self.options.gameId,
+                id: self.options.id,
                 userId: self.options.userId
             });
         });
@@ -29,7 +29,13 @@ Game.prototype._initEventHandlers = function(){
     });
 
     socket.on('resourceResponse', function(data){
+
+        self._current = data;
+        self._activeMap = data.player.mapInfo;
         self._initPlayers();
+
+        self.options.mapRenderer.setInternalContext(self._internalContext);
+        self.options.mapRenderer.setGrid(self._activeMap.grid);
         self.options.viewManager.setView('map');
     });
 };
@@ -50,6 +56,20 @@ Game.prototype._initViews = function(){
 };
 
 Game.prototype._initPlayers = function(){
+    var startInfo = this._activeMap.exits[this._current.player.direction][0];
+
+    this._player = playerFactory.create({
+        imageManager: this.options.imageManager,
+        playerType: this.currentPlayerType,
+        row: startInfo.row,
+        column: startInfo.column,
+        mapRenderer: this.options.mapRenderer,
+        context: this.options.context,
+        map: this._activeMap,
+        playerId: this.options.userId
+    });
+
+    this.options.mapRenderer.setPlayer(this._player);
 
 };
 
@@ -89,6 +109,7 @@ Game.prototype.render = function(time){
 
 Game.prototype._init = function()
 {
+    this._initInternalCanvas();
     this._initEventHandlers();
     this._initViews();
     this._initAssets();

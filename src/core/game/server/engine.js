@@ -1,18 +1,17 @@
+var engineCommands = require('../../commands/engineCommands'),
+    worldMap = require('./worldMap');
+
 exports.start = function(app, io){
-
-
 
     io.sockets.on('connection', function(socket){
 
-        function onResourceRequest(data){
-            var result = {
-                prop1: 'value1',
-                prop2: 'value2'
-            };
+        function onResourceRequest(param){
+            engineCommands.getInitialGameInfo(param, function(gameInfo){
+                gameInfo.player.mapInfo = worldMap[gameInfo.player.map].src;
 
-            socket.emit('resourceResponse', result);
+                socket.emit('resourceResponse', gameInfo);
+            });
         }
-
 
         socket.on('resourceRequest', onResourceRequest);
     });

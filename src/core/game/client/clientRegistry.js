@@ -5,5 +5,7 @@ module.exports = {
     ImageSource : require('../imageSource'),
     AreaTypes : require('../areaTypes'),
     MapRenderer: require('./mapRenderer'),
+    PlayerDirections: require('../playerDirections'),
+    PlayerTypes : require('../playerTypes'),
     Game : require('./game')
 };

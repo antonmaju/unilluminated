@@ -25,10 +25,15 @@ module.exports = (function(){
             this._player = player;
         },
 
+        /// TODO: need to find better way to manage this
+        setInternalContext : function(internalContext){
+            this.options.internalContext = internalContext;
+        },
+
 
         render: function(){
 
-            if(! this.grid)
+            if(! this._grid)
                 return;
 
             this._calculateCamera();
@@ -39,13 +44,10 @@ module.exports = (function(){
 
             internalContext.clearRect(0,0, canvas.width, canvas.height);
 
-            context.save();
-            context.fillStyle ='rgba(0,0,0,0.95)';
-            context.fillRect(0,0,canvas.width, canvas.height);
-            context.restore();
 
-            var curRow = this.player.getRow()- this._startRow;
-            var curColumn = this.player.getColumn()- this._startColumn;
+
+            var curRow = this._player.getRow()- this._startRow;
+            var curColumn = this._player.getColumn()- this._startColumn;
 
             /*
             context.save();
@@ -60,7 +62,7 @@ module.exports = (function(){
                 for(var j= this._startColumn; j< this._startColumn + this.columnPerScreen && j < this._totalColumn; j++)
                 {
                     var cameraColumn = j-this._startColumn;
-                    var areaType = AreaTypes[this.grid[i][j].toString()];
+                    var areaType = AreaTypes[this._grid[i][j].toString()];
                     var img = null;
                     if(areaType.bgKey)
                     {
@@ -77,19 +79,19 @@ module.exports = (function(){
             context.drawImage(internalContext.canvas, 0,0);
         },
         _calculateCamera : function(){
-            if(!this.player) return;
+            if(!this._player) return;
 
-            this._startRow = this.player.getRow() - this.idealCameraRowRange;
+            this._startRow = this._player.getRow() - this.idealCameraRowRange;
 
             if(this._startRow < 0)
                 this._startRow = 0;
-            else if(this.player.getRow() + this.idealCameraRowRange >= this._totalRow)
+            else if(this._player.getRow() + this.idealCameraRowRange >= this._totalRow)
                 this._startRow = this._totalRow - (this. idealCameraRowRange * 2);
 
-            this._startColumn = this.player.getColumn()- this. idealCameraColRange ;
+            this._startColumn = this._player.getColumn()- this. idealCameraColRange ;
             if(this._startColumn <0)
                 this._startColumn =0;
-            else if(this.player.getColumn() + this. idealCameraColRange >= this._totalColumn)
+            else if(this._player.getColumn() + this. idealCameraColRange >= this._totalColumn)
                 this._startColumn = this._totalColumn - (this. idealCameraColRange *2);
 
         },

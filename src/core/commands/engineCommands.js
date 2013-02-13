@@ -1,4 +1,6 @@
-var gameCommands = require('./gameCommands');
+var gameCommands = require('./gameCommands')
+    coreServices = require('../coreServices'),
+    typeConverter = coreServices.typeConverter;
 
 /**
  * Get current game information
@@ -35,9 +37,10 @@ exports.getInitialGameInfo = function(param, cb){
         result = {};
         var gameData = gameDataResult.doc;
 
-        if(gameData.player1 && gameData.player1.id.toString() == param.userId.toString()){
+        console.log(gameData.player1.id);
+        console.log(userId);
+        if(gameData.player1 && gameData.player1.id.toString() == userId.toString()){
             result.player = gameData.player1;
-
         }
         else
         {

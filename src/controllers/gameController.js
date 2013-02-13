@@ -15,7 +15,7 @@ module.exports ={
         route: '/game/:id',
         method:'get',
         handler: function(req, resp, next){
-            controllerHelper.renderView('game/index',{id: req.params._id}, req, resp);
+            controllerHelper.renderView('game/index',{id: req.params.id, userId: req.session.userId}, req, resp);
         }
     },
     create : {
@@ -30,20 +30,19 @@ module.exports ={
 
             if(req.params.type == 'heroine'){
                 game.player1 = {
-                    id : req.session.id,
+                    id : req.session.userId,
                     type : GameSystem.PlayerTypes.Girl,
                     direction: PlayerDirections.Right,
                     map : 'Map1'
                 };
             }else{
                 game.player1 = {
-                    id: req.session.id,
+                    id: req.session.userId,
                     type: GameSystem.PlayerTypes.Guardian,
                     direction: PlayerDirections.Left,
                     map : 'Map7'
                 };
             }
-
 
             gameCommands.create(game, function(result){
                 if(result.error){

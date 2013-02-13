@@ -11,8 +11,6 @@ var merge =  function(obj1, obj2){
     }
 };
 
-
-
 exports.extends = function(obj1, obj2, obj3){
 
     if(obj1 && obj2)

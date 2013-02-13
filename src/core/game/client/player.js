@@ -135,7 +135,6 @@ module.exports = (function(){
 
     Player.prototype._init = function(){
 
-
     };
 
 

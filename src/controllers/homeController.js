@@ -61,7 +61,7 @@ module.exports = {
                 }
 
                 req.session.name = req.body.name;
-                req.session.id = result.doc._id.toString();
+                req.session.userId = result.doc._id.toString();
                 controllerHelper.renderView('home/main',{}, req, resp);
 
             });

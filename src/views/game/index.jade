@@ -8,7 +8,8 @@ block privateJs
     script(type='text/javascript')
         var settings ={
             webUrl : '!{config.webUrl}',
-            id     : '!{model.id}'
+            id     : '!{model.id}',
+            userId : '!{model.userId}'
         }
     != html.jsLoader(['/js/requestNextAnimationFrame.js','/js/gameClientBundle.js'])
 
