@@ -27,7 +27,7 @@ module.exports = (function(){
     };
 
     MapView.prototype.resize = function(){
-        this.options.mapRenderer.calculateViewport();
+        this.options.mapRenderer.emit('resize');
     }
 
     MapView.prototype.animate = function(time){

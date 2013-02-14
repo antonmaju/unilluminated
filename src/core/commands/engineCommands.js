@@ -37,8 +37,6 @@ exports.getInitialGameInfo = function(param, cb){
         result = {};
         var gameData = gameDataResult.doc;
 
-        console.log(gameData.player1.id);
-        console.log(userId);
         if(gameData.player1 && gameData.player1.id.toString() == userId.toString()){
             result.player = gameData.player1;
         }

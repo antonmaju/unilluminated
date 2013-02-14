@@ -7,6 +7,9 @@ var Game = require('../game'),
 Game.prototype._initInternalCanvas = function(){
     this._internalCanvas = document.createElement('canvas');
     this._internalContext = this._internalCanvas.getContext('2d');
+    var canvas = this.options.context.canvas;
+    this._internalCanvas.width = canvas.width;
+    this._internalCanvas.height = canvas.width;
 };
 
 
@@ -60,7 +63,7 @@ Game.prototype._initPlayers = function(){
 
     this._player = playerFactory.create({
         imageManager: this.options.imageManager,
-        playerType: this.currentPlayerType,
+        playerType: this._current.player.type,
         row: startInfo.row,
         column: startInfo.column,
         mapRenderer: this.options.mapRenderer,
@@ -123,13 +126,13 @@ Game.prototype.resize = function(){
     if(this.options.viewManager.currentView)
         this.options.viewManager.currentView.resize();
 
-
     if(this._internalCanvas)
     {
         var canvas = this.options.context.canvas;
         this._internalCanvas.width = canvas.width;
         this._internalCanvas.height= canvas.height;
     }
+
 };
 
 module.exports = Game;

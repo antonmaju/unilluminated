@@ -17,6 +17,16 @@ $(function(){
 
     var socket = io.connect(settings.webUrl);
 
+    var game = new GameSystem.Game({
+        viewManager : viewManager,
+        imageManager : imageManager,
+        context:context,
+        socket: socket,
+        mapRenderer: mapRenderer,
+        id: settings.id,
+        userId: settings.userId
+    });
+
     //this resize function is from HTML5Rocks.com
     function resizeArea(){
         var newWidth = window.innerWidth;
@@ -32,17 +42,11 @@ $(function(){
 
         $container.css('marginTop',  (-newHeight / 2)).css('marginLeft',(-newWidth / 2) + 'px');
         $(canvas).attr('width',newWidth).attr('height', newHeight);
+
+        game.resize();
     }
 
-    var game = new GameSystem.Game({
-        viewManager : viewManager,
-        imageManager : imageManager,
-        context:context,
-        socket: socket,
-        mapRenderer: mapRenderer,
-        id: settings.id,
-        userId: settings.userId
-    });
+
 
 
     $(window).resize(function(evt){

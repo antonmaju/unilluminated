@@ -32,14 +32,14 @@ module.exports ={
                 game.player1 = {
                     id : req.session.userId,
                     type : GameSystem.PlayerTypes.Girl,
-                    direction: PlayerDirections.Right,
+                    direction: PlayerDirections.Left,
                     map : 'Map1'
                 };
             }else{
                 game.player1 = {
                     id: req.session.userId,
                     type: GameSystem.PlayerTypes.Guardian,
-                    direction: PlayerDirections.Left,
+                    direction: PlayerDirections.Right,
                     map : 'Map7'
                 };
             }

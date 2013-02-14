@@ -11,6 +11,7 @@ module.exports = (function(){
             var widthSize= 1;
             var heightSize=1;
             var sightRadius =10;
+            console.log(options.playerType);
             switch(options.playerType)
             {
                 case PlayerTypes.Girl:
