@@ -16,8 +16,6 @@ module.exports = (function(){
             interval:100,
             imageKeys:{},
             velocity: 0,
-            row:0,
-            column:0,
             mapRenderer: null,
             maxCountdown :10,
             maxWanderCountdown : 15000,
@@ -29,6 +27,9 @@ module.exports = (function(){
 
         this.options = GameUtils.extends({}, defaults, options);
         this._activeDirection = Directions.Right;
+
+        this.row = 0;
+        this.column = 0;
 
         this._init();
     }
@@ -43,8 +44,8 @@ module.exports = (function(){
 
         this._activeDirection = direction;
 
-        var newRow = this.options.row;
-        var newColumn = this.options.column;
+        var newRow = this.row;
+        var newColumn = this.column;
 
         switch(this._activeDirection)
         {
@@ -67,18 +68,11 @@ module.exports = (function(){
 
         if(this.canWalk(newRow, newColumn))
         {
-            this.options.row = newRow;
-            this.options.column = newColumn;
+            this.row = newRow;
+            this.column = newColumn;
         }
     };
 
-    Player.prototype.getRow = function(){
-        return this.options.row;
-    };
-
-    Player.prototype.getColumn= function(){
-        return this.options.column;
-    };
 
     Player.prototype.getWidthSize= function(){
         return this.options.widthSize;
@@ -86,6 +80,11 @@ module.exports = (function(){
 
     Player.prototype.getHeightSize = function(){
         return this.options.heightSize;
+    };
+
+    Player.prototype.setPosition = function(row, column){
+        this.row = row;
+        this.column = column;
     };
 
     Player.prototype.setMap = function(map){

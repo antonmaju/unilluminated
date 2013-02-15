@@ -71,6 +71,7 @@ Game.prototype._initPlayers = function(){
         playerId: this.options.userId
     });
 
+    this._player.setPosition(startInfo.row, startInfo.column);
     this._player.setMap(this._activeMap);
 
     this.options.mapRenderer.setPlayer(this._player);

@@ -97,18 +97,18 @@ module.exports = (function(){
     MapRenderer.prototype._calculateCamera = function(){
         if(!this._player) return;
 
-        this._startRow = this._player.getRow() - this._idealCameraRowRange;
+        this._startRow = this._player.row - this._idealCameraRowRange;
 
         if(this._startRow < 0)
             this._startRow = 0;
-        else if(this._player.getRow() + this._idealCameraRowRange >= this.totalRow)
+        else if(this._player.row + this._idealCameraRowRange >= this.totalRow)
             this._startRow = this.totalRow - (this. _idealCameraRowRange * 2);
 
 
-        this._startColumn = this._player.getColumn()- this. _idealCameraColRange ;
+        this._startColumn = this._player.column- this. _idealCameraColRange ;
         if(this._startColumn <0)
             this._startColumn =0;
-        else if(this._player.getColumn() + this. _idealCameraColRange >= this.totalColumn)
+        else if(this._player.column + this. _idealCameraColRange >= this.totalColumn)
             this._startColumn = this.totalColumn - (this. _idealCameraColRange *2);
 
 

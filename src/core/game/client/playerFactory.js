@@ -38,8 +38,6 @@ module.exports = (function(){
                 heightSize: heightSize,
                 imageKeys: imageKeys,
                 imageManager: options.imageManager,
-                row : options.row,
-                column: options.column,
                 mapRenderer: options.mapRenderer,
                 playerType: options.playerType,
                 context: options.context,
