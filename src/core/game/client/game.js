@@ -68,9 +68,10 @@ Game.prototype._initPlayers = function(){
         column: startInfo.column,
         mapRenderer: this.options.mapRenderer,
         context: this.options.context,
-        map: this._activeMap,
         playerId: this.options.userId
     });
+
+    this._player.setMap(this._activeMap);
 
     this.options.mapRenderer.setPlayer(this._player);
 
@@ -104,6 +105,13 @@ Game.prototype.render = function(time){
     if(time - this._lastDrawTime >= this._drawInterval)
     {
         self.options.viewManager.currentView.animate(time);
+
+        if(self.options.viewManager.currentView.id == 'map')
+        {
+            if(self._player)
+                self._player.paint(time);
+        }
+
         this._lastDrawTime = time;
     }
 

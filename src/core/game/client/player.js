@@ -29,7 +29,6 @@ module.exports = (function(){
 
         this.options = GameUtils.extends({}, defaults, options);
         this._activeDirection = Directions.Right;
-        this._reachExit =false;
 
         this._init();
     }
@@ -66,7 +65,7 @@ module.exports = (function(){
                 break;
         }
 
-        if(this._canWalk(newRow, newColumn))
+        if(this.canWalk(newRow, newColumn))
         {
             this.options.row = newRow;
             this.options.column = newColumn;
@@ -89,7 +88,12 @@ module.exports = (function(){
         return this.options.heightSize;
     };
 
+    Player.prototype.setMap = function(map){
+        this.map = map;
+    };
+
     Player.prototype.paint= function(time){
+
         this.emit('beforePaint', time);
 
         var gridSize = this.options.mapRenderer.gridSize;
@@ -107,13 +111,15 @@ module.exports = (function(){
         this.emit('afterPaint', time);
     };
 
-
-    Player.prototype._canWalk = function(newRow, newColumn){
+    Player.prototype.canWalk = function(newRow, newColumn){
         var widthDiff = this.options.widthSize-1;
         var heightDiff = this.options.heightSize-1;
 
-        if(newRow < 0 || (newRow+heightDiff) >= this.options.mapRenderer._totalRow ||
-            newColumn <0 || (newColumn+heightDiff) >= this.options.mapRenderer._totalColumn)
+        var totalRow = this.map.grid.length;
+        var totalColumn = this.map.grid[0].length;
+
+        if(newRow < 0 || (newRow+heightDiff) >= totalRow ||
+            newColumn <0 || (newColumn+heightDiff) >= totalColumn)
             return false;
 
         var walkable = true;
@@ -121,7 +127,7 @@ module.exports = (function(){
         {
             for(var j=newColumn; j<=newColumn+widthDiff; j++)
             {
-                areaType = AreaTypes[this.options.map.grid[i][j]];
+                var areaType = AreaTypes[this.map.grid[i][j]];
                 if(! areaType.isWalkable)
                 {
                     walkable = false;

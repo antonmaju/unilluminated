@@ -5,7 +5,7 @@ describe('ViewManager', function(){
 
     describe('#setView', function(){
 
-        describe('can change current active view', function(){
+        it('can change current active view', function(){
 
             var manager = new ViewManager();
             var view = {
