@@ -25,7 +25,10 @@ module.exports = (function(){
     Game.prototype.setState = function(state){
         this.options.state = state;
         this.emit('statechange', state);
-    }
+    };
+
+
+
 
     return Game;
 })();

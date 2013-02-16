@@ -15,7 +15,23 @@ module.exports ={
         route: '/game/:id',
         method:'get',
         handler: function(req, resp, next){
-            controllerHelper.renderView('game/index',{id: req.params.id, userId: req.session.userId}, req, resp);
+
+            gameCommands.getById(req.params.id, function(result){
+                if(result.error || !result.doc)
+                {
+                    resp.redirect('/main-menu');
+                    return;
+                }
+
+                var game = result.doc;
+                controllerHelper.renderView('game/index',{
+                    id: req.params.id,
+                    userId: req.session.userId,
+                    mode : game.mode
+                }, req, resp);
+            });
+
+
         }
     },
     create : {
@@ -46,8 +62,7 @@ module.exports ={
 
             gameCommands.create(game, function(result){
                 if(result.error){
-                    req.errors = [result.error];
-                    controllerHelper.renderView('home/main', {}, req, resp);
+                    resp.redirect('/main-menu');
                     return;
                 }
                 resp.redirect('/game/'+result.doc._id.toString());

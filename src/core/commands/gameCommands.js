@@ -63,12 +63,14 @@ exports.create = function(model, callback){
 exports.getById = function(id, callback){
     var gameId = id;
 
+
     if(typeof gameId == 'string')
         gameId = typeConverter.fromString.toObjectId(gameId);
 
     if(! gameId)
         callback();
 
+    console.log(gameId);
 
     dbHelpers.getClient(function(err, client){
         if(hasError(client, err, callback)) return;
@@ -76,9 +78,9 @@ exports.getById = function(id, callback){
         client.collection(collName, function(cerr, coll){
             if(hasError(client, cerr, callback)) return;
 
-            coll.findOne({_id: id}, function(err,doc){
+            coll.findOne({_id: gameId}, function(err,doc){
                 client.close();
-                callback({err: err, doc: doc});
+                callback({error: err, doc: doc});
             });
 
         });

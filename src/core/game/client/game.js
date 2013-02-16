@@ -2,7 +2,8 @@ var Game = require('../game'),
     LoadingView = require('./views/loadingView'),
     MapView = require('./views/mapView'),
     imageSource = require('../imageSource'),
-    playerFactory = require('./playerFactory');
+    playerFactory = require('./playerFactory'),
+    Directions = require('../playerDirections');
 
 Game.prototype._initInternalCanvas = function(){
     this._internalCanvas = document.createElement('canvas');
@@ -12,10 +13,44 @@ Game.prototype._initInternalCanvas = function(){
     this._internalCanvas.height = canvas.width;
 };
 
+Game.prototype._initDOMEventHandlers = function(){
+    var self = this;
+    var socket = this.options.socket;
+
+    $(document).on('keydown', function(event){
+        self.emit('keydown', event);
+    });
+
+};
+
+Game.prototype._initSinglePlayerHandlers = function(){
+    var self = this;
+
+    this.on('keydown', function(evt){
+        switch(evt.keyCode)
+        {
+            case 39:
+                self._player.move(Directions.Right);
+                break;
+            case 40:
+                self._player.move(Directions.Bottom);
+                break;
+            case 37:
+                self._player.move(Directions.Left);
+                break;
+            case 38:
+                self._player.move(Directions.Top);
+                break;
+        }
+    });
+};
+
 
 Game.prototype._initEventHandlers = function(){
     var socket = this.options.socket;
     var self = this;
+
+    this._initDOMEventHandlers();
 
     this.on('initializing', function(data){
 
@@ -23,6 +58,7 @@ Game.prototype._initEventHandlers = function(){
         this.render(+ new Date);
 
         this.options.imageManager.download(function(){
+
             socket.emit('resourceRequest', {
                 id: self.options.id,
                 userId: self.options.userId
@@ -32,7 +68,6 @@ Game.prototype._initEventHandlers = function(){
     });
 
     socket.on('resourceResponse', function(data){
-
         self._current = data;
         self._activeMap = data.player.mapInfo;
         self._initPlayers();
@@ -41,6 +76,9 @@ Game.prototype._initEventHandlers = function(){
         self.options.mapRenderer.setGrid(self._activeMap.grid);
         self.options.viewManager.setView('map');
     });
+
+    this._initSinglePlayerHandlers();
+
 };
 
 Game.prototype._initViews = function(){
@@ -54,8 +92,6 @@ Game.prototype._initViews = function(){
         context: this.options.context,
         mapRenderer: this.options.mapRenderer
     }));
-
-
 };
 
 Game.prototype._initPlayers = function(){
@@ -75,7 +111,6 @@ Game.prototype._initPlayers = function(){
     this._player.setMap(this._activeMap);
 
     this.options.mapRenderer.setPlayer(this._player);
-
 };
 
 
@@ -99,20 +134,20 @@ Game.prototype._initAssets = function(){
 };
 
 Game.prototype.render = function(time){
+
     var self = this;
     self.fps = self._getFps(time);
     var context = self.options.context;
-
     if(time - this._lastDrawTime >= this._drawInterval)
     {
         self.options.viewManager.currentView.animate(time);
-
         if(self.options.viewManager.currentView.id == 'map')
         {
             if(self._player)
+            {
                 self._player.paint(time);
+            }
         }
-
         this._lastDrawTime = time;
     }
 

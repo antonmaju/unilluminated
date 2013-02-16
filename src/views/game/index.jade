@@ -9,7 +9,8 @@ block privateJs
         var settings ={
             webUrl : '!{config.webUrl}',
             id     : '!{model.id}',
-            userId : '!{model.userId}'
+            userId : '!{model.userId}',
+            mode   : '!{model.mode}'
         }
     != html.jsLoader(['/js/requestNextAnimationFrame.js','/js/gameClientBundle.js'])
 

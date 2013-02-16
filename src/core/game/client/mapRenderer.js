@@ -58,7 +58,6 @@ module.exports = (function(){
     };
 
     MapRenderer.prototype.render= function(){
-
         if(! this._grid)
             return;
 

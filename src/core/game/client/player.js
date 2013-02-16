@@ -38,7 +38,7 @@ module.exports = (function(){
 
     Player.prototype.isAuto = function(){
         return this.playerId == null;
-    }
+    };
 
     Player.prototype.move =function(direction){
 
@@ -96,8 +96,8 @@ module.exports = (function(){
         this.emit('beforePaint', time);
 
         var gridSize = this.options.mapRenderer.gridSize;
-        var curRow = this.options.row - this.options.mapRenderer._startRow;
-        var curColumn = this.options.column - this.options.mapRenderer._startColumn;
+        var curRow = this.row - this.options.mapRenderer._startRow;
+        var curColumn = this.column - this.options.mapRenderer._startColumn;
         var context = this.options.context;
         var canvas = context.canvas;
 
