@@ -133,8 +133,8 @@ Game.prototype._initAssets = function(){
     this.options.imageManager.queueItems(imageSource);
 };
 
-Game.prototype.render = function(time){
-
+Game.prototype.render = function(step){
+    time = + new Date;
     var self = this;
     self.fps = self._getFps(time);
     var context = self.options.context;
