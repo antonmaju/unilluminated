@@ -2,7 +2,7 @@ module.exports = (function(){
 
     var PlayerTypes = require('../playerTypes'),
         Directions = require('../playerDirections'),
-        Player = require('./Player');
+        Player = require('./player');
 
 
     var factory ={
