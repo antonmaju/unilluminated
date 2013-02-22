@@ -1,6 +1,7 @@
-var nconf = require('nconf');
+var nconf = require('nconf'), path = require('path');
 
-nconf.argv().env().file({ file: 'config.json' });
+
+nconf.argv().env().file({ file: path.join(path.dirname(process.mainModule.filename), 'config.json') });
 
 module.exports = {
     mongoServer :nconf.get('mongoServer'),

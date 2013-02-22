@@ -1,8 +1,11 @@
 module.exports = function(app){
 
     var childProcess = require('child_process');
+    var path = require('path');
+    var originalJs = path.join(path.dirname(process.mainModule.filename),'public/js/gameClient.js');
+    var combinedJs = path.join(path.dirname(process.mainModule.filename),'public/js/gameClientBundle.js');
 
-    childProcess.exec('browserify  public/js/gameClient.js -o public/js/gameClientBundle.js', function (error, stdout, stderr) {
+    childProcess.exec('browserify '+originalJs+ ' -o '+ combinedJs, function (error, stdout, stderr) {
         if(error)
         {
             console.log(error.stack);
