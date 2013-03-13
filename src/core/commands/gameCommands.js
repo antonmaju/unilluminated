@@ -70,7 +70,6 @@ exports.getById = function(id, callback){
     if(! gameId)
         callback();
 
-    console.log(gameId);
 
     dbHelpers.getClient(function(err, client){
         if(hasError(client, err, callback)) return;

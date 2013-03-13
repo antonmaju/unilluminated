@@ -9,6 +9,8 @@ var express = require('express'),
     lessMiddleware = require('less-middleware'),
     controllerRegistry = require('./controllers/controllerRegistry') ,
     GameEngine = require('./core/game/server/engine'),
+    MongoStore = require('./core/utils/mongoStore')(express),
+    config = require('./core/config'),
     nconf = require('nconf');
 
 var app = express();
@@ -29,7 +31,13 @@ app.configure(function(){
     app.use(express.logger('dev'));
     app.use(express.bodyParser());
     app.use(express.cookieParser());
-    app.use(express.session({secret:'test'}));
+    app.use(express.session({secret:nconf.get('sessionSecret'), store: new MongoStore({
+        host: config.mongoServer,
+        port: config.mongoPort,
+        db : config.mongoDatabase,
+        user: config.mongoUser,
+        password: config.mongoPassword
+    })}));
     app.use(express.methodOverride());
     app.use(app.router);
     app.use(express.static(path.join(__dirname, 'public')));

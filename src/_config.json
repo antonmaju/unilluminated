@@ -5,5 +5,6 @@
     "mongoUser"     : "your mongo User if any",
     "mongoPassword" : "your mongo password if any",
     "assetsUrl"     : "your asset url",
-    "webUrl"        : "your web url"
+    "webUrl"        : "your web url",
+    "sessionSecret" : "your session secret"
 }
