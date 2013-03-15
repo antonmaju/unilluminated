@@ -1,4 +1,4 @@
-var mongo = require('mongoDb');
+var mongo = require('mongodb');
 
 module.exports = function(connect){
 
