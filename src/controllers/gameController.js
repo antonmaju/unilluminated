@@ -15,7 +15,6 @@ module.exports ={
         route: '/game/:id',
         method:'get',
         handler: function(req, resp, next){
-
             gameCommands.getById(req.params.id, function(result){
                 if(result.error || !result.doc)
                 {

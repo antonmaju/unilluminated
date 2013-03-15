@@ -19,7 +19,6 @@ exports.getInitialGameInfo = function(param, cb){
         return;
     }
 
-
     var gameId= typeof param.id == 'string' ? typeConverter.fromString.toObjectId(param.id) : param.id;
     var userId = typeof param.userId == 'string' ?  typeConverter.fromString.toObjectId(param.userId) : param.userId;
     if(! gameId || ! userId) {

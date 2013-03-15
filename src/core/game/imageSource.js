@@ -1,123 +1,291 @@
-module.exports =[
-    {
-        key:'grass',
-        src:'/images/game/grass.png'
-    },
-    {
-        key: 'ground',
-        src:'/images/game/cave_ground.png'
-    },
-    {
-        key: 'sign',
-        src: '/images/game/sign.png'
-    },
-    {
-        key: 'stone',
-        src: '/images/game/stone.png'
-    },
-    {
-        key: 'grass-road',
-        src: '/images/game/road3.png'
-    },
-    {
-        key:'stalgmite',
-        src: '/images/game/stalagmite.png'
-    },
-    {
-        key: 'chasm',
-        src:'/images/game/chasm.png'
-    },
-    {
-        key: 'tree1',
-        src:'/images/game/tree1.png'
-    },
-    {
-        key: 'tree2',
-        src:'/images/game/tree2.png'
-    },
-    {
-        key: 'tree3',
-        src:'/images/game/tree3.png'
-    },
-    {
-        key: 'plant1',
-        src:'/images/game/plant1.png'
-    },
-    {
-        key: 'plant2',
-        src:'/images/game/plant2.png'
-    },
-    {
-        key: 'plant3',
-        src:'/images/game/plant3.png'
-    },
-    {
-        key: 'plant4',
-        src:'/images/game/plant4.png'
-    },
-    {
-        key: 'cave-cliff',
-        src:'/images/game/cave_cliff.png'
-    },
-    {
-        key: 'cave-edge-bottom',
-        src:'/images/game/cave_edge4.png'
-    },
-    {
-        key: 'girl-front',
-        src:'/images/game/girl_front.png'
-    },
-    {
-        key: 'girl-left',
-        src:'/images/game/girl_left.png'
-    },
-    {
-        key: 'girl-back',
-        src:'/images/game/girl_back.png'
-    },
-    {
-        key: 'girl-right',
-        src:'/images/game/girl_right.png'
-    },
-    {
-        key: 'monster-front',
-        src:'/images/game/monster_front.png'
-    },
-    {
-        key: 'monster-left',
-        src:'/images/game/monster_left.png'
-    },
-    {
-        key: 'monster-back',
-        src:'/images/game/monster_back.png'
-    },
-    {
-        key: 'monster-right',
-        src:'/images/game/monster_right.png'
-    },
-    {
-        key: 'barrel',
-        src:'/images/game/barrel.png'
-    },
-    {
-        key: 'end-of-area',
-        src:'/images/game/end_area.png'
-    },
-    {
-        key: 'wall1',
-        src:'/images/game/wall1.png'
-    },
-    {
-        key:'bad-ending',
-        src:'/images/game/girl_lose.png'
-    },
-    {
-        key:'good-ending',
-        src:'/images/game/monster_lose.png'
-    },
-    {
-        key: 'flower',
-        src:'/images/game/goldflower.png'
+module.exports ={
 
+    'grass':{
+        //src:'/images/game/grass.png',
+        src:'bg_sprite',
+        width: 256,
+        height: 256,
+        top: 3840
+    },
+    'ground':{
+        //src:'/images/game/cave_ground.png',
+        src:'bg_sprite',
+        width: 256,
+        height: 256,
+        top: 1792
+    },
+    'sign': {
+        src:'bg_sprite',
+        width: 256,
+        height: 256,
+        top: 6806
+    },
+    'stone':{
+        //src: '/images/game/stone.png',
+        src:'bg_sprite',
+        width: 256,
+        height: 256,
+        top: 7318
+    },
+    'stone2':{
+        src:'bg_sprite',
+        width: 256,
+        height: 256,
+        top: 7574
+    },
+    'road1':{
+        src:'bg_sprite',
+        width: 256,
+        height: 256,
+        top: 5120
+    },
+    'road2':{
+        src:'bg_sprite',
+        width: 256,
+        height: 256,
+        top: 5376
+    },
+    'grass-road':{
+        key: 'grass-road',
+        src:'bg_sprite',
+        width: 256,
+        height: 256,
+        top: 5362
+    },
+    'road4':{
+        src:'bg_sprite',
+        width: 256,
+        height: 256,
+        top: 5782
+    },
+    'road5': {
+        src:'bg_sprite',
+        width: 256,
+        height: 256,
+        top: 6038
+    },
+    'road6': {
+        src:'bg_sprite',
+        width: 256,
+        height: 256,
+        top: 6294
+    },
+    'road7':{
+        src:'bg_sprite',
+        width: 256,
+        height: 256,
+        top: 6550
+    },
+    'stalagmite':{
+        src:'bg_sprite',
+        width: 256,
+        height: 256,
+        top: 7062
+    },
+    'chasm':
+    {
+        src:'bg_sprite',
+        width: 256,
+        height: 256,
+        top: 2560
+    },
+    'tree1':{
+        src:'bg_sprite',
+        width: 256,
+        height: 256,
+        top: 7830
+    },
+    'tree2':
+    {
+        src:'bg_sprite',
+        width: 256,
+        height: 256,
+        top: 8086
+    },
+    'tree3':
+    {
+        src:'bg_sprite',
+        width: 256,
+        height: 256,
+        top: 8342
+    },
+    'plant1':
+    {
+        src:'bg_sprite',
+        width: 256,
+        height: 256,
+        top: 4096
+    },
+    'plant2':
+    {
+        src:'bg_sprite',
+        width: 256,
+        height: 256,
+        top: 4352
+    },
+    'plant3':{
+        src:'bg_sprite',
+        width: 256,
+        height: 256,
+        top: 4608
+    },
+    'plant4': {
+        src:'bg_sprite',
+        width: 256,
+        height: 256,
+        top: 4864
+    },
+    'cave-cliff':{
+        src:'bg_sprite',
+        width: 256,
+        height: 256,
+        top: 512
+    },
+    'cave-edge1':
+    {
+        src:'bg_sprite',
+        width: 256,
+        height: 256,
+        top:768
+    },
+    'cave-edge2':
+    {
+        src:'bg_sprite',
+        width: 256,
+        height: 256,
+        top: 1024
+    },
+    'cave-edge4':
+    {
+        src:'bg_sprite',
+        width: 256,
+        height: 256,
+        top: 1280
+    },
+    'cave-edge5':
+    {
+        src:'bg_sprite',
+        width: 256,
+        height: 256,
+        top: 1536
+    },
+    'cave-wall1':
+    {
+        src:'bg_sprite',
+        width: 256,
+        height: 256,
+        top: 2048
+    },
+    'cave-wall2':
+    {
+        src:'bg_sprite',
+        width: 256,
+        height: 256,
+        top: 2304
+    },
+    'girl-front':
+    {
+        src: 'girl_sprite',
+        width: 256,
+        height: 256,
+        top: 512
+    },
+    'girl-left':
+    {
+        src:'girl_sprite',
+        width: 256,
+        height: 256,
+        top: 768
+    },
+    'girl-back':
+    {
+        src: 'girl_sprite',
+        width: 256,
+        height: 256,
+        top: 256
+    },
+    'girl-right':
+    {
+        src: 'girl_sprite',
+        width: 256,
+        height: 256,
+        top: 0
+    },
+    'monster-front':
+    {
+        src: 'guardian_sprite',
+        width: 512,
+        height: 512,
+        top: 512
+    },
+    'monster-left':
+    {
+        src: 'guardian_sprite',
+        width: 512,
+        height: 512,
+        top: 1024
+    },
+    'monster-back':
+    {
+        src: 'guardian_sprite',
+        width: 512,
+        height: 512,
+        top: 0
+    },
+    'monster-right':
+    {
+        src: 'guardian_sprite',
+        width: 512,
+        height: 512,
+        top: 1536
+    },
+    'barrel':
+    {
+        src:'bg_sprite',
+        width: 256,
+        height: 256,
+        top: 256
+    },
+    'end-of-area':
+    {
+        src:'bg_sprite',
+        width: 256,
+        height: 256,
+        top: 3072
+    },
+    'wall1':
+    {
+        src:'bg_sprite',
+        width: 256,
+        height: 256,
+        top: 8598
+    },
+    'wall2':
+    {
+        src:'bg_sprite',
+        width: 256,
+        height: 256,
+        top: 8854
+    },
+    'wall3':
+    {
+        src:'bg_sprite',
+        width: 256,
+        height: 256,
+        top: 9110
+    },
+    'flower':
+    {
+        src:'bg_sprite',
+        width: 256,
+        height: 256,
+        top: 3328
+    },
+    'goldflower':
+    {
+        src:'bg_sprite',
+        width: 256,
+        height: 256,
+        top: 3584
     }
-];
+};

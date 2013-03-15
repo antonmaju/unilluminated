@@ -77,16 +77,19 @@ module.exports = (function(){
                 var cameraColumn = j-this._startColumn;
                 var areaType = AreaTypes[this._grid[i][j].toString()];
                 var img = null;
+                var imgSource = null;
                 if(areaType.bgKey)
                 {
-                    img = this.options.imageManager.get(areaType.bgKey);
-                    internalContext.drawImage(img,cameraColumn * this.gridSize,cameraRow* this.gridSize,
+                    imgSource = imageSource[areaType.bgKey];
+                    img = this.options.imageManager.get(imgSource.src);
+                    internalContext.drawImage(img,0,imgSource.top,imgSource.width,imgSource.height, cameraColumn * this.gridSize,cameraRow* this.gridSize,
                         this.gridSize, this.gridSize);
                 }
                 if(areaType.srcKey)
                 {
-                    img = this.options.imageManager.get(areaType.srcKey);
-                    internalContext.drawImage(img, cameraColumn * this.gridSize, cameraRow* this.gridSize,
+                    imgSource = imageSource[areaType.srcKey];
+                    img = this.options.imageManager.get(imgSource.src);
+                    internalContext.drawImage(img, 0,imgSource.top,imgSource.width,imgSource.height, cameraColumn * this.gridSize, cameraRow* this.gridSize,
                         this.gridSize, this.gridSize);
                 }
             }

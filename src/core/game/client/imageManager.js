@@ -27,10 +27,7 @@ module.exports = (function(){
             if(! items)
                 return;
 
-            for(var i=0; i<items.length; i++)
-            {
-                this.queueItem(items[i]);
-            }
+            this._queue.push.apply(this._queue, items);
         },
         /**
          * Checks whether now is downloading

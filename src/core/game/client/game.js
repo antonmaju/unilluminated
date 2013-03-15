@@ -1,6 +1,7 @@
 var Game = require('../game'),
     LoadingView = require('./views/loadingView'),
     MapView = require('./views/mapView'),
+    AssetFiles = require('../assetFiles'),
     imageSource = require('../imageSource'),
     playerFactory = require('./playerFactory'),
     Directions = require('../playerDirections');
@@ -130,7 +131,7 @@ Game.prototype._getFps = function(time){
 
 
 Game.prototype._initAssets = function(){
-    this.options.imageManager.queueItems(imageSource);
+    this.options.imageManager.queueItems(AssetFiles);
 };
 
 Game.prototype.render = function(step){
