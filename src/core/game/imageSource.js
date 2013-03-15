@@ -48,9 +48,9 @@ module.exports ={
     'grass-road':{
         key: 'grass-road',
         src:'bg_sprite',
-        width: 256,
-        height: 256,
-        top: 5362
+        width: 201,
+        height: 150,
+        top: 5632
     },
     'road4':{
         src:'bg_sprite',

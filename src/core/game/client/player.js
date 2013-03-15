@@ -3,6 +3,7 @@ module.exports = (function(){
     var GameUtils = require('../commonUtils');
     var Directions = require('../playerDirections');
     var AreaTypes = require('../areaTypes');
+    var ImageSource = require('../imageSource');
     var event = require('events');
     var PlayerModes = require('./playerMode');
 
@@ -101,11 +102,14 @@ module.exports = (function(){
         var context = this.options.context;
         var canvas = context.canvas;
 
-        var img = this.options.imageManager.get(this.options.imageKeys[this._activeDirection]);
+        var imgSource = ImageSource[this.options.imageKeys[this._activeDirection]];
 
-        context.drawImage(img, curColumn * gridSize,
-            curRow * gridSize, this.getWidthSize() *gridSize,
-            this.getHeightSize() * gridSize);
+        var img = this.options.imageManager.get(imgSource.src);
+
+        context.drawImage(img,
+            0, imgSource.top, imgSource.width, imgSource.height,
+            curColumn * gridSize,curRow * gridSize,
+            this.getWidthSize() *gridSize,this.getHeightSize() * gridSize);
 
         this.emit('afterPaint', time);
     };
