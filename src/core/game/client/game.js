@@ -139,6 +139,7 @@ Game.prototype.render = function(step){
     var self = this;
     self.fps = self._getFps(time);
     var context = self.options.context;
+
     if(time - this._lastDrawTime >= this._drawInterval)
     {
         self.options.viewManager.currentView.animate(time);
