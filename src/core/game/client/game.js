@@ -4,7 +4,9 @@ var Game = require('../game'),
     AssetFiles = require('../assetFiles'),
     imageSource = require('../imageSource'),
     playerFactory = require('./playerFactory'),
-    Directions = require('../playerDirections');
+    Directions = require('../playerDirections'),
+    PlayerActions = require('../playerActions'),
+    InputBuffer = require('./inputBuffer');
 
 Game.prototype._initInternalCanvas = function(){
     this._internalCanvas = document.createElement('canvas');
@@ -26,30 +28,83 @@ Game.prototype._initDOMEventHandlers = function(){
 
 Game.prototype._initSinglePlayerHandlers = function(){
     var self = this;
+    var prevKey = null;
+    var lastTime = + new Date;
 
     this.on('keydown', function(evt){
+
+        var curTime = + new Date;
+
+        if(evt.keyCode == prevKey){
+            if((curTime - lastTime) < 100) return;
+        }
+
         switch(evt.keyCode)
         {
             case 39:
-                self._player.move(Directions.Right);
+                self._inputBuffer.addInput(PlayerActions.MoveRight);
                 break;
             case 40:
-                self._player.move(Directions.Bottom);
+                self._inputBuffer.addInput(PlayerActions.MoveBottom);
                 break;
             case 37:
-                self._player.move(Directions.Left);
+                self._inputBuffer.addInput(PlayerActions.MoveLeft);
                 break;
             case 38:
+                self._inputBuffer.addInput(PlayerActions.MoveTop);
+                break;
+        }
+
+
+//        switch(evt.keyCode)
+//        {
+//            case 37:
+//                self._player.move(Directions.Left);
+//                break;
+//            case 39:
+//                self._player.move(Directions.Right);
+//                break;
+//            case 38:
+//                self._player.move(Directions.Top);
+//                break;
+//            case 40:
+//                self._player.move(Directions.Bottom);
+//                break;
+//        }
+
+
+        prevKey = evt.keyCode;
+        lastTime = curTime;
+    });
+
+    this._inputBuffer.on('inputPublished', function(action){
+        switch(action)
+        {
+            case PlayerActions.MoveLeft:
+                self._player.move(Directions.Left);
+                break;
+            case PlayerActions.MoveRight:
+                self._player.move(Directions.Right);
+                break;
+            case PlayerActions.MoveTop:
                 self._player.move(Directions.Top);
+                break;
+            case PlayerActions.MoveBottom:
+                self._player.move(Directions.Bottom);
                 break;
         }
     });
+
+
 };
 
 
 Game.prototype._initEventHandlers = function(){
     var socket = this.options.socket;
     var self = this;
+
+    this._inputBuffer = new InputBuffer(50);
+
 
     this._initDOMEventHandlers();
 
@@ -164,8 +219,6 @@ Game.prototype._init = function()
     this._initAssets();
     this._drawInterval = 150;
     this._lastDrawTime = + new Date;
-
-
 };
 
 Game.prototype.resize = function(){
