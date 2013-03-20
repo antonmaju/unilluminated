@@ -71,6 +71,7 @@ module.exports = (function(){
 
 //        internalContext.clearRect(0,0, canvas.width, canvas.height);
 
+        console.log('col='+this._startColumn +'; row='+ this._startRow);
         context.drawImage(this._cacheCanvas, this._startColumn * this.gridSize,this._startRow * this.gridSize ,
             canvas.width, canvas.height, 0, 0,
             canvas.width, canvas.height);
@@ -133,9 +134,11 @@ module.exports = (function(){
     MapRenderer.prototype._renderCache = function(){
         if(! this._grid) return;
 
-        this._cacheCanvas.width = this.gridSize * this.totalColumn;
-        this._cacheCanvas.height = this.gridSize * this.totalRow;
+        var context = this.options.context;
+        var canvas = context.canvas;
 
+        this._cacheCanvas.width = Math.ceil(this.gridSize * this.totalColumn);
+        this._cacheCanvas.height = Math.ceil(this.gridSize * this.totalRow);
 
         this._cacheContext.clearRect(0,0, this._cacheCanvas.width, this._cacheCanvas.height);
 
