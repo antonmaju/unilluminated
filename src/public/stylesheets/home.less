@@ -28,6 +28,17 @@ fieldset
     background-color:#000;
 
     #logo {margin-top:25px;}
+  @media only screen and (max-width : 800px) {
+    img{
+        width:40%;
+    }
+  }
+  @media only screen and (max-width : 480px) {
+    img{
+        width:300px;
+      }
+  }
+
 }
 
 #home
@@ -36,6 +47,7 @@ fieldset
     height:350px;
     margin-left:-300px;
     margin-top:-175px;
+
 }
 
 #main-menu
@@ -56,6 +68,12 @@ fieldset
             color:#99f;
         }
     }
+  @media only screen and (max-width : 480px) {
+    width:400px;
+    height:300px;
+    margin-left:-200px;
+    margin-top:-150px;
+  }
 }
 
 #selection
@@ -81,8 +99,8 @@ fieldset
         padding: 20px 0;
 
         img{
-            width: 225px;
-            height: 225px;
+            max-width: 100%;
+            //height: 225px;
             margin:auto;
         }
         &:hover
@@ -109,6 +127,22 @@ fieldset
     {
         margin-left: 15px;
     }
+
+  @media only screen and (max-width : 480px) {
+    width:400px;
+    margin-left:-200px;
+    height:300px;
+    margin-top:-175px;
+    .char{
+      float:left;
+      width:150px;
+      text-decoration:none;
+      color: white;
+      padding: 20px 0;
+
+    }
+
+  }
 }
 
 #naming
@@ -130,6 +164,16 @@ fieldset
         margin: 20px;
         font-weight:bold;
         font-size:1.2em;
+      @media only screen and (max-width : 480px) {
+          width:200px;
+        }
 
     }
+  @media only screen and (max-width : 480px) {
+    width:400px;
+    margin-left:-200px;
+    height:300px;
+    margin-top:-175px;
+    fieldset{ margin: 100px auto; }
+  }
 }
