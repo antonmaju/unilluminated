@@ -36,7 +36,7 @@ Game.prototype._initSinglePlayerHandlers = function(){
         var curTime = + new Date;
 
         if(evt.keyCode == prevKey){
-            if((curTime - lastTime) < 100) return;
+            if((curTime - lastTime) < self._inputInterval) return;
         }
 
         switch(evt.keyCode)
@@ -54,24 +54,6 @@ Game.prototype._initSinglePlayerHandlers = function(){
                 self._inputBuffer.addInput(PlayerActions.MoveTop);
                 break;
         }
-
-
-//        switch(evt.keyCode)
-//        {
-//            case 37:
-//                self._player.move(Directions.Left);
-//                break;
-//            case 39:
-//                self._player.move(Directions.Right);
-//                break;
-//            case 38:
-//                self._player.move(Directions.Top);
-//                break;
-//            case 40:
-//                self._player.move(Directions.Bottom);
-//                break;
-//        }
-
 
         prevKey = evt.keyCode;
         lastTime = curTime;
@@ -103,7 +85,7 @@ Game.prototype._initEventHandlers = function(){
     var socket = this.options.socket;
     var self = this;
 
-    this._inputBuffer = new InputBuffer(50);
+    this._inputBuffer = new InputBuffer(this._inputInterval);
 
 
     this._initDOMEventHandlers();
@@ -213,6 +195,7 @@ Game.prototype.render = function(step){
 
 Game.prototype._init = function()
 {
+    this._inputInterval = 50;
     this._initInternalCanvas();
     this._initEventHandlers();
     this._initViews();
