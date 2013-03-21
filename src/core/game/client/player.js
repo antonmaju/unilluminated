@@ -143,7 +143,40 @@ module.exports = (function(){
     };
 
     Player.prototype._init = function(){
+        this.on('afterPaint', function(){
+           this._checkPostCondition();
+        });
+    };
 
+    Player.prototype._checkPostCondition = function(){
+        var areaType = this.map.grid[this.row][this.column];
+
+        if(areaType == '27' && this._hasMove){
+            var direction = this._getExitDirection();
+            if(direction){
+                this.emit('movingToNewArea', direction);
+            }
+
+        }else if(areaType != '27'){
+            this._hasMove = true;
+        }
+
+    };
+
+    Player.prototype._getExitDirection = function(){
+        var direction = null;
+
+        for(var exitProp in this.map.exits){
+            var exitInfo = this.map.exits[exitProp];
+            for(var i=0; i< exitInfo.length; i++){
+                if(exitInfo[i].row == this.row && exitInfo[i].column == this.column){
+                    direction = exitProp;
+                    break;
+                }
+            }
+        }
+
+        return direction;
     };
 
 

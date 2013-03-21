@@ -148,6 +148,10 @@ Game.prototype._initPlayers = function(){
     this._player.setPosition(startInfo.row, startInfo.column);
     this._player.setMap(this._activeMap);
 
+    this._player.on('movingToNewArea', function(direction){
+       //console.log(direction);
+    });
+
     this.options.mapRenderer.setPlayer(this._player);
 };
 

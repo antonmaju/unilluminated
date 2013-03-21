@@ -71,8 +71,8 @@ module.exports = (function(){
 
 //        internalContext.clearRect(0,0, canvas.width, canvas.height);
 
-        console.log('col='+this._startColumn +'; row='+ this._startRow);
-        context.drawImage(this._cacheCanvas, this._startColumn * this.gridSize,this._startRow * this.gridSize ,
+
+        context.drawImage(this._cacheCanvas, Math.floor(this._startColumn * this.gridSize),Math.floor(this._startRow * this.gridSize) ,
             canvas.width, canvas.height, 0, 0,
             canvas.width, canvas.height);
 
