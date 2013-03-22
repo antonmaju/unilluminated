@@ -14,12 +14,11 @@ function hasError(client, err, callback){
 
 exports.create = function(model, callback){
     function validateModel(){
-
         if(! model.mode)
             return {message:'Mode is required'};
 
-        if(! model.player1)
-            return {message:'Player 1 is required'};
+        if(! model.players || (! model.players.girl && ! model.players.guardian))
+            return {message:'Player is required'};
 
         return null;
     }

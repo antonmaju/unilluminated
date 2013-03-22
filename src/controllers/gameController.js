@@ -40,18 +40,20 @@ module.exports ={
 
             var game = {
                 mode : req.params.mode,
-                created : new Date()
+                created : new Date(),
+                players: {}
             };
 
+
             if(req.params.type == 'heroine'){
-                game.player1 = {
+                game.players.girl = {
                     id : req.session.userId,
                     type : GameSystem.PlayerTypes.Girl,
                     direction: PlayerDirections.Left,
                     map : 'Map1'
                 };
             }else{
-                game.player1 = {
+                game.players.guardian = {
                     id: req.session.userId,
                     type: GameSystem.PlayerTypes.Guardian,
                     direction: PlayerDirections.Right,

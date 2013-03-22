@@ -35,15 +35,13 @@ exports.getInitialGameInfo = function(param, cb){
 
         result = {};
         var gameData = gameDataResult.doc;
-
-        if(gameData.player1 && gameData.player1.id.toString() == userId.toString()){
-            result.player = gameData.player1;
-        }
-        else
-        {
-
-        }
-
+        result.players = gameData.players;
         cb(result);
     });
+};
+
+exports.movingToNewArea = function(param, cb){
+
+
+
 };

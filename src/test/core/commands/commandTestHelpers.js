@@ -1,6 +1,7 @@
 var coreServices = require('../../../core/coreServices'),
     dbHelpers = coreServices.dbHelpers;
 
+
 /**
  * Clear mongodb collection
  * @param {string} collName MongoDb collection name

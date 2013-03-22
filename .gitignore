@@ -19,6 +19,7 @@ home.css
 site.css
 game.css
 config.json
+testConfig.json
 gameClientBundle.js
 /.bundle
 /db/*.sqlite3

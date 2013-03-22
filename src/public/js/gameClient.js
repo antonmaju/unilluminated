@@ -24,7 +24,8 @@ $(function(){
         socket: socket,
         mapRenderer: mapRenderer,
         id: settings.id,
-        userId: settings.userId
+        userId: settings.userId,
+        mode: settings.mode
     });
 
     //this resize function is from HTML5Rocks.com
@@ -45,9 +46,6 @@ $(function(){
 
         game.resize();
     }
-
-
-
 
     $(window).resize(function(evt){
         resizeArea();

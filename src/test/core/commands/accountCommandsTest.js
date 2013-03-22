@@ -1,9 +1,11 @@
+var testSettings = require('../../testSettings');
+
 var should = require('should'),
     coreServices = require('../../../core/coreServices'),
     dbHelpers = coreServices.dbHelpers,
     config = coreServices.config,
-    accountCommands = require('../../../core/commands/accountCommands'),
-    testHelpers = require('./commandTestHelpers');
+    testHelpers = require('./commandTestHelpers'),
+    accountCommands = require('../../../core/commands/accountCommands');
 
 var collName = 'Account';
 

@@ -16,8 +16,6 @@ var express = require('express'),
 var app = express();
 
 
-
-
 app.configure(function(){
     app.set('port', nconf.get('port') ||   3000);
     app.set('views', __dirname + '/views');
