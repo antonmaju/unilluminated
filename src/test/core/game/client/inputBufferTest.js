@@ -1,3 +1,5 @@
+var testSettings = require('../../../testSettings');
+
 var should = require('should'),
     PlayerActions = require('../../../../core/game/playerActions'),
     InputBuffer= require('../../../../core/game/client/inputBuffer');

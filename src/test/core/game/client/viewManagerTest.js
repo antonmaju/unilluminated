@@ -1,3 +1,5 @@
+var testSettings = require('../../../testSettings');
+
 var should = require('should'),
     ViewManager = require('../../../../core/game/client/viewManager');
 

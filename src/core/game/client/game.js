@@ -102,7 +102,6 @@ Game.prototype._initEventHandlers = function(){
                 userId: self.options.userId
             });
         });
-
     });
 
     socket.on('resourceResponse', function(data){
@@ -117,6 +116,18 @@ Game.prototype._initEventHandlers = function(){
 
     this._initSinglePlayerHandlers();
 
+};
+
+Game.prototype._initPlayerEvents = function(player){
+    var self = this;
+    player.on('movingToNewArea', function(direction){
+        self.options.viewManager.setView('loading');
+        self.options.socket.emit('movingToNewArea',{
+            id: self.options.id,
+            userId: player.playerId,
+            direction: direction
+        });
+    });
 };
 
 Game.prototype._initViews = function(){
@@ -134,6 +145,8 @@ Game.prototype._initViews = function(){
 
 Game.prototype._initPlayers = function(){
     var startInfo = this._activeMap.exits[this._current.player.direction][0];
+    var self = this;
+
 
     this._player = playerFactory.create({
         imageManager: this.options.imageManager,
@@ -147,10 +160,7 @@ Game.prototype._initPlayers = function(){
 
     this._player.setPosition(startInfo.row, startInfo.column);
     this._player.setMap(this._activeMap);
-
-    this._player.on('movingToNewArea', function(direction){
-       //console.log(direction);
-    });
+    this._initPlayerEvents(this._player);
 
     this.options.mapRenderer.setPlayer(this._player);
 };
@@ -167,7 +177,6 @@ Game.prototype._getFps = function(time){
         fps = 1000/ (time - this._lastFpsTime);
     this._lastFpsTime = time;
     return fps;
-
 };
 
 

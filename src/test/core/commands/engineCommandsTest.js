@@ -1,3 +1,5 @@
+var testSettings = require('../../testSettings');
+
 var should = require('should'),
     mongo = require('mongodb'),
     assert = require('assert'),
@@ -29,21 +31,22 @@ describe('EngineCommands', function(){
             var originalFunc = gameCommands.getById;
 
             var dummy = {
-                player1: {id: new mongo.ObjectID(), direction :'R', map:'Map1'}
+                players: {
+                    girl: {id: new mongo.ObjectID(), direction :'R', map:'Map1'}
+                }
             };
 
             gameCommands.getById = function(id, callback){
                 callback({doc:dummy});
             };
 
-            engineCommands.getInitialGameInfo({id: new mongo.ObjectID(), userId: dummy.player1.id}, function(result){
-                should.exist(result.player);
-                assert.equal(result.player.map, dummy.player1.map);
+            engineCommands.getInitialGameInfo({id: new mongo.ObjectID(), userId: dummy.players.girl.id}, function(result){
+                should.exist(result.players);
+                assert.equal(result.players.girl, dummy.players.girl);
                 gameCommands.getById = originalFunc;
                 done();
             });
 
         });
-
     });
 });

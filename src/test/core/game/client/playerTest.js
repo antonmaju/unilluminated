@@ -1,3 +1,5 @@
+var testSettings = require('../../../testSettings');
+
 var should = require('should'),
     PlayerDirections = require('../../../../core/game/playerDirections'),
     Player = require('../../../../core/game/client/player.js');

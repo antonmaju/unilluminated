@@ -1,3 +1,5 @@
+var testSettings = require('../testSettings');
+
 var should = require('should'),
     mongo = require('mongodb'),
     gameCommands = require('../../core/commands/gameCommands'),
@@ -44,13 +46,11 @@ describe('gameController', function(){
     describe('create.handler', function(){
 
 
-
-
-
         it('should redirect to main menu if failed to create new game', function(done){
             req.params.mode='1p';
             req.params.type='heroine';
 
+            var originalMethod = gameCommands.create;
             gameCommands.create = function(game, result){
                 result({
                     error : {message:'error'}
@@ -59,6 +59,7 @@ describe('gameController', function(){
 
 
             gameController.create.handler(req, resp, next);
+            gameCommands.create = originalMethod;
             resp.url.should.equal('/main-menu');
             done();
 
@@ -69,7 +70,7 @@ describe('gameController', function(){
             req.params.mode='1p';
             req.params.type='heroine';
             var id = new mongo.ObjectID();
-
+            var originalMethod = gameCommands.create;
             gameCommands.create = function(game, result){
                 result({
                     doc :{
@@ -79,6 +80,7 @@ describe('gameController', function(){
             };
 
             gameController.create.handler(req, resp, next);
+            gameCommands.create = originalMethod;
             resp.url.should.equal('/game/'+id.toString());
             done();
         });
@@ -90,12 +92,13 @@ describe('gameController', function(){
         it('should redirect to main menu if id is invalid', function(done){
             var id = new mongo.ObjectID();
             req.params.id = id.toString();
-
+            var originalMethod = gameCommands.getById;
             gameCommands.getById = function(game, result){
                 result({ });
             };
 
             gameController.index.handler(req, resp, next);
+            gameCommands.getById = originalMethod;
             resp.url.should.equal('/main-menu');
             done();
 
@@ -104,7 +107,7 @@ describe('gameController', function(){
         it('render page if data found', function(done){
             var id = new mongo.ObjectID();
             req.params.id = id.toString();
-
+            var originalMethod = gameCommands.getById;
             gameCommands.getById = function(game, result){
                 result({
                 doc:{
@@ -114,6 +117,7 @@ describe('gameController', function(){
             };
 
             gameController.index.handler(req, resp, next);
+            gameCommands.getById =originalMethod;
             resp.view.should.equal('game/index');
 
             done();

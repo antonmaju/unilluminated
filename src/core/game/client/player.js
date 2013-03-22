@@ -163,6 +163,8 @@ module.exports = (function(){
 
     };
 
+
+
     Player.prototype._getExitDirection = function(){
         var direction = null;
 
