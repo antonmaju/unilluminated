@@ -182,5 +182,9 @@ module.exports = (function(){
     };
 
 
+    Player.prototype.destroy = function(){
+        this.removeAllListeners();
+    };
+
     return Player;
 })();

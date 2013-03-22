@@ -8,13 +8,6 @@ var Game = require('../game'),
     PlayerActions = require('../playerActions'),
     InputBuffer = require('./inputBuffer');
 
-Game.prototype._initInternalCanvas = function(){
-    this._internalCanvas = document.createElement('canvas');
-    this._internalContext = this._internalCanvas.getContext('2d');
-    var canvas = this.options.context.canvas;
-    this._internalCanvas.width = canvas.width;
-    this._internalCanvas.height = canvas.width;
-};
 
 Game.prototype._initDOMEventHandlers = function(){
     var self = this;
@@ -27,6 +20,31 @@ Game.prototype._initDOMEventHandlers = function(){
 };
 
 Game.prototype._initSinglePlayerHandlers = function(){
+    var self = this;
+    this._inputBuffer.on('inputPublished', function(action){
+        switch(action)
+        {
+            case PlayerActions.MoveLeft:
+                self._player.move(Directions.Left);
+                break;
+            case PlayerActions.MoveRight:
+                self._player.move(Directions.Right);
+                break;
+            case PlayerActions.MoveTop:
+                self._player.move(Directions.Top);
+                break;
+            case PlayerActions.MoveBottom:
+                self._player.move(Directions.Bottom);
+                break;
+        }
+    });
+};
+
+Game.prototype._initMultiPlayerHandlers = function(){
+
+};
+
+Game.prototype._initPlayerHandlers = function(){
     var self = this;
     var prevKey = null;
     var lastTime = + new Date;
@@ -59,26 +77,10 @@ Game.prototype._initSinglePlayerHandlers = function(){
         lastTime = curTime;
     });
 
-    this._inputBuffer.on('inputPublished', function(action){
-        switch(action)
-        {
-            case PlayerActions.MoveLeft:
-                self._player.move(Directions.Left);
-                break;
-            case PlayerActions.MoveRight:
-                self._player.move(Directions.Right);
-                break;
-            case PlayerActions.MoveTop:
-                self._player.move(Directions.Top);
-                break;
-            case PlayerActions.MoveBottom:
-                self._player.move(Directions.Bottom);
-                break;
-        }
-    });
-
-
+    (self.options.mode == '1p') ? this._initSinglePlayerHandlers() : this._initMultiPlayerHandlers();
 };
+
+
 
 
 Game.prototype._initEventHandlers = function(){
@@ -106,15 +108,11 @@ Game.prototype._initEventHandlers = function(){
 
     socket.on('resourceResponse', function(data){
         self._current = data;
-        self._activeMap = data.player.mapInfo;
         self._initPlayers();
-
-        self.options.mapRenderer.setInternalContext(self._internalContext);
-        self.options.mapRenderer.setGrid(self._activeMap.grid);
         self.options.viewManager.setView('map');
     });
 
-    this._initSinglePlayerHandlers();
+    this._initPlayerHandlers();
 
 };
 
@@ -144,25 +142,58 @@ Game.prototype._initViews = function(){
 };
 
 Game.prototype._initPlayers = function(){
-    var startInfo = this._activeMap.exits[this._current.player.direction][0];
     var self = this;
+    var playersInfo = this._current.players;
+
+    if(this._players){
+        for(var i=0; i< this._players.length; i++){
+            this._players[i].destroy();
+        }
+    }
+
+    this._players =[];
+    this._maps = this._current.maps;
+    this._player = null;
+    this._playerType = null;
+    this._map = null;
 
 
-    this._player = playerFactory.create({
-        imageManager: this.options.imageManager,
-        playerType: this._current.player.type,
-        row: startInfo.row,
-        column: startInfo.column,
-        mapRenderer: this.options.mapRenderer,
-        context: this.options.context,
-        playerId: this.options.userId
-    });
+    for(var playerType in playersInfo)
+    {
+        var playerInfo = playersInfo[playerType];
+        var playerMap = this._current.maps[playerType];
+        var positionInfo = playerMap.exits[playerInfo.direction][0];
 
-    this._player.setPosition(startInfo.row, startInfo.column);
-    this._player.setMap(this._activeMap);
-    this._initPlayerEvents(this._player);
+        var player = playerFactory.create({
+            imageManager: this.options.imageManager,
+            playerType: playerInfo.type,
+            row: positionInfo.row,
+            column: positionInfo.column,
+            mapRenderer: this.options.mapRenderer,
+            context: this.options.context,
+            playerId: playerInfo.id
+        });
 
-    this.options.mapRenderer.setPlayer(this._player);
+        player.setPosition(positionInfo.row, positionInfo.column);
+        player.setMap(playerMap);
+
+        if(playerInfo.id == self.options.userId)
+        {
+            this._player = player;
+            this._playerType = playerType;
+            this._map = playerMap;
+            this.options.mapRenderer.setPlayer(player);
+            this.options.mapRenderer.setGrid(playerMap.grid);
+
+        }
+        else
+        {
+            //set AI
+        }
+
+        this._initPlayerEvents(player);
+        this._players.push(player);
+    }
 };
 
 
@@ -195,10 +226,12 @@ Game.prototype.render = function(step){
         self.options.viewManager.currentView.animate(time);
         if(self.options.viewManager.currentView.id == 'map')
         {
-            if(self._player)
+            for(var i =0; i<self._players.length; i++)
             {
-                self._player.paint(time);
+                var player = self._players[i];
+                player.paint(time);
             }
+
         }
         this._lastDrawTime = time;
     }
@@ -209,7 +242,6 @@ Game.prototype.render = function(step){
 Game.prototype._init = function()
 {
     this._inputInterval = 50;
-    this._initInternalCanvas();
     this._initEventHandlers();
     this._initViews();
     this._initAssets();
@@ -220,13 +252,6 @@ Game.prototype._init = function()
 Game.prototype.resize = function(){
     if(this.options.viewManager.currentView)
         this.options.viewManager.currentView.resize();
-
-    if(this._internalCanvas)
-    {
-        var canvas = this.options.context.canvas;
-        this._internalCanvas.width = canvas.width;
-        this._internalCanvas.height= canvas.height;
-    }
 
 };
 
