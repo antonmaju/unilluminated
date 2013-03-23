@@ -54,6 +54,49 @@ exports.create = function(model, callback){
     });
 };
 
+exports.save = function(model, callback){
+    function validateModel(){
+        if(! model._id)
+            return {message:'id is required'};
+
+        if(! model.mode)
+            return {message:'Mode is required'};
+
+        if(! model.players || (! model.players.girl && ! model.players.guardian))
+            return {message:'Player is required'};
+
+        return null;
+    }
+
+    if(! model)
+    {
+        callback({error:{message:'Model is required!'}});
+        return;
+    }
+
+    var error = validateModel();
+
+    if(error)
+    {
+        callback({error: error});
+        return;
+    }
+
+    dbHelpers.getClient(function(err, client){
+        if(hasError(client, err, callback)) return;
+
+        client.collection(collName, function(cerr, coll){
+            if(hasError(client, cerr, callback)) return;
+
+            coll.update({_id: model._id}, model, {safe:true}, function(err2, docs){
+                if(hasError(client, err2, callback)) return;
+                client.close();
+                callback({doc: docs[0]});
+            });
+        });
+    });
+};
+
 /**
  * get game information by its id
  * @param {ObjectId} id

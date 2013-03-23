@@ -1,4 +1,5 @@
-var coreServices = require('../core/coreServices'),
+var mongo=require('mongodb'),
+    coreServices = require('../core/coreServices'),
     controllerHelper = coreServices.controllerHelpers,
     gameCommands = require('../core/commands/gameCommands'),
     GameSystem = require('../core/game/server/serverRegistry'),
@@ -44,21 +45,29 @@ module.exports ={
                 players: {}
             };
 
+            var isHeroine = req.params.type == 'heroine';
 
-            if(req.params.type == 'heroine'){
+            if(game.mode == '1p')
+            {
                 game.players.girl = {
-                    id : req.session.userId,
+                    id :  isHeroine ? req.session.userId : new mongo.ObjectID(),
                     type : GameSystem.PlayerTypes.Girl,
                     direction: PlayerDirections.Left,
-                    map : 'Map1'
+                    map : 'Map1',
+                    auto: !isHeroine,
+                    trace: true
                 };
-            }else{
-                game.players.guardian = {
-                    id: req.session.userId,
+                game.players.guardian ={
+                    id:  isHeroine ? new mongo.ObjectID() :  req.session.userId,
                     type: GameSystem.PlayerTypes.Guardian,
                     direction: PlayerDirections.Right,
-                    map : 'Map7'
+                    map: 'Map7',
+                    auto: isHeroine,
+                    random: isHeroine
                 };
+            }
+            else{
+
             }
 
             gameCommands.create(game, function(result){

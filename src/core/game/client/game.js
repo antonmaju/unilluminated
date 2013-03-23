@@ -252,7 +252,6 @@ Game.prototype._init = function()
 Game.prototype.resize = function(){
     if(this.options.viewManager.currentView)
         this.options.viewManager.currentView.resize();
-
 };
 
 module.exports = Game;
