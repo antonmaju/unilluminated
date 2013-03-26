@@ -13,7 +13,9 @@ exports.start = function(app, io){
         }
 
         function onMovingToNewArea(param){
-
+            engineCommands.getNewAreaInfo(param, function(gameInfo){
+                socket.emit('movedToNewArea', gameInfo);
+            });
         };
 
 

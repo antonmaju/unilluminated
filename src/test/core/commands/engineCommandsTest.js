@@ -176,6 +176,7 @@ describe('EngineCommands', function(){
             }, function(result){
                 should.exist(result.maps.girl);
                 assert.equal(result.maps.girl, worldMap['Map4'].src);
+                result.players.girl.direction.should.equal('T');
                 done();
             });
         });

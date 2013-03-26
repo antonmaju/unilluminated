@@ -4,6 +4,7 @@ var mongo=require('mongodb'),
     gameCommands = require('../core/commands/gameCommands'),
     GameSystem = require('../core/game/server/serverRegistry'),
     PlayerDirections = GameSystem.PlayerDirections,
+    typeConverter = coreServices.typeConverter,
     filters = coreServices.filters;
 
 
@@ -30,8 +31,6 @@ module.exports ={
                     mode : game.mode
                 }, req, resp);
             });
-
-
         }
     },
     create : {
@@ -46,11 +45,15 @@ module.exports ={
             };
 
             var isHeroine = req.params.type == 'heroine';
+            var currentUserId = req.session.userId;
+
+            if (typeof(currentUserId) == 'string')
+                currentUserId = typeConverter.fromString.toObjectId(currentUserId);
 
             if(game.mode == '1p')
             {
                 game.players.girl = {
-                    id :  isHeroine ? req.session.userId : new mongo.ObjectID(),
+                    id :  isHeroine ? currentUserId : new mongo.ObjectID(),
                     type : GameSystem.PlayerTypes.Girl,
                     direction: PlayerDirections.Left,
                     map : 'Map1',
@@ -58,7 +61,7 @@ module.exports ={
                     trace: true
                 };
                 game.players.guardian ={
-                    id:  isHeroine ? new mongo.ObjectID() :  req.session.userId,
+                    id:  isHeroine ? new mongo.ObjectID() :  currentUserId,
                     type: GameSystem.PlayerTypes.Guardian,
                     direction: PlayerDirections.Right,
                     map: 'Map7',

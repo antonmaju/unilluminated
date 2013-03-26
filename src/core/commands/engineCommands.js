@@ -4,6 +4,19 @@ var gameCommands = require('./gameCommands')
     PlayerDirections = require('../game/playerDirections'),
     typeConverter = coreServices.typeConverter;
 
+function getOppositeDirection(direction){
+    switch(direction){
+        case PlayerDirections.Top:
+            return PlayerDirections.Bottom;
+        case PlayerDirections.Left:
+            return PlayerDirections.Right;
+        case PlayerDirections.Right:
+            return PlayerDirections.Left;
+        case PlayerDirections.Bottom:
+            return PlayerDirections.Top;
+    }
+}
+
 /**
  * Get current game information
  * @param {object} param
@@ -46,7 +59,7 @@ exports.getInitialGameInfo = function(param, cb){
         for(var playerProp in gameData.players)
         {
             var playerInfo = gameData.players[playerProp];
-            if(playerInfo.id == userId)
+            if(playerInfo.id.toString() == userId.toString())
             {
                 result.players[playerProp] = playerInfo;
                 userInfo = playerInfo;
@@ -59,11 +72,11 @@ exports.getInitialGameInfo = function(param, cb){
         for(var playerProp in gameData.players)
         {
             var playerInfo = gameData.players[playerProp];
-            if(playerInfo.id != userInfo.id && playerInfo.map == userInfo.map)
+            if(playerInfo.id.toString() != userInfo.id.toString() && playerInfo.map == userInfo.map)
             {
                 result.players[playerProp] = playerInfo;
             }
-            else if(playerInfo.id != userInfo.id && playerInfo.trace)
+            else if(playerInfo.id.toString() != userInfo.id.toString() && playerInfo.trace)
             {
                 result.players[playerProp] = playerInfo;
                 result.maps[playerProp] = worldMap[playerInfo.map].src;
@@ -125,12 +138,13 @@ exports.getNewAreaInfo = function(param, cb){
         for(var playerProp in gameData.players)
         {
             var playerInfo = gameData.players[playerProp];
-            if(playerInfo.id == userId)
+            if(playerInfo.id.toString() == userId.toString())
             {
                 result.players[playerProp] = playerInfo;
                 userInfo = playerInfo;
                 var newMapName =  worldMap[playerInfo.map].links[direction];
                 playerInfo.map = newMapName;
+                playerInfo.direction = getOppositeDirection(direction);
                 result.maps[playerProp] = worldMap[newMapName].src;
                 break;
             }
@@ -151,15 +165,15 @@ exports.getNewAreaInfo = function(param, cb){
             for(var playerProp in gameData.players)
             {
                 var playerInfo = gameData.players[playerProp];
-                if(playerInfo.id != userInfo.id && playerInfo.map == userInfo.map)
+                if(playerInfo.id.toString() != userInfo.id.toString() && playerInfo.map == userInfo.map)
                 {
                     result.players[playerProp] = playerInfo;
                 }
-                else if(playerInfo.id != userInfo.id && playerInfo.trace)
-                {
-                    result.players[playerProp] = playerInfo;
-                    result.maps[playerProp] = worldMap[playerInfo.map].src;
-                }
+//                else if(playerInfo.id != userInfo.id && playerInfo.trace)
+//                {
+//                    result.players[playerProp] = playerInfo;
+//                    result.maps[playerProp] = worldMap[playerInfo.map].src;
+//                }
             }
 
             cb(result);
