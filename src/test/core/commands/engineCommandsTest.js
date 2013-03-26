@@ -126,54 +126,58 @@ describe('EngineCommands', function(){
             });
         });
 
-//        it('should return new user data', function(done){
-//            originalFunc = gameCommands.getById;
-//            originalFuncName = 'getById';
-//
-//            var dummy = {
-//                players: {
-//                    girl: {id: new mongo.ObjectID(), direction :'R', map:'Map2',trace:true }
-//                }
-//            };
-//
-//            gameCommands.getById = function(id, callback){
-//                callback({doc:dummy});
-//            };
-//
-//            engineCommands.getNewAreaInfo({
-//                id: new mongo.ObjectID(),
-//                direction : 'B',
-//                userId: dummy.players.girl.id
-//            }, function(result){
-//                should.exist(result.players.girl);
-//                assert.equal(result.players.girl.map, 'Map4');
-//                done();
-//            });
-//        });
-//
-//        it('should return user new map', function(done){
-//            originalFunc = gameCommands.getById;
-//            originalFuncName = 'getById';
-//
-//            var dummy = {
-//                players: {
-//                    girl: {id: new mongo.ObjectID(), direction :'R', map:'Map2',trace:true }
-//                }
-//            };
-//
-//            gameCommands.getById = function(id, callback){
-//                callback({doc:dummy});
-//            };
-//
-//            engineCommands.getNewAreaInfo({
-//                id: new mongo.ObjectID(),
-//                direction : 'B',
-//                userId: dummy.players.girl.id
-//            }, function(result){
-//                should.exist(result.players.maps.girl);
-//                assert.equal(result.players.maps.girl, worldMap['Map4'].src);
-//                done();
-//            });
-//        });
+        it('should return new user data', function(done){
+            originalFunc = gameCommands.getById;
+            originalFuncName = 'getById';
+
+            var dummy = {
+                _id: new mongo.ObjectID(),
+                mode: '1p',
+                players: {
+                    girl: {id: new mongo.ObjectID(), direction :'R', map:'Map2',trace:true }
+                }
+            };
+
+            gameCommands.getById = function(id, callback){
+                callback({doc:dummy});
+            };
+
+            engineCommands.getNewAreaInfo({
+                id: new mongo.ObjectID(),
+                direction : 'B',
+                userId: dummy.players.girl.id
+            }, function(result){
+                should.exist(result.players.girl);
+                assert.equal(result.players.girl.map, 'Map4');
+                done();
+            });
+        });
+
+        it('should return user new map', function(done){
+            originalFunc = gameCommands.getById;
+            originalFuncName = 'getById';
+
+            var dummy = {
+                _id: new mongo.ObjectID(),
+                mode: '1p',
+                players: {
+                    girl: {id: new mongo.ObjectID(), direction :'R', map:'Map2',trace:true }
+                }
+            };
+
+            gameCommands.getById = function(id, callback){
+                callback({doc:dummy});
+            };
+
+            engineCommands.getNewAreaInfo({
+                id: new mongo.ObjectID(),
+                direction : 'B',
+                userId: dummy.players.girl.id
+            }, function(result){
+                should.exist(result.maps.girl);
+                assert.equal(result.maps.girl, worldMap['Map4'].src);
+                done();
+            });
+        });
     });
 });

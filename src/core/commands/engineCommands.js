@@ -101,8 +101,8 @@ exports.getNewAreaInfo = function(param, cb){
         return;
     }
 
-    if(direction != PlayerDirections.Bottom || direction != PlayerDirections.Left ||
-        direction !=  PlayerDirections.Right || direction != PlayerDirections.Top)
+    if(direction != PlayerDirections.Bottom && direction != PlayerDirections.Left &&
+        direction !=  PlayerDirections.Right && direction != PlayerDirections.Top)
     {
         cb(result);
         return;
@@ -138,25 +138,34 @@ exports.getNewAreaInfo = function(param, cb){
 
         //process enemy generation
 
+
         //save current state
-
-
-        //find other players who are in the same map or if trace is set to true
-        for(var playerProp in gameData.players)
-        {
-            var playerInfo = gameData.players[playerProp];
-            if(playerInfo.id != userInfo.id && playerInfo.map == userInfo.map)
+        function onGameDataUpdated(updatedData){
+            if(updatedData.error)
             {
-                result.players[playerProp] = playerInfo;
+                cb(updatedData);
+                return;
             }
-            else if(playerInfo.id != userInfo.id && playerInfo.trace)
+
+            //find other players who are in the same map or if trace is set to true
+            for(var playerProp in gameData.players)
             {
-                result.players[playerProp] = playerInfo;
-                result.maps[playerProp] = worldMap[playerInfo.map].src;
+                var playerInfo = gameData.players[playerProp];
+                if(playerInfo.id != userInfo.id && playerInfo.map == userInfo.map)
+                {
+                    result.players[playerProp] = playerInfo;
+                }
+                else if(playerInfo.id != userInfo.id && playerInfo.trace)
+                {
+                    result.players[playerProp] = playerInfo;
+                    result.maps[playerProp] = worldMap[playerInfo.map].src;
+                }
             }
+
+            cb(result);
         }
 
-        cb(result);
+        gameCommands.save(gameData,onGameDataUpdated);
     });
 
 };

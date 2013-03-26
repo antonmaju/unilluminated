@@ -88,10 +88,11 @@ exports.save = function(model, callback){
         client.collection(collName, function(cerr, coll){
             if(hasError(client, cerr, callback)) return;
 
-            coll.update({_id: model._id}, model, {safe:true}, function(err2, docs){
+            coll.update({_id: model._id}, model, {safe:true, upsert:true}, function(err2, count){
+
                 if(hasError(client, err2, callback)) return;
                 client.close();
-                callback({doc: docs[0]});
+                callback({count: count});
             });
         });
     });
