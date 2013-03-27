@@ -8,6 +8,19 @@ var Game = require('../game'),
     PlayerActions = require('../playerActions'),
     InputBuffer = require('./inputBuffer');
 
+function getOppositeDirection(direction){
+    switch(direction){
+        case Directions.Top:
+            return Directions.Bottom;
+        case Directions.Left:
+            return Directions.Right;
+        case Directions.Right:
+            return Directions.Left;
+        case Directions.Bottom:
+            return Directions.Top;
+    }
+}
+
 
 Game.prototype._initDOMEventHandlers = function(){
     var self = this;
@@ -112,6 +125,12 @@ Game.prototype._initEventHandlers = function(){
         self.options.viewManager.setView('map');
     });
 
+    socket.on('movedToNewArea', function(data){
+        self._current = data;
+        self._initPlayers();
+        self.options.viewManager.setView('map');
+    });
+
     this._initPlayerHandlers();
 
 };
@@ -162,6 +181,17 @@ Game.prototype._initPlayers = function(){
     {
         var playerInfo = playersInfo[playerType];
         var playerMap = this._current.maps[playerType];
+        if(!playerMap)
+        {
+            for(var mapType in this._current.maps)
+            {
+                if(this._current.maps[mapType].id == playerInfo.map)
+                {
+                    playerMap = this._current.maps[mapType];
+                    break;
+                }
+            }
+        }
         var positionInfo = playerMap.exits[playerInfo.direction][0];
 
         var player = playerFactory.create({
@@ -252,7 +282,6 @@ Game.prototype._init = function()
 Game.prototype.resize = function(){
     if(this.options.viewManager.currentView)
         this.options.viewManager.currentView.resize();
-
 };
 
 module.exports = Game;

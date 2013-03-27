@@ -1,8 +1,10 @@
-var coreServices = require('../core/coreServices'),
+var mongo=require('mongodb'),
+    coreServices = require('../core/coreServices'),
     controllerHelper = coreServices.controllerHelpers,
     gameCommands = require('../core/commands/gameCommands'),
     GameSystem = require('../core/game/server/serverRegistry'),
     PlayerDirections = GameSystem.PlayerDirections,
+    typeConverter = coreServices.typeConverter,
     filters = coreServices.filters;
 
 
@@ -29,8 +31,6 @@ module.exports ={
                     mode : game.mode
                 }, req, resp);
             });
-
-
         }
     },
     create : {
@@ -44,21 +44,33 @@ module.exports ={
                 players: {}
             };
 
+            var isHeroine = req.params.type == 'heroine';
+            var currentUserId = req.session.userId;
 
-            if(req.params.type == 'heroine'){
+            if (typeof(currentUserId) == 'string')
+                currentUserId = typeConverter.fromString.toObjectId(currentUserId);
+
+            if(game.mode == '1p')
+            {
                 game.players.girl = {
-                    id : req.session.userId,
+                    id :  isHeroine ? currentUserId : new mongo.ObjectID(),
                     type : GameSystem.PlayerTypes.Girl,
                     direction: PlayerDirections.Left,
-                    map : 'Map1'
+                    map : 'Map1',
+                    auto: !isHeroine,
+                    trace: true
                 };
-            }else{
-                game.players.guardian = {
-                    id: req.session.userId,
+                game.players.guardian ={
+                    id:  isHeroine ? new mongo.ObjectID() :  currentUserId,
                     type: GameSystem.PlayerTypes.Guardian,
                     direction: PlayerDirections.Right,
-                    map : 'Map7'
+                    map: 'Map7',
+                    auto: isHeroine,
+                    random: isHeroine
                 };
+            }
+            else{
+
             }
 
             gameCommands.create(game, function(result){

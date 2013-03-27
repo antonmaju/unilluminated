@@ -243,5 +243,11 @@ module.exports ={
         srcKey:'cave-edge-bottom',
         bgKey:'ground',
         isWalkable:false
+    },
+    '46':{
+        desc:'start of area',
+        srcKey:'end-of-area',
+        bgKey : 'grass-road',
+        isWalkable : true
     }
 };
