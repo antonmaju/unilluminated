@@ -19,6 +19,20 @@ block content
     #container
         canvas#canvas
             |Your browser does not support canvas
-        #btnDirection.btn Up
-        #btnJump.btn
-            div.inner Jump
+        div#btnContainer
+            #btnEmp.btnEmpty &nbsp;
+            #btnDirection.btn(value="up") up
+            #btnEmp.btnEmpty &nbsp;
+        div#btnContainer
+            #btnDirection.btn(value="left") left
+            #btnEmp.btnEmpty &nbsp;
+            #btnDirection.btn(value="right") right
+        div#btnContainerRight
+            #btnAct.btn
+                div.inner action
+        div#btnContainer
+            #btnEmp.btnEmpty &nbsp;
+            #btnDirection.btn(value="down") down
+            #btnEmp.btnEmpty &nbsp;
+
+     != html.jsLoader(['/js/hammer.js','/js/jqueryspecialevent.hammer.js'])
