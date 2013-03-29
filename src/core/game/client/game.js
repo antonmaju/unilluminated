@@ -94,8 +94,6 @@ Game.prototype._initPlayerHandlers = function(){
 };
 
 
-
-
 Game.prototype._initEventHandlers = function(){
     var socket = this.options.socket;
     var self = this;
@@ -132,7 +130,6 @@ Game.prototype._initEventHandlers = function(){
     });
 
     this._initPlayerHandlers();
-
 };
 
 Game.prototype._initPlayerEvents = function(player){
