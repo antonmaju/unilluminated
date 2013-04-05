@@ -7,6 +7,26 @@ var Game = require('../game'),
     Directions = require('../playerDirections'),
     PlayerActions = require('../playerActions'),
     InputBuffer = require('./inputBuffer');
+var isMobile = {
+    Android: function() {
+        return navigator.userAgent.match(/Android/i);
+    },
+    BlackBerry: function() {
+        return navigator.userAgent.match(/BlackBerry/i);
+    },
+    iOS: function() {
+        return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+    },
+    Opera: function() {
+        return navigator.userAgent.match(/Opera Mini|Opera Mobi/i);
+    },
+    Windows: function() {
+        return navigator.userAgent.match(/IEMobile/i);
+    },
+    any: function() {
+        return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
+    }
+};
 
 function getOppositeDirection(direction){
     switch(direction){
@@ -20,7 +40,6 @@ function getOppositeDirection(direction){
             return Directions.Top;
     }
 }
-
 
 Game.prototype._initDOMEventHandlers = function(){
     var self = this;
@@ -61,6 +80,42 @@ Game.prototype._initPlayerHandlers = function(){
     var self = this;
     var prevKey = null;
     var lastTime = + new Date;
+
+    function initMobileButtons(){
+
+        alert('its mobile');
+
+
+        $('#btnContainerAll').show().css('position','absolute')
+            .css('display','inline');
+
+        $('#btnAct')
+            .click(function(evt){
+               alert("action");
+            });
+
+        $('#btnDirectionUp')
+            .click(function(evt){
+                self._inputBuffer.addInput(PlayerActions.MoveTop);
+            });
+        $('#btnDirectionRight')
+            .click(function(evt){
+                self._inputBuffer.addInput(PlayerActions.MoveRight);
+            });
+        $('#btnDirectionLeft')
+            .click(function(evt){
+                self._inputBuffer.addInput(PlayerActions.MoveLeft);
+            });
+        $('#btnDirectionDown')
+            .click(function(evt){
+                self._inputBuffer.addInput(PlayerActions.MoveBottom);
+            });
+
+
+
+    }
+    if(isMobile.any())
+        initMobileButtons();
 
     this.on('keydown', function(evt){
 
