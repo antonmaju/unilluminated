@@ -5,6 +5,12 @@ module.exports =(function(){
     }
 
     ChaseBehavior.prototype ={
+        setTarget: function(){
+            
+        },
+        setCurrentPosition: function(){
+
+        },
         getNextMove : function(cb){
             cb(null);
         }
