@@ -58,7 +58,6 @@ module.exports = (function(){
             this._items[0] = lastItem;
             this._items.pop();
             this._heapifyDown(0);
-
             return frontItem;
         },
         size : function(){

@@ -164,6 +164,7 @@ module.exports = (function(){
                     this._cacheContext.drawImage(img, 0,imgSource.top,imgSource.width,imgSource.height, j * this.gridSize, i * this.gridSize,
                         this.gridSize, this.gridSize);
                 }
+
             }
         }
     }

@@ -6,7 +6,9 @@ var Game = require('../game'),
     playerFactory = require('./playerFactory'),
     Directions = require('../playerDirections'),
     PlayerActions = require('../playerActions'),
+    WanderBehavior = require('./wanderBehavior'),
     InputBuffer = require('./inputBuffer');
+
 
 function getOppositeDirection(direction){
     switch(direction){
@@ -216,6 +218,9 @@ Game.prototype._initPlayers = function(){
         else
         {
             //set AI
+            player.behavior = new WanderBehavior();
+            player.behavior.setMap(playerMap);
+            player.behavior.setPosition({row: positionInfo.row, column: positionInfo.column});
         }
 
         this._initPlayerEvents(player);
@@ -256,6 +261,14 @@ Game.prototype.render = function(step){
             for(var i =0; i<self._players.length; i++)
             {
                 var player = self._players[i];
+                if(player.behavior)
+                {
+                    var nextPos = player.behavior.getNextMove();
+                    if(nextPos)
+                    {
+                        player.setPosition(nextPos.row, nextPos.column);
+                    }
+                }
                 player.paint(time);
             }
 
