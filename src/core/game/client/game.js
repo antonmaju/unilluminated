@@ -114,8 +114,8 @@ Game.prototype._initPlayerHandlers = function(){
 
 
     }
-    if(isMobile.any())
-        initMobileButtons();
+/*    if(isMobile.any())
+        initMobileButtons();*/
 
     this.on('keydown', function(evt){
 

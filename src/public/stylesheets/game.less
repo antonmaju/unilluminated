@@ -1,4 +1,8 @@
+body
+{
+  background-color: #000000;
 
+}
 #container
 {
     display: none;
@@ -15,7 +19,9 @@
 }
 #btnContainerAll
 {
-  position: absolute; bottom: 0; right: 0;
+  position: absolute;
+  //left: 10px;
+  //top: 320px;
   display: none;
 }
 #btnContainer
@@ -31,27 +37,46 @@
 }
 .btn
 {
-  z-index: 10;
-  //border-radius: 50%;
-  margin-left:auto;
-  margin-right:auto;
-  width: 25px;
-  float:left;
   border: 1px solid #000;
+  background:#dddddd;
+  border-radius:25px;
   opacity: 0.5;
-  background-color: gray;
-  text-align: center;
-  font-size:.5em;
-  display:table;
+  background-color: white;
+  //padding:15px 20px;
+}
 
-  @media(min-width:480px){
-      width: 45px;
-      font-size:.7em;
-   }
-    @media(min-width:768px){
-      width: 60px;
-      font-size:.7em;
-    }
+#btnDirectionUp
+{
+  position:absolute;
+  top: 0px;
+  //left: 85px;
+  //width:10px;
+  //height:55px;
+}
+
+#btnDirectionLeft
+{
+  position:absolute;
+  top: 75px;
+  left: 0px;
+  width:55px;
+  height:10px;
+}
+#btnDirectionRight
+{
+  position:absolute;
+  top: 75px;
+  left:125px;
+  width:55px;
+  height:10px;
+}
+#btnDirectionDown
+{
+  position:absolute;
+  //top: 105px;
+  //left: 85px;
+  //width:10px;
+  //height:55px;
 }
 
 .btn .inner
