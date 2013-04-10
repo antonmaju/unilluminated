@@ -32,8 +32,10 @@ body
 }
 #btnContainerRight
 {
-  float:right;
-  width: 30%;
+  position: absolute;
+//left: 10px;
+//top: 320px;
+  display: none;
 }
 .btn
 {
@@ -44,39 +46,35 @@ body
   background-color: white;
   //padding:15px 20px;
 }
+.btnAction{
+  border:1px solid #000;
+  background:#dddddd;
+  opacity: 0.5;
+  background-color: #f8f8ff;
+  border-radius:50%;
 
+}
 #btnDirectionUp
 {
   position:absolute;
   top: 0px;
-  //left: 85px;
-  //width:10px;
-  //height:55px;
 }
 
 #btnDirectionLeft
 {
   position:absolute;
-  top: 75px;
-  left: 0px;
-  width:55px;
-  height:10px;
 }
 #btnDirectionRight
 {
   position:absolute;
-  top: 75px;
-  left:125px;
-  width:55px;
-  height:10px;
 }
 #btnDirectionDown
 {
   position:absolute;
-  //top: 105px;
-  //left: 85px;
-  //width:10px;
-  //height:55px;
+}
+#btnAct
+{
+  position:absolute;
 }
 
 .btn .inner
@@ -85,6 +83,12 @@ body
   vertical-align: middle;
 }
 .btn:hover
+{
+  background-color: #4169e1;
+  color: black;
+  border: none;
+}
+.btnAction:hover
 {
   background-color: #4169e1;
   color: black;

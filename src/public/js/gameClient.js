@@ -14,6 +14,8 @@ $(function(){
 
     var $container = $('#container');
     var $btnContainerAll = $('#btnContainerAll');
+    var $btnContainerRight = $('#btnContainerRight');
+    var $btnAct = $('#btnAct');
     var $btnDirectionUp = $('#btnDirectionUp');
     var $btnDirectionLeft = $('#btnDirectionLeft');
     var $btnDirectionRight = $('#btnDirectionRight');
@@ -56,7 +58,9 @@ $(function(){
         var btnContainerLeft=0;
         var outWidth=window.outerWidth;
         var outHeight=window.outerHeight;
-
+        var crTop=0;
+        var crLeft=0;
+        var crWidth=0;
 //        if((outWidth > outHeight) && (outHeight<=320))
 //        {
 //
@@ -89,6 +93,10 @@ $(function(){
             }
 
         btnContainerTop = newHeight-(buffTop+verHeight*2+horHeight*2+btnSpace*2);
+        crTop=btnContainerTop+btnSpace*2;
+        crLeft=newWidth-4*verHeight;
+        crWidth=2*verHeight;
+
         if (newWidthRatio > widthRatio) {
             newWidth = newHeight * widthRatio;
             $container.css('height', newHeight + 'px').css('width', newWidth + 'px');
@@ -98,7 +106,8 @@ $(function(){
             $container.css('width',  newWidth + 'px').css('height', newHeight +'px');
         }
 
-
+        //alert(newWidth);
+        //alert(newHeight);
         verLeft=horWidth+btnSpace;
         verTop=verHeight+btnSpace*2+horHeight;
         horTop=verHeight+btnSpace;
@@ -106,6 +115,8 @@ $(function(){
         horLeft=verLeft+verWidth+btnSpace;
         $container.css('marginTop',  (-newHeight / 2)).css('marginLeft',(-newWidth / 2) + 'px');
         $btnContainerAll.css('display','block').css('top',btnContainerTop + 'px').css('left',btnContainerLeft + 'px');
+        $btnContainerRight.css('display','block').css('top',crTop + 'px').css('left',crLeft + 'px');
+        $btnAct.css('width',crWidth + 'px').css('height',crWidth + 'px');
         $btnDirectionUp.css('width',verWidth + 'px').css('height',verHeight + 'px').css('left',verLeft + 'px');
         $btnDirectionDown.css('width',verWidth + 'px').css('height',verHeight + 'px').css('top', verTop + 'px').css('left',verLeft + 'px');
         $btnDirectionLeft.css('width',horWidth + 'px').css('height',horHeight + 'px').css('top', horTop + 'px').css('left',0 + 'px');
