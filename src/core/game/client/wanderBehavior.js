@@ -3,13 +3,16 @@ module.exports = (function(){
     var GameUtils = require('../commonUtils'),
         PlayerDirections = require('../playerDirections'),
         AreaTypes = require('../areaTypes'),
+        commonUtils = require('../commonUtils'),
         astar = require('./astar');
 
     function WanderBehavior(options){
 
         var defaults = {
             sightRadius:10,
-            isSingleMap:true
+            isSingleMap:true,
+            widthSize:1,
+            heightSize:1
         };
 
         this.options = GameUtils.extends({}, defaults, options);
@@ -43,8 +46,7 @@ module.exports = (function(){
                 target = this._findNearbyMultiMapTarget();
             }
 
-
-            this._path = astar(this._map.grid, this._position, target) || [];
+            this._path = astar(this._map.grid, this._position, target, this.options.widthSize, this.options.heightSize) || [];
 
         },
         _mapDirection :function(pos){
@@ -89,8 +91,8 @@ module.exports = (function(){
                         {
                             for(var j=leftMost; j<= rightMost; j++)
                             {
-                                var areaType = AreaTypes[this._map.grid[i][j]];
-                                if(areaType.isWalkable && areaType != '27')
+                                if(commonUtils.isWalkableArea(this._map.grid, i, j,
+                                    this.options.widthSize, this.options.heightSize) && areaType != '27')
                                 {
                                     target = {row: i, column: j};
                                     break;

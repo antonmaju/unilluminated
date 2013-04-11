@@ -43,7 +43,8 @@ module.exports = (function(){
                 context: options.context,
                 camouflageKey: 'stone',
                 sightRadius : sightRadius,
-                playerId:options.playerId
+                playerId:options.playerId,
+                isSingleMap: options.isSingleMap
             });
         }
     };

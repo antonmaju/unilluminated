@@ -193,15 +193,18 @@ Game.prototype._initPlayers = function(){
         }
         var positionInfo = playerMap.exits[playerInfo.direction][0];
 
-        var player = playerFactory.create({
+        var playerOptions = {
             imageManager: this.options.imageManager,
             playerType: playerInfo.type,
             row: positionInfo.row,
             column: positionInfo.column,
             mapRenderer: this.options.mapRenderer,
             context: this.options.context,
-            playerId: playerInfo.id
-        });
+            playerId: playerInfo.id,
+            isSingleMap: playerInfo.id != self.options.userId //will be changed later
+        };
+
+        var player = playerFactory.create(playerOptions);
 
         player.setPosition(positionInfo.row, positionInfo.column);
         player.setMap(playerMap);
@@ -218,7 +221,10 @@ Game.prototype._initPlayers = function(){
         else
         {
             //set AI
-            player.behavior = new WanderBehavior();
+            player.behavior = new WanderBehavior({
+                widthSize: player.getWidthSize(),
+                heightSize:player.getHeightSize()
+            });
             player.behavior.setMap(playerMap);
             player.behavior.setPosition({row: positionInfo.row, column: positionInfo.column});
         }
@@ -266,6 +272,7 @@ Game.prototype.render = function(step){
                     var nextPos = player.behavior.getNextMove();
                     if(nextPos)
                     {
+                        player.setDirectionBasedOnPosition(nextPos.row, nextPos.column);
                         player.setPosition(nextPos.row, nextPos.column);
                     }
                 }

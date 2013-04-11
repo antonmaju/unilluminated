@@ -1,27 +1,28 @@
 var ds=require('./ds'),
-    AreaTypes = require('../areaTypes');
+    AreaTypes = require('../areaTypes'),
+    commonUtils = require('../commonUtils') ;
 
 function ManhattanDistance(start, end){
     return Math.abs(end.row-start.row) + Math.abs(end.column-start.column);
 };
 
-function getPossiblePositions(grid, pos){
-    var connections = [];
-    var totalRow = grid.length;
-    var totalColumn = grid[0].length;
 
-    if(pos.row > 0 && AreaTypes[grid[pos.row-1][pos.column]].isWalkable){
+
+function getPossiblePositions(grid, pos, widthSize, heightSize){
+    var connections = [];
+
+    if(commonUtils.isWalkableArea(grid, pos.row-1, pos.column, widthSize, heightSize))
         connections.push({row:pos.row-1, column:pos.column});
-    }
-    if(pos.column > 0 && AreaTypes[grid[pos.row][pos.column-1]].isWalkable){
+
+    if(commonUtils.isWalkableArea(grid, pos.row, pos.column-1, widthSize, heightSize))
         connections.push({row:pos.row, column:pos.column-1});
-    }
-    if(pos.row < totalRow-1  && AreaTypes[grid[pos.row+1][pos.column]].isWalkable){
+
+    if(commonUtils.isWalkableArea(grid, pos.row+1, pos.column, widthSize, heightSize))
         connections.push({row:pos.row+1, column:pos.column});
-    }
-    if(pos.column < totalColumn-1 && AreaTypes[grid[pos.row][pos.column+1]].isWalkable){
+
+    if(commonUtils.isWalkableArea(grid, pos.row, pos.column+1, widthSize, heightSize))
         connections.push({row:pos.row, column:pos.column+1});
-    }
+
     return connections;
 }
 
@@ -59,7 +60,8 @@ function convertPathStringsToPositions(positions){
     return points;
 }
 
-module.exports = function(grid, start, end){
+module.exports = function(grid, start, end, widthSize, heightSize){
+
     var heuristic = ManhattanDistance;
     var closedHash = {};
     var openSet = new ds.PriorityQueue();
@@ -85,7 +87,7 @@ module.exports = function(grid, start, end){
 
         closedHash[stringPos]=true;
 
-        var positions = getPossiblePositions(grid, current);
+        var positions = getPossiblePositions(grid, current,widthSize, heightSize);
 
         for(var i=0; i<positions.length; i++){
             var newPos = positions[i];
