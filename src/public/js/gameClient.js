@@ -41,6 +41,19 @@ $(function(){
         var newWidth = window.innerWidth;
         var newHeight = window.innerHeight;
         var newWidthRatio = newWidth / newHeight;
+
+
+        // Direction ratio default portrait
+        var controllerRatio=0.3*newWidth;
+        var directionRatioHeight=0.3;
+        var directionRatioWidth=0.1;
+        //landscape Controller ratio
+        //var lanTopCR=0.3;
+
+        //var porTopCR=0.3;
+        var widthCR=0.3*newHeight;
+        var HeightCR=0.3*newHeight;
+
         var padd1= 7;
         var padd2= 8;
         var horTop=0;
@@ -56,49 +69,29 @@ $(function(){
         var btnContainerTop=0;
         var buffTop=20;
         var btnContainerLeft=0;
-        var outWidth=window.outerWidth;
-        var outHeight=window.outerHeight;
+
         var crTop=0;
         var crLeft=0;
         var crWidth=0;
-//        if((outWidth > outHeight) && (outHeight<=320))
-//        {
-//
-//            //btnContainerLeft=0;
-//        }
 
-        if(outWidth > 480 && newHeight > 320)
+
+     if(newWidth > newHeight)
         {
-//            alert('480+');
-            padd1=8;
-            padd2=11;
-            verWidth=8;
-            verHeight=40;
-            horWidth=40;
-            horHeight=8;
-            btnSpace=17;
-            btnContainerLeft=10;
-            buffTop=40;
-            //if()
+
+            btnContainerTop=0.6*newHeight;
+            btnContainerLeft=0.1*newWidth;
+            controllerRatio=0.3*newHeight;
+            //directionRatio
 
         }
-        if(outWidth > 800 && newHeight > 500) {
-//            alert('800+');
-            padd1=10;
-            padd2=15;
-            verWidth=10;
-            verHeight=55;
-            horWidth=55;
-            horHeight=10;
-            btnSpace=20;
-            buffTop=100;
-        }
+
+
 //        alert(mapRenderer._startRow);
 //        alert(mapRenderer.gridSize);
-        btnContainerTop = newHeight-(buffTop+verHeight*2+horHeight*2+btnSpace*2);
-        crTop=btnContainerTop+btnSpace*2;
-        crLeft=newWidth-3*verHeight;
-        crWidth=2*verHeight;
+        //btnContainerTop = newHeight-(buffTop+verHeight*2+horHeight*2+btnSpace*2);
+//        crTop=btnContainerTop+btnSpace*2;
+//        crLeft=newWidth-3*verHeight;
+//        crWidth=2*verHeight;
 
         if (newWidthRatio > widthRatio) {
             newWidth = newHeight * widthRatio;
@@ -109,21 +102,24 @@ $(function(){
             $container.css('width',  newWidth + 'px').css('height', newHeight +'px');
         }
 
-//        alert(newWidth);
-//        alert(newHeight);
+//        alert(btnContainerLeft);
+//        alert(btnContainerTop);
+        btnSpace=0.1*controllerRatio;
         verLeft=horWidth+btnSpace;
         verTop=verHeight+btnSpace*2+horHeight;
         horTop=verHeight+btnSpace;
         /* horleft is for left margin of DirectionRight*/
         horLeft=verLeft+verWidth+btnSpace;
+
         $container.css('marginTop',  (-newHeight / 2)).css('marginLeft',(-newWidth / 2) + 'px');
         $btnContainerAll.css('display','block').css('top',btnContainerTop + 'px').css('left',btnContainerLeft + 'px');
-        $btnContainerRight.css('display','block').css('top',crTop + 'px').css('left',crLeft + 'px');
-        $btnAct.css('width',crWidth + 'px').css('height',crWidth + 'px');
+
+        verLeft=0.3*controllerRatio+btnSpace;
+        verWidth=0.1*controllerRatio;
+        verHeight=0.3*controllerRatio;
         $btnDirectionUp.css('width',verWidth + 'px').css('height',verHeight + 'px').css('left',verLeft + 'px');
-        $btnDirectionDown.css('width',verWidth + 'px').css('height',verHeight + 'px').css('top', verTop + 'px').css('left',verLeft + 'px');
-        $btnDirectionLeft.css('width',horWidth + 'px').css('height',horHeight + 'px').css('top', horTop + 'px').css('left',0 + 'px');
-        $btnDirectionRight.css('width',horWidth + 'px').css('height',horHeight + 'px').css('top', horTop + 'px').css('left',horLeft + 'px');
+        verTop=0.3*controllerRatio+btnSpace;
+        $btnDirectionDown.css('width',verWidth + 'px').css('height',verHeight + 'px').css('left',verLeft + 'px').css('top',verTop + 'px');
         $btn.css('padding', padd1 + 'px ' + padd2 + 'px');
         $(canvas).attr('width',newWidth).attr('height', newHeight);
 
