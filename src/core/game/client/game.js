@@ -216,7 +216,6 @@ Game.prototype._initPlayers = function(){
             this._map = playerMap;
             this.options.mapRenderer.setPlayer(player);
             this.options.mapRenderer.setGrid(playerMap.grid);
-
         }
         else
         {
@@ -227,6 +226,17 @@ Game.prototype._initPlayers = function(){
             });
             player.behavior.setMap(playerMap);
             player.behavior.setPosition({row: positionInfo.row, column: positionInfo.column});
+
+            player.behavior.on('nextMoveGenerated', function(player){
+
+                function handleNextMove(nextPos){
+                    player.setDirectionBasedOnPosition(nextPos.row, nextPos.column);
+                    player.setPosition(nextPos.row, nextPos.column);
+                }
+
+                return handleNextMove;
+
+            }(player));
         }
 
         this._initPlayerEvents(player);
@@ -269,12 +279,7 @@ Game.prototype.render = function(step){
                 var player = self._players[i];
                 if(player.behavior)
                 {
-                    var nextPos = player.behavior.getNextMove();
-                    if(nextPos)
-                    {
-                        player.setDirectionBasedOnPosition(nextPos.row, nextPos.column);
-                        player.setPosition(nextPos.row, nextPos.column);
-                    }
+                    player.behavior.getNextMove();
                 }
                 player.paint(time);
             }

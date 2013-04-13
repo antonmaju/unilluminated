@@ -20,6 +20,7 @@ site.css
 game.css
 config.json
 testConfig.json
+astarWorkerBundle.js
 gameClientBundle.js
 /.bundle
 /db/*.sqlite3
