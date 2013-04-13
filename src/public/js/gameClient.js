@@ -54,7 +54,7 @@ $(function(){
         var verHeight=20;
         var btnSpace=15;
         var btnContainerTop=0;
-        var buffTop=10;
+        var buffTop=20;
         var btnContainerLeft=0;
         var outWidth=window.outerWidth;
         var outHeight=window.outerHeight;
@@ -67,9 +67,9 @@ $(function(){
 //            //btnContainerLeft=0;
 //        }
 
-        if(outWidth > 480 )
+        if(outWidth > 480 && newHeight > 320)
         {
-            //alert('480+');
+//            alert('480+');
             padd1=8;
             padd2=11;
             verWidth=8;
@@ -78,10 +78,12 @@ $(function(){
             horHeight=8;
             btnSpace=17;
             btnContainerLeft=10;
+            buffTop=40;
             //if()
 
         }
-        if(outWidth > 800 ) {
+        if(outWidth > 800 && newHeight > 500) {
+//            alert('800+');
             padd1=10;
             padd2=15;
             verWidth=10;
@@ -89,12 +91,13 @@ $(function(){
             horWidth=55;
             horHeight=10;
             btnSpace=20;
-            buffTop=20;
-            }
-
+            buffTop=100;
+        }
+//        alert(mapRenderer._startRow);
+//        alert(mapRenderer.gridSize);
         btnContainerTop = newHeight-(buffTop+verHeight*2+horHeight*2+btnSpace*2);
         crTop=btnContainerTop+btnSpace*2;
-        crLeft=newWidth-4*verHeight;
+        crLeft=newWidth-3*verHeight;
         crWidth=2*verHeight;
 
         if (newWidthRatio > widthRatio) {
@@ -106,8 +109,8 @@ $(function(){
             $container.css('width',  newWidth + 'px').css('height', newHeight +'px');
         }
 
-        //alert(newWidth);
-        //alert(newHeight);
+//        alert(newWidth);
+//        alert(newHeight);
         verLeft=horWidth+btnSpace;
         verTop=verHeight+btnSpace*2+horHeight;
         horTop=verHeight+btnSpace;

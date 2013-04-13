@@ -31,6 +31,7 @@ module.exports = (function(){
     MapRenderer.prototype._init = function(){
 
         this.on('resize', function(){
+            this._setTiles();
             this._calculateViewport();
             this._renderCache();
         });
@@ -40,11 +41,11 @@ module.exports = (function(){
 
     };
 
-
     MapRenderer.prototype.setGrid = function(grid){
         this._grid = grid;
         this.totalRow = this._grid.length;
         this.totalColumn = this._grid[0].length;
+        this._setTiles();
         this._calculateViewport();
         this._renderCache();
 
@@ -129,6 +130,21 @@ module.exports = (function(){
         this._idealCameraColRange =  Math.floor(this._columnPerScreen/2);
         this._idealCameraRowRange =  Math.floor(this._rowPerScreen/2);
 
+    };
+
+    MapRenderer.prototype._setTiles = function(){
+        this._columnPerScreen=12;
+        this._rowPerScreen=8;
+        if(window.innerWidth > 480)
+        {
+            this._columnPerScreen=14;
+            this._rowPerScreen=10;
+        }
+        if(window.innerWidth > 600)
+        {
+            this._columnPerScreen=16;
+            this._rowPerScreen=12;
+        }
     };
 
     MapRenderer.prototype._renderCache = function(){
