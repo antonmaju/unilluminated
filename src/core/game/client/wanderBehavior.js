@@ -3,7 +3,6 @@ module.exports = (function(){
     var GameUtils = require('../commonUtils'),
         PlayerDirections = require('../playerDirections'),
         AreaTypes = require('../areaTypes'),
-        commonUtils = require('../commonUtils'),
         astar = require('./astar'),
         event = require('events');
 
@@ -22,7 +21,7 @@ module.exports = (function(){
         this._path = [];
         this._pathIndex =0;
 
-        if(Modernizr.webworkers)
+        if(typeof(Modernizr) != "undefined" &&  Modernizr.webworkers)
             this._worker = new Worker('/js/astarWorkerBundle.js');
 
         this._init();
@@ -129,7 +128,7 @@ module.exports = (function(){
                     {
                         for(var j=leftMost; j<= rightMost; j++)
                         {
-                            if(commonUtils.isWalkableArea(this._map.grid, i, j,
+                            if(GameUtils.isWalkableArea(this._map.grid, i, j,
                                 this.options.widthSize, this.options.heightSize) && areaType != '27')
                             {
                                 target = {row: i, column: j};

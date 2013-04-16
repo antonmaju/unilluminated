@@ -29,12 +29,13 @@ describe('WanderBehavior', function(){
             behavior.setPosition({row:2, column: 1})
             behavior.setMap(map);
 
+            behavior.on('nextMoveGenerated', function(result){
+                var typeId = map.grid[result.row][result.column];
+                AreaTypes[typeId].isWalkable.should.be.true;
+                done();
+            });
+
             var result =behavior.getNextMove();
-            //function(result){
-            var typeId = map.grid[result.row][result.column];
-            AreaTypes[typeId].isWalkable.should.be.true;
-            done();
-            //});
 
         });
 

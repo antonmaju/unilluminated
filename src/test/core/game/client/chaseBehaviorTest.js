@@ -22,41 +22,45 @@ describe('ChaseBehavior', function(){
         it('should return walkable position', function(done){
 
             var behavior = new ChaseBehavior({
-                sightRadius: 5,
-                map:map,
-                row:3,
-                column: 0
+                sightRadius: 5
             });
 
-            behavior.setTarget(3,7);
+            behavior.setMap(map);
+            behavior.setPosition({row:3, column:0});
+            behavior.setTarget({row: 3,column: 7});
 
-            behavior.getNextMove(function(result){
+            behavior.on('nextMoveGenerated', function(result){
                 var typeId = map.grid[result.row][result.column];
                 AreaTypes[typeId].isWalkable.should.be.true;
                 done();
             });
 
+            behavior.getNextMove();
         });
 
         it('should be able to reach target', function(done){
-            var behavior = new WanderBehavior({
-                sightRadius: 5,
-                map:map,
-                row:3,
-                column: 0
-            })
+            var behavior = new ChaseBehavior({
+                sightRadius: 5
+            });
 
-            var counter =0;
+            behavior.setMap(map);
+            behavior.setPosition({row:3, column:0});
             var target = {row:3, column: 7};
-            behavior.setTarget(target.row,target.column);
+            behavior.setTarget(target);
+
             function onNextMoveRetrieved(result){
                 if(result.row == target.row && result.column == target.column)
                 {
                     done();
                 }
+                else
+                    behavior.getNextMove();
             }
 
-            behavior.getNextMove(onNextMoveRetrieved);
+            behavior.on('nextMoveGenerated', onNextMoveRetrieved);
+
+            behavior.getNextMove();
+
         });
 
 
