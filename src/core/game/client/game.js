@@ -83,15 +83,15 @@ Game.prototype._initPlayerHandlers = function(){
 
     function initMobileButtons(){
 
-        alert('its mobile');
-
 
         $('#btnContainerAll').show().css('position','absolute')
-            .css('display','inline');
+            .css('display','block');
+        $('#btnContainerRight').show().css('position','absolute')
+            .css('display','block');
 
         $('#btnAct')
             .click(function(evt){
-               alert("action");
+               console.log("action");
             });
 
         $('#btnDirectionUp')
@@ -114,8 +114,8 @@ Game.prototype._initPlayerHandlers = function(){
 
 
     }
-/*    if(isMobile.any())
-        initMobileButtons();*/
+    if(isMobile.any())
+        initMobileButtons();
 
     this.on('keydown', function(evt){
 

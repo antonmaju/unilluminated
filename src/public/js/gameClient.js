@@ -36,13 +36,9 @@ $(function(){
         mode: settings.mode
     });
 
-    //this resize function is from HTML5Rocks.com
-    function resizeArea(){
+    function resizeController(){
         var newWidth = window.innerWidth;
         var newHeight = window.innerHeight;
-        var newWidthRatio = newWidth / newHeight;
-
-
         // Direction ratio default portrait
         var controllerRatio=0.3*newWidth;
         var directionRatioHeight=0.3;
@@ -84,39 +80,27 @@ $(function(){
         var crLeft=0;
         var crWidth=0;
 
-        btnContainerTop=0.75*newWidth;
+        btnContainerTop=0.65*newHeight;
         btnContainerLeft=0.05*newWidth;
-        controllerRatio=0.35*newWidth;
-     if(newWidth > newHeight)
+        controllerRatio=0.3*newHeight;
+        if(newWidth > newHeight)
         {
 
-            btnContainerTop=0.6*newHeight;
+            btnContainerTop=0.55*newHeight;
             btnContainerLeft=0.05*newWidth;
-            controllerRatio=0.35*newHeight;
+            controllerRatio=0.4*newHeight;
             //directionRatio
         }
-
-        if (newWidthRatio > widthRatio) {
-            newWidth = newHeight * widthRatio;
-            $container.css('height', newHeight + 'px').css('width', newWidth + 'px');
-
-        } else { // window height is too high relative to desired game height
-            newHeight = newWidth / widthRatio;
-            $container.css('width',  newWidth + 'px').css('height', newHeight +'px');
-        }
-
 //        alert(btnContainerLeft);
 //        alert(btnContainerTop);
         btnSpace=btnSpaceRatio*controllerRatio;
         verLeft=horWidth+btnSpace;
         verTop=verHeight+btnSpace*2+horHeight;
         horTop=verHeight+btnSpace;
-        /* horleft is for left margin of DirectionRight*/
+        // horleft is for left margin of DirectionRight
         horLeft=verLeft+verWidth+btnSpace;
-
-        $container.css('marginTop',  (-newHeight / 2)).css('marginLeft',(-newWidth / 2) + 'px');
-        $btnContainerAll.css('display','block').css('top',btnContainerTop + 'px').css('left',btnContainerLeft + 'px');
-
+        $btnContainerAll.css('top',btnContainerTop + 'px').css('left',btnContainerLeft + 'px');
+//     .css('display','block')
         verWidth=verWidthRatio*controllerRatio;
         verHeight=verHeightRatio*controllerRatio;
         horHeight=horHeightRatio*controllerRatio;
@@ -134,8 +118,38 @@ $(function(){
         horLeft=horWidth+verWidth+2*btnSpace;
         $btnDirectionRight.css('width',horWidth + 'px').css('height',horHeight + 'px').css('left',horLeft + 'px').css('top',horTop + 'px');
         $btn.css('padding', padding1 + 'px ' + padding2 + 'px');
-        $(canvas).attr('width',newWidth).attr('height', newHeight);
 
+
+        crTop=btnContainerTop+(verHeight/2);
+        crLeft=newWidth-btnContainerLeft-(verHeight*2.5);
+        crWidth=verHeight*2;
+        $btnContainerRight.css('top',crTop + 'px').css('left',crLeft + 'px');
+//     .css('display','block')
+        $btnAct.css('width',crWidth + 'px').css('height',crWidth + 'px');
+
+
+    }
+    //this resize function is from HTML5Rocks.com
+    function resizeArea(){
+        var newWidth = window.innerWidth;
+        var newHeight = window.innerHeight;
+        var newWidthRatio = newWidth / newHeight;
+
+
+
+        if (newWidthRatio > widthRatio) {
+            newWidth = newHeight * widthRatio;
+            $container.css('height', newHeight + 'px').css('width', newWidth + 'px');
+
+        } else { // window height is too high relative to desired game height
+            newHeight = newWidth / widthRatio;
+            $container.css('width',  newWidth + 'px').css('height', newHeight +'px');
+        }
+
+        $container.css('marginTop',  (-newHeight / 2)).css('marginLeft',(-newWidth / 2) + 'px');
+
+        $(canvas).attr('width',newWidth).attr('height', newHeight);
+        resizeController();
         game.resize();
     }
 
