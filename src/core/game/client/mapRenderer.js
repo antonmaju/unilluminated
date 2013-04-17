@@ -133,12 +133,12 @@ module.exports = (function(){
     };
 
     MapRenderer.prototype._setTiles = function(){
-        this._columnPerScreen=12;
-        this._rowPerScreen=8;
+        this._columnPerScreen=8;
+        this._rowPerScreen=6;
         if(window.innerWidth > 480)
         {
-            this._columnPerScreen=14;
-            this._rowPerScreen=10;
+            this._columnPerScreen=12;
+            this._rowPerScreen=9;
         }
         if(window.innerWidth > 600)
         {
