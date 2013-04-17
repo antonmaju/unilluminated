@@ -6,7 +6,9 @@ var Game = require('../game'),
     playerFactory = require('./playerFactory'),
     Directions = require('../playerDirections'),
     PlayerActions = require('../playerActions'),
+    PlayerTypes = require('../playerTypes'),
     WanderBehavior = require('./wanderBehavior'),
+    GuardianBehavior = require('./guardianBehavior'),
     InputBuffer = require('./inputBuffer');
 
 
@@ -220,10 +222,15 @@ Game.prototype._initPlayers = function(){
         else
         {
             //set AI
-            player.behavior = new WanderBehavior({
-                widthSize: player.getWidthSize(),
-                heightSize:player.getHeightSize()
-            });
+            //if(playerInfo.type == PlayerTypes.Guardian)
+            //{
+                player.behavior = new GuardianBehavior({
+                    widthSize: player.getWidthSize(),
+                    heightSize:player.getHeightSize()
+                });
+            //}
+
+
             player.behavior.setMap(playerMap);
             player.behavior.setPosition({row: positionInfo.row, column: positionInfo.column});
 
@@ -241,6 +248,16 @@ Game.prototype._initPlayers = function(){
 
         this._initPlayerEvents(player);
         this._players.push(player);
+    }
+
+    for(var i=0; i<this._players.length; i++)
+    {
+        var player = this._players[i];
+        if(player.behavior)
+        {
+            if(player.getType() == PlayerTypes.Guardian)
+                player.behavior.setEnemy(this._player);
+        }
     }
 };
 

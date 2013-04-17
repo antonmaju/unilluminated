@@ -85,6 +85,10 @@ module.exports = (function(){
             this._activeDirection = Directions.Left;
     };
 
+    Player.prototype.getType = function(){
+        return this.options.playerType;
+    };
+
     Player.prototype.getWidthSize= function(){
         return this.options.widthSize;
     };
@@ -173,6 +177,19 @@ module.exports = (function(){
 
     };
 
+    Player.prototype.getOccupiedPositions = function(){
+        var posList =[];
+
+        for(var i=this.row; i<this.row+this.getHeightSize(); i++)
+        {
+            for(var j= this.column; j< this.column+this.getWidthSize(); j++)
+            {
+                posList.push({row:i, column:j});
+            }
+        }
+
+        return posList;
+    };
 
 
     Player.prototype._getExitDirection = function(){

@@ -33,6 +33,7 @@ module.exports =(function(){
 
     ChaseBehavior.prototype.setPosition= function(pos){
         this._position = pos;
+        this.reset();
     };
 
     ChaseBehavior.prototype.getPosition = function(){
@@ -41,6 +42,7 @@ module.exports =(function(){
 
     ChaseBehavior.prototype.setTarget = function(pos){
         this._target = pos;
+        this.reset();
     };
 
     ChaseBehavior.prototype.getTarget = function(){

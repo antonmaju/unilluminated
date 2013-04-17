@@ -45,3 +45,14 @@ exports.isWalkableArea = function(grid, row, column,widthSize, heightSize)
 };
 
 
+exports.isPlayerSeen = function(player, currentRow, currentCol, sightRadius){
+    var posList = player.getOccupiedPositions();
+    for(var i=0; i<posList.length; i++){
+        var pos = posList[i];
+        if(Math.abs(pos.row - currentRow) <= sightRadius && Math.abs(pos.column - currentCol) <= sightRadius)
+            return true;
+    }
+
+    return false;
+};
+
