@@ -6,8 +6,6 @@ function ManhattanDistance(start, end){
     return Math.abs(end.row-start.row) + Math.abs(end.column-start.column);
 };
 
-
-
 function getPossiblePositions(grid, pos, widthSize, heightSize){
     var connections = [];
 
