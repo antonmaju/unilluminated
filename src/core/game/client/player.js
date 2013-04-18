@@ -74,6 +74,20 @@ module.exports = (function(){
         }
     };
 
+    Player.prototype.setDirectionBasedOnPosition = function(row, column){
+        if(row > this.row)
+            this._activeDirection = Directions.Bottom;
+        else if(row < this.row)
+            this._activeDirection = Directions.Top;
+        else if(column > this.column)
+            this._activeDirection = Directions.Right;
+        else if(column < this.column)
+            this._activeDirection = Directions.Left;
+    };
+
+    Player.prototype.getType = function(){
+        return this.options.playerType;
+    };
 
     Player.prototype.getWidthSize= function(){
         return this.options.widthSize;
@@ -151,7 +165,7 @@ module.exports = (function(){
     Player.prototype._checkPostCondition = function(){
         var areaType = this.map.grid[this.row][this.column];
 
-        if(areaType == '27' && this._hasMove){
+        if(areaType == '27' && this._hasMove && !this.options.isSingleMap){
             var direction = this._getExitDirection();
             if(direction){
                 this.emit('movingToNewArea', direction);
@@ -163,6 +177,19 @@ module.exports = (function(){
 
     };
 
+    Player.prototype.getOccupiedPositions = function(){
+        var posList =[];
+
+        for(var i=this.row; i<this.row+this.getHeightSize(); i++)
+        {
+            for(var j= this.column; j< this.column+this.getWidthSize(); j++)
+            {
+                posList.push({row:i, column:j});
+            }
+        }
+
+        return posList;
+    };
 
 
     Player.prototype._getExitDirection = function(){

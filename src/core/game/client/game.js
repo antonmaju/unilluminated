@@ -6,6 +6,9 @@ var Game = require('../game'),
     playerFactory = require('./playerFactory'),
     Directions = require('../playerDirections'),
     PlayerActions = require('../playerActions'),
+    PlayerTypes = require('../playerTypes'),
+    WanderBehavior = require('./wanderBehavior'),
+    GuardianBehavior = require('./guardianBehavior'),
     InputBuffer = require('./inputBuffer');
 var isMobile = {
     Android: function() {
@@ -27,6 +30,7 @@ var isMobile = {
         return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
     }
 };
+
 
 function getOppositeDirection(direction){
     switch(direction){
@@ -149,8 +153,6 @@ Game.prototype._initPlayerHandlers = function(){
 };
 
 
-
-
 Game.prototype._initEventHandlers = function(){
     var socket = this.options.socket;
     var self = this;
@@ -187,7 +189,6 @@ Game.prototype._initEventHandlers = function(){
     });
 
     this._initPlayerHandlers();
-
 };
 
 Game.prototype._initPlayerEvents = function(player){
@@ -249,15 +250,18 @@ Game.prototype._initPlayers = function(){
         }
         var positionInfo = playerMap.exits[playerInfo.direction][0];
 
-        var player = playerFactory.create({
+        var playerOptions = {
             imageManager: this.options.imageManager,
             playerType: playerInfo.type,
             row: positionInfo.row,
             column: positionInfo.column,
             mapRenderer: this.options.mapRenderer,
             context: this.options.context,
-            playerId: playerInfo.id
-        });
+            playerId: playerInfo.id,
+            isSingleMap: playerInfo.id != self.options.userId //will be changed later
+        };
+
+        var player = playerFactory.create(playerOptions);
 
         player.setPosition(positionInfo.row, positionInfo.column);
         player.setMap(playerMap);
@@ -269,15 +273,46 @@ Game.prototype._initPlayers = function(){
             this._map = playerMap;
             this.options.mapRenderer.setPlayer(player);
             this.options.mapRenderer.setGrid(playerMap.grid);
-
         }
         else
         {
             //set AI
+            //if(playerInfo.type == PlayerTypes.Guardian)
+            //{
+                player.behavior = new GuardianBehavior({
+                    widthSize: player.getWidthSize(),
+                    heightSize:player.getHeightSize()
+                });
+            //}
+
+
+            player.behavior.setMap(playerMap);
+            player.behavior.setPosition({row: positionInfo.row, column: positionInfo.column});
+
+            player.behavior.on('nextMoveGenerated', function(player){
+
+                function handleNextMove(nextPos){
+                    player.setDirectionBasedOnPosition(nextPos.row, nextPos.column);
+                    player.setPosition(nextPos.row, nextPos.column);
+                }
+
+                return handleNextMove;
+
+            }(player));
         }
 
         this._initPlayerEvents(player);
         this._players.push(player);
+    }
+
+    for(var i=0; i<this._players.length; i++)
+    {
+        var player = this._players[i];
+        if(player.behavior)
+        {
+            if(player.getType() == PlayerTypes.Guardian)
+                player.behavior.setEnemy(this._player);
+        }
     }
 };
 
@@ -314,6 +349,10 @@ Game.prototype.render = function(step){
             for(var i =0; i<self._players.length; i++)
             {
                 var player = self._players[i];
+                if(player.behavior)
+                {
+                    player.behavior.getNextMove();
+                }
                 player.paint(time);
             }
 

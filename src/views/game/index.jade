@@ -10,9 +10,10 @@ block privateJs
             webUrl : '!{config.webUrl}',
             id     : '!{model.id}',
             userId : '!{model.userId}',
-            mode   : '!{model.mode}'
+            mode   : '!{model.mode}',
+            assetsUrl:'!{config.assetsUrl}'
         }
-    != html.jsLoader(['/js/requestNextAnimationFrame.js','/js/gameClientBundle.js'])
+    != html.jsLoader(['/js/requestNextAnimationFrame.js','/js/gameClient.min.js'])
 
 
 block content
@@ -26,15 +27,3 @@ block content
             #btnDirectionDown.btn
     div#btnContainerRight
             #btnAct.btnAction
-     != html.jsLoader(['/js/hammer.js','/js/jqueryspecialevent.hammer.js'])
-
-//           #btnContainerRight
-//                #btnAct.btn
-//                    div.inner action
-//            #btnMiddle.btn(value="middle") middle
-
-//#btnDirectionLeft.btn
-//    #btnDirectionRight.btn
-//    #btnDirectionDown.btn
-//div#btnContainerRight
-//    #btnAct.btnAction
