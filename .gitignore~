@@ -23,4 +23,3 @@ testConfig.json
 gameClientBundle.js
 /.bundle
 /db/*.sqlite3
-astarWorkerBundle.js

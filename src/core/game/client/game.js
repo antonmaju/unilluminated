@@ -7,7 +7,39 @@ var Game = require('../game'),
     Directions = require('../playerDirections'),
     PlayerActions = require('../playerActions'),
     InputBuffer = require('./inputBuffer');
+var isMobile = {
+    Android: function() {
+        return navigator.userAgent.match(/Android/i);
+    },
+    BlackBerry: function() {
+        return navigator.userAgent.match(/BlackBerry/i);
+    },
+    iOS: function() {
+        return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+    },
+    Opera: function() {
+        return navigator.userAgent.match(/Opera Mini|Opera Mobi/i);
+    },
+    Windows: function() {
+        return navigator.userAgent.match(/IEMobile/i);
+    },
+    any: function() {
+        return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
+    }
+};
 
+function getOppositeDirection(direction){
+    switch(direction){
+        case Directions.Top:
+            return Directions.Bottom;
+        case Directions.Left:
+            return Directions.Right;
+        case Directions.Right:
+            return Directions.Left;
+        case Directions.Bottom:
+            return Directions.Top;
+    }
+}
 
 Game.prototype._initDOMEventHandlers = function(){
     var self = this;
@@ -48,6 +80,42 @@ Game.prototype._initPlayerHandlers = function(){
     var self = this;
     var prevKey = null;
     var lastTime = + new Date;
+
+    function initMobileButtons(){
+
+
+        $('#btnContainerAll').show().css('position','absolute')
+            .css('display','block');
+        $('#btnContainerRight').show().css('position','absolute')
+            .css('display','block');
+
+        $('#btnAct')
+            .click(function(evt){
+               console.log("action");
+            });
+
+        $('#btnDirectionUp')
+            .click(function(evt){
+                self._inputBuffer.addInput(PlayerActions.MoveTop);
+            });
+        $('#btnDirectionRight')
+            .click(function(evt){
+                self._inputBuffer.addInput(PlayerActions.MoveRight);
+            });
+        $('#btnDirectionLeft')
+            .click(function(evt){
+                self._inputBuffer.addInput(PlayerActions.MoveLeft);
+            });
+        $('#btnDirectionDown')
+            .click(function(evt){
+                self._inputBuffer.addInput(PlayerActions.MoveBottom);
+            });
+
+
+
+    }
+    if(isMobile.any())
+        initMobileButtons();
 
     this.on('keydown', function(evt){
 
@@ -112,6 +180,12 @@ Game.prototype._initEventHandlers = function(){
         self.options.viewManager.setView('map');
     });
 
+    socket.on('movedToNewArea', function(data){
+        self._current = data;
+        self._initPlayers();
+        self.options.viewManager.setView('map');
+    });
+
     this._initPlayerHandlers();
 
 };
@@ -162,6 +236,17 @@ Game.prototype._initPlayers = function(){
     {
         var playerInfo = playersInfo[playerType];
         var playerMap = this._current.maps[playerType];
+        if(!playerMap)
+        {
+            for(var mapType in this._current.maps)
+            {
+                if(this._current.maps[mapType].id == playerInfo.map)
+                {
+                    playerMap = this._current.maps[mapType];
+                    break;
+                }
+            }
+        }
         var positionInfo = playerMap.exits[playerInfo.direction][0];
 
         var player = playerFactory.create({
@@ -252,7 +337,6 @@ Game.prototype._init = function()
 Game.prototype.resize = function(){
     if(this.options.viewManager.currentView)
         this.options.viewManager.currentView.resize();
-
 };
 
 module.exports = Game;
