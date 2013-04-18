@@ -10,9 +10,10 @@ block privateJs
             webUrl : '!{config.webUrl}',
             id     : '!{model.id}',
             userId : '!{model.userId}',
-            mode   : '!{model.mode}'
+            mode   : '!{model.mode}',
+            assetsUrl:'!{config.assetsUrl}'
         }
-    != html.jsLoader(['/js/requestNextAnimationFrame.js','/js/gameClientBundle.js'])
+    != html.jsLoader(['/js/requestNextAnimationFrame.js','/js/gameClient.min.js'])
 
 
 block content
