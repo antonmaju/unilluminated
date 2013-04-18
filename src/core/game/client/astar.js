@@ -33,8 +33,18 @@ function convertToPosition(posString){
     return {row:parseInt(arr[0],10),column:parseInt(arr[1],10)};
 }
 
-function samePosition(pos1,pos2){
-    return pos1.row==pos2.row && pos1.column == pos2.column;
+function isIntersect(pos1,pos2, widthSize, heightSize){
+    for(var i=pos1.row; i< pos1.row + heightSize; i++ )
+    {
+        for(var j=pos1.column; j <pos1.column +widthSize; j++)
+        {
+            if(i == pos2.row && j== pos2.column)
+                return true;
+        }
+    }
+
+    return false;
+    //return pos1.row==pos2.row && pos1.column == pos2.column;
 }
 
 function reconstructPath(cameFrom, current){
@@ -80,7 +90,7 @@ module.exports = function(grid, start, end, widthSize, heightSize){
         var current = convertToPosition(stringPos);
         openHash[stringPos] = false;
 
-        if(samePosition(current, end))
+        if(isIntersect(current, end, widthSize, heightSize))
             return convertPathStringsToPositions(reconstructPath(cameFrom,stringPos));
 
         closedHash[stringPos]=true;

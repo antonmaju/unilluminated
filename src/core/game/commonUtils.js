@@ -30,10 +30,10 @@ exports.isWalkableArea = function(grid, row, column,widthSize, heightSize)
 {
     var totalRow = grid.length;
     var totalColumn = grid[0].length;
-    for(var i=row; i<row+widthSize; i++){
+    for(var i=row; i<row+heightSize; i++){
         if(i < 0 || i>= totalRow) return false;
 
-        for(var j=column; j<column+heightSize; j++){
+        for(var j=column; j<column+widthSize; j++){
             if(j<0 || j>= totalColumn) return false;
 
             if(! AreaTypes[grid[i][j]].isWalkable)
@@ -43,7 +43,6 @@ exports.isWalkableArea = function(grid, row, column,widthSize, heightSize)
 
     return true;
 };
-
 
 exports.isPlayerSeen = function(player, currentRow, currentCol, sightRadius){
     var posList = player.getOccupiedPositions();
