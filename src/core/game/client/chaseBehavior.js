@@ -19,7 +19,7 @@ module.exports =(function(){
         this._pathIndex =0;
 
         if(typeof(Modernizr) != "undefined" && Modernizr.webworkers)
-            this._worker = new Worker(settings.assetsUrl +'/js/astarWorker.min.js');
+            this._worker = new Worker('/js/astarWorker.min.js');
 
         this._init();
     }
