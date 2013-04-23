@@ -2,10 +2,21 @@ var mongo=require('mongodb'),
     coreServices = require('../core/coreServices'),
     controllerHelper = coreServices.controllerHelpers,
     gameCommands = require('../core/commands/gameCommands'),
+    GameStates = require('../core/game/gameStates'),
     GameSystem = require('../core/game/server/serverRegistry'),
     PlayerDirections = GameSystem.PlayerDirections,
     typeConverter = coreServices.typeConverter,
     filters = coreServices.filters;
+
+function getCurrentUserId(req){
+    var currentUserId = req.session.userId;
+
+    if (typeof(currentUserId) == 'string')
+        currentUserId = typeConverter.fromString.toObjectId(currentUserId);
+
+    return currentUserId;
+}
+
 
 
 module.exports ={
@@ -25,9 +36,49 @@ module.exports ={
                 }
 
                 var game = result.doc;
+                var currentUserId = getCurrentUserId(req);
+                var userFound = false;
+                var userType = null;
+
+                for(var type in game.players)
+                {
+                    var player = game.players[type];
+                    if(player.id.toString() == currentUserId.toString())
+                    {
+                        userFound = true;
+                        userType = type;
+                        break;
+                    }
+                }
+
+                if(! userFound)
+                {
+                    resp.redirect('/main-menu');
+                    return;
+                }
+
+                if(game.state == GameStates.Finished)
+                {
+                    var model = {};
+
+                    if(userType == GameSystem.PlayerTypes.Girl)
+                    {
+                        model.winner = game.winner.toString() == currentUserId.toString() ?
+                        GameSystem.PlayerTypes.Girl : GameSystem.PlayerTypes.Guardian;
+                    }
+                    else
+                    {
+                        model.winner =game.winner.toString() == currentUserId.toString() ?
+                            GameSystem.PlayerTypes.Guardian : GameSystem.PlayerTypes.Girl;
+                    }
+
+                    controllerHelper.renderView('game/game-over',model, req, resp);
+                    return;
+                }
+
                 controllerHelper.renderView('game/index',{
                     id: req.params.id,
-                    userId: req.session.userId,
+                    userId: currentUserId,
                     mode : game.mode
                 }, req, resp);
             });
@@ -41,14 +92,12 @@ module.exports ={
             var game = {
                 mode : req.params.mode,
                 created : new Date(),
+                state : GameStates.Running,
                 players: {}
             };
 
             var isHeroine = req.params.type == 'heroine';
-            var currentUserId = req.session.userId;
-
-            if (typeof(currentUserId) == 'string')
-                currentUserId = typeConverter.fromString.toObjectId(currentUserId);
+            var currentUserId = getCurrentUserId(req);
 
             if(game.mode == '1p')
             {

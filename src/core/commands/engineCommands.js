@@ -181,5 +181,4 @@ exports.getNewAreaInfo = function(param, cb){
 
         gameCommands.save(gameData,onGameDataUpdated);
     });
-
 };

@@ -10,6 +10,7 @@ var Game = require('../game'),
     WanderBehavior = require('./wanderBehavior'),
     GuardianBehavior = require('./guardianBehavior'),
     InputBuffer = require('./inputBuffer');
+
 var isMobile = {
     Android: function() {
         return navigator.userAgent.match(/Android/i);
@@ -188,6 +189,10 @@ Game.prototype._initEventHandlers = function(){
         self.options.viewManager.setView('map');
     });
 
+    socket.on('gameFinished', function(data){
+        document.location.href = '/game/'+self.options.id;
+    });
+
     this._initPlayerHandlers();
 };
 
@@ -335,6 +340,43 @@ Game.prototype._initAssets = function(){
     this.options.imageManager.queueItems(AssetFiles);
 };
 
+Game.prototype._evaluateState = function(){
+    if(! this._player) return;
+    var socket = this.options.socket;
+
+    for(var i=0; i<this._players.length; i++)
+    {
+        var player = this._players[i];
+
+        if(this._player.id == player.id || this._player.map.id != player.map.id) continue;
+
+        if(this._player.getType() == PlayerTypes.Girl)
+        {
+           if(this._player.collidesWith(player))
+           {
+               socket.emit('playerCollides', {
+                   id: this.options.id,
+                   userId: this.options.userId
+               });
+               break;
+           }
+        }
+        else if(this._player.getType() == PlayerTypes.Guardian)
+        {
+            if(player.getType() != PlayerTypes.Girl) continue;
+
+            if(this._player.collidesWith(player))
+            {
+                socket.emit('playerCollides', {
+                    id: this.options.id,
+                    userId: this.options.userId
+                });
+                break;
+            }
+        }
+    }
+};
+
 Game.prototype.render = function(step){
     time = + new Date;
     var self = this;
@@ -350,18 +392,19 @@ Game.prototype.render = function(step){
             {
                 var player = self._players[i];
                 if(player.behavior)
-                {
                     player.behavior.getNextMove();
-                }
+
                 player.paint(time);
             }
-
         }
+
         this._lastDrawTime = time;
+        this._evaluateState();
     }
 
     requestNextAnimationFrame(function(tm){self.render(tm);});
 };
+
 
 Game.prototype._init = function()
 {

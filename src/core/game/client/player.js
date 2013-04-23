@@ -191,6 +191,21 @@ module.exports = (function(){
         return posList;
     };
 
+    Player.prototype.collidesWith = function(player){
+        var ownPos = this.getOccupiedPositions();
+        var otherPos = player.getOccupiedPositions();
+
+        for(var i=0; i< ownPos.length; i++)
+        {
+            for(var j=0; j< otherPos.length; j++)
+            {
+                if(ownPos[i].row == otherPos[j].row && ownPos[i].column == otherPos[j].column)
+                    return true;
+            }
+        }
+
+        return false;
+    };
 
     Player.prototype._getExitDirection = function(){
         var direction = null;
