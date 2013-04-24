@@ -1,8 +1,14 @@
 extends ../layout
 
+block privateCss
+    != html.cssLoader(['/stylesheets/ending.css'])
+
 block content
-    #ending
+    #container
         - if (locals.model.winner == 1)
             img(alt='Heroine Won', src='#{config.assetsUrl}/images/game/monster_lose.png')
         - else
             img(alt='Guardian Won', src='#{config.assetsUrl}/images/game/girl_lose.png')
+
+        div
+            a(href='/main-menu') Try Again ?

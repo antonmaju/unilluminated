@@ -2,6 +2,8 @@ var gameCommands = require('./gameCommands')
     coreServices = require('../coreServices'),
     worldMap = require('../game/server/worldMap'),
     PlayerDirections = require('../game/playerDirections'),
+    GameStates = require('../game/gameStates'),
+    PlayerTypes = require('../game/playerTypes'),
     typeConverter = coreServices.typeConverter;
 
 function getOppositeDirection(direction){
@@ -180,5 +182,70 @@ exports.getNewAreaInfo = function(param, cb){
         }
 
         gameCommands.save(gameData,onGameDataUpdated);
+    });
+};
+
+exports.handleEndGame = function(param, cb){
+    var result = null;
+
+    if(! param.id || !param.userId || !param.winnerId){
+        cb(result);
+        return;
+    }
+
+    var gameId= typeof param.id == 'string' ? typeConverter.fromString.toObjectId(param.id) : param.id;
+    var userId = typeof param.userId == 'string' ?  typeConverter.fromString.toObjectId(param.userId) : param.userId;
+    var winnerId = typeof param.winnerId == 'string' ? typeConverter.fromString.toObjectId(param.winnerId) : param.winnerId;
+
+    if(! gameId || ! userId || ! winnerId)
+    {
+        cb(result);
+        return;
+    }
+
+    gameCommands.getById(gameId, function(gameDataResult){
+        if(gameDataResult.err || !gameDataResult.doc){
+            cb(result);
+            return;
+        }
+
+        result = {};
+        var gameData = gameDataResult.doc;
+
+        if(gameData.state != GameStates.Running){
+            cb(result);
+            return;
+        }
+
+        var winnerFound = false;
+
+        for(var type in gameData.players)
+        {
+            var playerInfo = gameData.players[type];
+            if(playerInfo.id.toString() == winnerId.toString()){
+                winnerFound= true;
+                break;
+            }
+        }
+
+        if(! winnerFound){
+            cb(result);
+            return;
+        }
+
+        gameData.state = GameStates.Finished;
+        gameData.winnerId = winnerId;
+
+        function onGameUpdated(updatedData){
+            if(updatedData.error)
+            {
+                cb(false);
+                return;
+            }
+
+            cb(true);
+        }
+
+        gameCommands.save(gameData, onGameUpdated);
     });
 };

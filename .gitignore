@@ -19,6 +19,7 @@ node_modules
 home.css
 site.css
 game.css
+ending.css
 config.json
 testConfig.json
 astarWorkerBundle.js

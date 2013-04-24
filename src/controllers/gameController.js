@@ -46,7 +46,7 @@ module.exports ={
                     if(player.id.toString() == currentUserId.toString())
                     {
                         userFound = true;
-                        userType = type;
+                        userType = player.type;
                         break;
                     }
                 }
@@ -63,12 +63,12 @@ module.exports ={
 
                     if(userType == GameSystem.PlayerTypes.Girl)
                     {
-                        model.winner = game.winner.toString() == currentUserId.toString() ?
+                        model.winner = game.winnerId.toString() == currentUserId.toString() ?
                         GameSystem.PlayerTypes.Girl : GameSystem.PlayerTypes.Guardian;
                     }
                     else
                     {
-                        model.winner =game.winner.toString() == currentUserId.toString() ?
+                        model.winner =game.winnerId.toString() == currentUserId.toString() ?
                             GameSystem.PlayerTypes.Guardian : GameSystem.PlayerTypes.Girl;
                     }
 

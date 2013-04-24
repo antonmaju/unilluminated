@@ -189,7 +189,7 @@ Game.prototype._initEventHandlers = function(){
         self.options.viewManager.setView('map');
     });
 
-    socket.on('gameFinished', function(data){
+    socket.on('gameEnded', function(data){
         document.location.href = '/game/'+self.options.id;
     });
 
@@ -348,15 +348,16 @@ Game.prototype._evaluateState = function(){
     {
         var player = this._players[i];
 
-        if(this._player.id == player.id || this._player.map.id != player.map.id) continue;
+        if(this._player.playerId == player.playerId || this._player.map.id != player.map.id) continue;
 
         if(this._player.getType() == PlayerTypes.Girl)
         {
            if(this._player.collidesWith(player))
            {
-               socket.emit('playerCollides', {
+               socket.emit('gameOverRequest', {
                    id: this.options.id,
-                   userId: this.options.userId
+                   userId: this.options.userId,
+                   winnerId: player.playerId
                });
                break;
            }
@@ -367,9 +368,11 @@ Game.prototype._evaluateState = function(){
 
             if(this._player.collidesWith(player))
             {
-                socket.emit('playerCollides', {
+
+                socket.emit('gameOverRequest', {
                     id: this.options.id,
-                    userId: this.options.userId
+                    userId: this.options.userId,
+                    winnerId: this._player.playerId
                 });
                 break;
             }

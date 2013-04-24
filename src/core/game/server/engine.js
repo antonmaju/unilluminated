@@ -18,9 +18,17 @@ exports.start = function(app, io){
             });
         };
 
+        function onGameEnded(param){
+            engineCommands.handleEndGame(param, function(success){
+                if(success){
+                    socket.emit('gameEnded');
+                }
+            });
+        }
 
         socket.on('resourceRequest', onResourceRequest);
         socket.on('movingToNewArea', onMovingToNewArea);
+        socket.on('gameOverRequest', onGameEnded);
     });
 
 };
