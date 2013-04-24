@@ -2,7 +2,8 @@ module.exports = {
     Map1: {
         src: require('../maps/map1'),
         links:{
-            'R':'Map2',
+            //'R':'Map2',
+            'R':'Map72',
             'L' : '*'
         }
     },
@@ -25,7 +26,7 @@ module.exports = {
     Map4: {
         src: require('../maps/map4'),
         links:{
-            'T':'Map2',
+            'T':'Map72',
             'R':'Map5'
         }
     },
@@ -59,7 +60,7 @@ module.exports = {
     Map7: {
         src: require('../maps/map7'),
         links:{
-            'L':'Map3',
+            'L':'Map73',
             'R':'Map8'
         }
     },
@@ -76,11 +77,39 @@ module.exports = {
         links:{
             'B':'Map8'
         }
+    },Map6: {
+        src: require('../maps/map6'),
+        links:{
+            'B':'Map73'
+        }
     },
     Map11: {
         src: require('../maps/map11'),
         links:{
             'L':'Map8'
+        }
+    },
+    /*new map*/
+    Map72: {
+        src: require('../maps/map72'),
+        links:{
+            'R':'Map73',
+            'B':'Map4',
+            'L':'Map1'
+        }
+    },
+    Map73: {
+        src: require('../maps/map73'),
+        links:{
+            'L':'Map72',
+            'T':'Map6',
+            'R':'Map77'
+        }
+    }, Map77: {
+        src: require('../maps/map77'),
+        links:{
+            'L':'Map73',
+            'R':'Map8'
         }
     }
 };
