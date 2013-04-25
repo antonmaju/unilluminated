@@ -411,6 +411,7 @@ Game.prototype.render = function(step){
             }
         }
 
+        context.restore();
         this._lastDrawTime = time;
         this._evaluateState();
     }

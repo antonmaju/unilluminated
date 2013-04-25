@@ -97,6 +97,10 @@ module.exports = (function(){
         return this.options.heightSize;
     };
 
+    Player.prototype.getSightRadius = function(){
+        return this.options.sightRadius;
+    };
+
     Player.prototype.setPosition = function(row, column){
         this.row = row;
         this.column = column;
