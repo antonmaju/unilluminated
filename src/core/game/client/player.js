@@ -207,6 +207,18 @@ module.exports = (function(){
         return false;
     };
 
+    Player.prototype.isOnArea = function(areaId){
+        var ownPos = this.getOccupiedPositions();
+        for(var i=0; i<ownPos.length; i++)
+        {
+            var pos = ownPos[i];
+            if(this.map.grid[pos.row][pos.column] == areaId)
+                return true;
+        }
+
+        return false;
+    };
+
     Player.prototype._getExitDirection = function(){
         var direction = null;
 

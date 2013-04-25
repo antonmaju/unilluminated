@@ -96,7 +96,7 @@ Game.prototype._initPlayerHandlers = function(){
 
         $('#btnAct')
             .click(function(evt){
-               console.log("action");
+                console.log("action");
             });
 
         $('#btnDirectionUp')
@@ -284,10 +284,10 @@ Game.prototype._initPlayers = function(){
             //set AI
             //if(playerInfo.type == PlayerTypes.Guardian)
             //{
-                player.behavior = new GuardianBehavior({
-                    widthSize: player.getWidthSize(),
-                    heightSize:player.getHeightSize()
-                });
+            player.behavior = new GuardianBehavior({
+                widthSize: player.getWidthSize(),
+                heightSize:player.getHeightSize()
+            });
             //}
 
 
@@ -352,15 +352,16 @@ Game.prototype._evaluateState = function(){
 
         if(this._player.getType() == PlayerTypes.Girl)
         {
-           if(this._player.collidesWith(player))
-           {
-               socket.emit('gameOverRequest', {
-                   id: this.options.id,
-                   userId: this.options.userId,
-                   winnerId: player.playerId
-               });
-               break;
-           }
+            if(this._player.collidesWith(player))
+            {
+                socket.emit('gameOverRequest', {
+                    id: this.options.id,
+                    userId: this.options.userId,
+                    winnerId: player.playerId
+                });
+                return;
+            }
+
         }
         else if(this._player.getType() == PlayerTypes.Guardian)
         {
@@ -374,9 +375,18 @@ Game.prototype._evaluateState = function(){
                     userId: this.options.userId,
                     winnerId: this._player.playerId
                 });
-                break;
+                return;
             }
         }
+    }
+
+    if(this._player.isOnArea(5))
+    {
+        socket.emit('gameOverRequest',  {
+            id: this.options.id,
+            userId: this._player.playerId,
+            winnerId: this._player.playerId
+        });
     }
 };
 
