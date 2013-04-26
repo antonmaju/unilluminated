@@ -9,6 +9,7 @@ var Game = require('../game'),
     PlayerTypes = require('../playerTypes'),
     WanderBehavior = require('./wanderBehavior'),
     GuardianBehavior = require('./guardianBehavior'),
+    AudioManager = require('./audioManager'),
     InputBuffer = require('./inputBuffer');
 
 var isMobile = {
@@ -168,12 +169,27 @@ Game.prototype._initEventHandlers = function(){
         this.options.viewManager.setView('loading');
         this.render(+ new Date);
 
-        this.options.imageManager.download(function(){
-
+        function emitResourceRequest(){
             socket.emit('resourceRequest', {
                 id: self.options.id,
                 userId: self.options.userId
             });
+        }
+
+        this.options.imageManager.download(function(){
+            soundManager.setup({
+                url:'/soundmanager2/swf/',
+                onready: function() {
+                    AudioManager.init();
+                    emitResourceRequest();
+                },
+                ontimeout: function(){
+                    AudioManager.enabled = false;
+                    emitResourceRequest();
+                }
+
+            });
+
         });
     });
 
@@ -181,6 +197,7 @@ Game.prototype._initEventHandlers = function(){
         self._current = data;
         self._initPlayers();
         self.options.viewManager.setView('map');
+        AudioManager.play('harp');
     });
 
     socket.on('movedToNewArea', function(data){
@@ -220,6 +237,7 @@ Game.prototype._initViews = function(){
         mapRenderer: this.options.mapRenderer
     }));
 };
+
 
 Game.prototype._initPlayers = function(){
     var self = this;

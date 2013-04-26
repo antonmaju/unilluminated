@@ -143,6 +143,7 @@ module.exports = (function(){
 
         this._cacheContext.clearRect(0,0, this._cacheCanvas.width, this._cacheCanvas.height);
 
+
         for(var i= 0; i<this.totalRow; i++)
         {
             for(var j=0; j<this.totalColumn; j++)
@@ -168,6 +169,7 @@ module.exports = (function(){
 
             }
         }
+
     }
 
     return MapRenderer;

@@ -2,8 +2,6 @@ module.exports = function(app){
 
     var childProcess = require('child_process');
     var path = require('path');
-//    var originalGameJs = path.join(path.dirname(process.mainModule.filename),'public/js/gameClient.js');
-//    var combinedGameJs = path.join(path.dirname(process.mainModule.filename),'public/js/gameClientBundle.js');
 
     var inputs = [
         path.join(path.dirname(process.mainModule.filename),'public/js/gameClient.js'),

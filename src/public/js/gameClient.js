@@ -135,8 +135,6 @@ $(function(){
         var newHeight = window.innerHeight;
         var newWidthRatio = newWidth / newHeight;
 
-
-
         if (newWidthRatio > widthRatio) {
             newWidth = newHeight * widthRatio;
             $container.css('height', newHeight + 'px').css('width', newWidth + 'px');
