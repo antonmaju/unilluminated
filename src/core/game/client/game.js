@@ -9,6 +9,7 @@ var Game = require('../game'),
     PlayerTypes = require('../playerTypes'),
     WanderBehavior = require('./wanderBehavior'),
     GuardianBehavior = require('./guardianBehavior'),
+    PlayerMode = require('../playerMode'),
     AudioManager = require('./audioManager'),
     InputBuffer = require('./inputBuffer');
 
@@ -117,8 +118,6 @@ Game.prototype._initPlayerHandlers = function(){
                 self._inputBuffer.addInput(PlayerActions.MoveBottom);
             });
 
-
-
     }
     if(isMobile.any())
         initMobileButtons();
@@ -161,7 +160,6 @@ Game.prototype._initEventHandlers = function(){
 
     this._inputBuffer = new InputBuffer(this._inputInterval);
 
-
     this._initDOMEventHandlers();
 
     this.on('initializing', function(data){
@@ -179,12 +177,13 @@ Game.prototype._initEventHandlers = function(){
         this.options.imageManager.download(function(){
             soundManager.setup({
                 url:'/soundmanager2/swf/',
+                debugMode: false,
                 onready: function() {
-                    AudioManager.init();
+                    self._audioManager.init();
                     emitResourceRequest();
                 },
                 ontimeout: function(){
-                    AudioManager.enabled = false;
+                    self._audioManager.enabled = false;
                     emitResourceRequest();
                 }
 
@@ -193,11 +192,19 @@ Game.prototype._initEventHandlers = function(){
         });
     });
 
+    self.on('evaluatingSound', function(){
+        if(this._chasers <= 0){
+            this._audioManager.play('harp');
+        } else {
+            this._audioManager.play('dissonant');
+        }
+    });
+
     socket.on('resourceResponse', function(data){
         self._current = data;
         self._initPlayers();
         self.options.viewManager.setView('map');
-        AudioManager.play('harp');
+        self._audioManager.play('harp');
     });
 
     socket.on('movedToNewArea', function(data){
@@ -215,6 +222,7 @@ Game.prototype._initEventHandlers = function(){
 
 Game.prototype._initPlayerEvents = function(player){
     var self = this;
+
     player.on('movingToNewArea', function(direction){
         self.options.viewManager.setView('loading');
         self.options.socket.emit('movingToNewArea',{
@@ -255,11 +263,13 @@ Game.prototype._initPlayers = function(){
     this._playerType = null;
     this._map = null;
 
+    this._chasers = 0;
 
     for(var playerType in playersInfo)
     {
         var playerInfo = playersInfo[playerType];
         var playerMap = this._current.maps[playerType];
+        
         if(!playerMap)
         {
             for(var mapType in this._current.maps)
@@ -299,15 +309,10 @@ Game.prototype._initPlayers = function(){
         }
         else
         {
-            //set AI
-            //if(playerInfo.type == PlayerTypes.Guardian)
-            //{
             player.behavior = new GuardianBehavior({
                 widthSize: player.getWidthSize(),
                 heightSize:player.getHeightSize()
             });
-            //}
-
 
             player.behavior.setMap(playerMap);
             player.behavior.setPosition({row: positionInfo.row, column: positionInfo.column});
@@ -320,6 +325,21 @@ Game.prototype._initPlayers = function(){
                 }
 
                 return handleNextMove;
+
+            }(player));
+
+            player.behavior.on('stateChanged', function(player){
+
+                function handleModeChange(data){
+                    if(data.oldState == PlayerMode.Chase)
+                        self._chasers --;
+                    else if(data.newState == PlayerMode.Chase)
+                        self._chasers ++;
+
+                    self.emit('evaluatingSound');
+                }
+
+                return handleModeChange;
 
             }(player));
         }
@@ -339,7 +359,6 @@ Game.prototype._initPlayers = function(){
     }
 };
 
-
 /***
  * Get current fps
  * @param time current timestamp
@@ -355,6 +374,8 @@ Game.prototype._getFps = function(time){
 
 
 Game.prototype._initAssets = function(){
+
+    this._audioManager = new AudioManager();
     this.options.imageManager.queueItems(AssetFiles);
 };
 
@@ -379,7 +400,6 @@ Game.prototype._evaluateState = function(){
                 });
                 return;
             }
-
         }
         else if(this._player.getType() == PlayerTypes.Guardian)
         {
@@ -387,7 +407,6 @@ Game.prototype._evaluateState = function(){
 
             if(this._player.collidesWith(player))
             {
-
                 socket.emit('gameOverRequest', {
                     id: this.options.id,
                     userId: this.options.userId,
