@@ -1,16 +1,8 @@
 $(function(){
     var GameSystem = require('../../core/game/client/clientRegistry');
-    var viewManager =  new GameSystem.ViewManager();
-    var imageManager = new GameSystem.ImageManager();
-
 
     var canvas = document.getElementById('canvas'),
         context = canvas.getContext('2d');
-
-    var mapRenderer = new GameSystem.MapRenderer({
-        imageManager: imageManager,
-        context: context
-    });
 
     var $container = $('#container');
     var $btnContainerAll = $('#btnContainerAll');
@@ -26,16 +18,14 @@ $(function(){
     var socket = io.connect(settings.webUrl);
 
     var game = new GameSystem.Game({
-        viewManager : viewManager,
-        imageManager : imageManager,
         context:context,
         socket: socket,
-        mapRenderer: mapRenderer,
         id: settings.id,
         userId: settings.userId,
         mode: settings.mode
     });
 
+    //TODO: refactor this
     function resizeController(){
         var newWidth = window.innerWidth;
         var newHeight = window.innerHeight;

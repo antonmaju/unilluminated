@@ -1,7 +1,7 @@
-module.exports = function(){
+module.exports = (function(){
 
     function FilterManager(){
-.       this._filters={};
+        this._filters={};
         this._currentId = null;
     }
 
@@ -28,4 +28,4 @@ module.exports = function(){
     };
 
     return FilterManager;
-}();
+})();

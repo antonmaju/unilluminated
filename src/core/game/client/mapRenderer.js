@@ -68,26 +68,26 @@ module.exports = (function(){
 
         var context = this.options.context;
         var canvas = context.canvas;
-        var internalContext= this.options.internalContext;
 
-        context.save();
-        context.fillStyle ='rgba(0,0,0,0.95)';
-        context.fillRect(0,0,canvas.width, canvas.height);
-        context.restore();
-
-        var curRow = this._player.row- this._startRow;
-        var curColumn = this._player.column- this._startColumn;
-
-        context.save();
-        context.beginPath();
-        context.arc(curColumn * this.gridSize,curRow * this.gridSize,
-            this._player.getSightRadius() * this.gridSize ,0, Math.PI *2, false);
-        context.clip();
+        this.options.filterManager.get().applyPreRenderMap({
+            context : context,
+            player : this._player,
+            startRow: this._startRow,
+            startColumn : this._startColumn,
+            gridSize: this.gridSize
+        });
 
         context.drawImage(this._cacheCanvas, Math.floor(this._startColumn * this.gridSize),Math.floor(this._startRow * this.gridSize) ,
             canvas.width, canvas.height, 0, 0,
             canvas.width, canvas.height);
 
+        this.options.filterManager.get().applyPostRenderMap({
+            context : context,
+            player : this._player,
+            startRow: this._startRow,
+            startColumn : this._startColumn,
+            gridSize: this._gridSize
+        });
     };
     MapRenderer.prototype._calculateCamera = function(){
         if(!this._player) return;
@@ -143,6 +143,9 @@ module.exports = (function(){
 
         this._cacheContext.clearRect(0,0, this._cacheCanvas.width, this._cacheCanvas.height);
 
+        this.options.filterManager.get().applyPreRenderInternalMap({
+            context: this._cacheContext
+        });
 
         for(var i= 0; i<this.totalRow; i++)
         {
@@ -169,6 +172,10 @@ module.exports = (function(){
 
             }
         }
+
+        this.options.filterManager.get().applyPostRenderInternalMap({
+            context: this._cacheContext
+        });
 
     }
 

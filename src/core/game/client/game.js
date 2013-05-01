@@ -11,6 +11,10 @@ var Game = require('../game'),
     GuardianBehavior = require('./guardianBehavior'),
     PlayerMode = require('../playerMode'),
     AudioManager = require('./audioManager'),
+    FilterManager = require('./filterManager'),
+    ImageManager = require('./imageManager'),
+    MapRenderer = require('./mapRenderer'),
+    ViewManager = require('./viewManager'),
     InputBuffer = require('./inputBuffer');
 
 var isMobile = {
@@ -47,6 +51,25 @@ function getOppositeDirection(direction){
             return Directions.Top;
     }
 }
+
+Game.prototype._initDependencies = function(){
+    this._filterManager = new FilterManager();
+    this._imageManager = new ImageManager();
+    this._viewManager = new ViewManager();
+
+    this._mapRenderer = new MapRenderer({
+        filterManager: this._filterManager,
+        imageManager: this._imageManager,
+        context : this.options.context
+    });
+
+};
+
+Game.prototype._initFilters = function(){
+    this._filterManager.register('filterBase', require('./filters/filterBase'));
+    this._filterManager.register('darkCircle', require('./filters/darkCircleFilter'));
+    this._filterManager.set('darkCircle');
+};
 
 Game.prototype._initDOMEventHandlers = function(){
     var self = this;
@@ -164,7 +187,7 @@ Game.prototype._initEventHandlers = function(){
 
     this.on('initializing', function(data){
 
-        this.options.viewManager.setView('loading');
+        this._viewManager.setView('loading');
         this.render(+ new Date);
 
         function emitResourceRequest(){
@@ -174,7 +197,7 @@ Game.prototype._initEventHandlers = function(){
             });
         }
 
-        this.options.imageManager.download(function(){
+        this._imageManager.download(function(){
             soundManager.setup({
                 url:'/soundmanager2/swf/',
                 debugMode: false,
@@ -203,14 +226,14 @@ Game.prototype._initEventHandlers = function(){
     socket.on('resourceResponse', function(data){
         self._current = data;
         self._initPlayers();
-        self.options.viewManager.setView('map');
+        self._viewManager.setView('map');
         self._audioManager.play('harp');
     });
 
     socket.on('movedToNewArea', function(data){
         self._current = data;
         self._initPlayers();
-        self.options.viewManager.setView('map');
+        self._viewManager.setView('map');
     });
 
     socket.on('gameEnded', function(data){
@@ -224,7 +247,7 @@ Game.prototype._initPlayerEvents = function(player){
     var self = this;
 
     player.on('movingToNewArea', function(direction){
-        self.options.viewManager.setView('loading');
+        self._viewManager.setView('loading');
         self.options.socket.emit('movingToNewArea',{
             id: self.options.id,
             userId: player.playerId,
@@ -234,7 +257,7 @@ Game.prototype._initPlayerEvents = function(player){
 };
 
 Game.prototype._initViews = function(){
-    var mgr = this.options.viewManager;
+    var mgr = this._viewManager;
 
     mgr.addView(new LoadingView({
         context: this.options.context
@@ -242,7 +265,7 @@ Game.prototype._initViews = function(){
 
     mgr.addView(new MapView({
         context: this.options.context,
-        mapRenderer: this.options.mapRenderer
+        mapRenderer: this._mapRenderer
     }));
 };
 
@@ -284,11 +307,11 @@ Game.prototype._initPlayers = function(){
         var positionInfo = playerMap.exits[playerInfo.direction][0];
 
         var playerOptions = {
-            imageManager: this.options.imageManager,
+            imageManager: this._imageManager,
             playerType: playerInfo.type,
             row: positionInfo.row,
             column: positionInfo.column,
-            mapRenderer: this.options.mapRenderer,
+            mapRenderer: this._mapRenderer,
             context: this.options.context,
             playerId: playerInfo.id,
             isSingleMap: playerInfo.id != self.options.userId //will be changed later
@@ -304,8 +327,8 @@ Game.prototype._initPlayers = function(){
             this._player = player;
             this._playerType = playerType;
             this._map = playerMap;
-            this.options.mapRenderer.setPlayer(player);
-            this.options.mapRenderer.setGrid(playerMap.grid);
+            this._mapRenderer.setPlayer(player);
+            this._mapRenderer.setGrid(playerMap.grid);
         }
         else
         {
@@ -340,7 +363,6 @@ Game.prototype._initPlayers = function(){
                 }
 
                 return handleModeChange;
-
             }(player));
         }
 
@@ -376,7 +398,7 @@ Game.prototype._getFps = function(time){
 Game.prototype._initAssets = function(){
 
     this._audioManager = new AudioManager();
-    this.options.imageManager.queueItems(AssetFiles);
+    this._imageManager.queueItems(AssetFiles);
 };
 
 Game.prototype._evaluateState = function(){
@@ -435,8 +457,12 @@ Game.prototype.render = function(step){
 
     if(time - this._lastDrawTime >= this._drawInterval)
     {
-        self.options.viewManager.currentView.animate(time);
-        if(self.options.viewManager.currentView.id == 'map')
+        self._filterManager.get().applyPreRenderGame({
+            context: context
+        });
+
+        self._viewManager.currentView.animate(time);
+        if(self._viewManager.currentView.id == 'map')
         {
             for(var i =0; i<self._players.length; i++)
             {
@@ -448,7 +474,10 @@ Game.prototype.render = function(step){
             }
         }
 
-        context.restore();
+        self._filterManager.get().applyPostRenderGame({
+            context: context
+        });
+
         this._lastDrawTime = time;
         this._evaluateState();
     }
@@ -460,16 +489,18 @@ Game.prototype.render = function(step){
 Game.prototype._init = function()
 {
     this._inputInterval = 50;
+    this._initDependencies();
     this._initEventHandlers();
     this._initViews();
+    this._initFilters();
     this._initAssets();
     this._drawInterval = 150;
     this._lastDrawTime = + new Date;
 };
 
 Game.prototype.resize = function(){
-    if(this.options.viewManager.currentView)
-        this.options.viewManager.currentView.resize();
+    if(this._viewManager.currentView)
+        this._viewManager.currentView.resize();
 };
 
 module.exports = Game;
