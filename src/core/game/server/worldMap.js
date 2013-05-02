@@ -67,7 +67,7 @@ module.exports = {
     Map8: {
         src: require('../maps/map8'),
         links:{
-            'L':'Map7',
+            'L':'Map77',
             'T':'Map10',
             'R':'Map11'
         }
