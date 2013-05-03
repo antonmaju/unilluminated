@@ -58,7 +58,8 @@ module.exports = {
                 column:32
             }
         ]
-    }
+    },
+    filter: 'none'
 };
 
 

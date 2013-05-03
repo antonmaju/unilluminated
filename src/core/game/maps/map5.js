@@ -80,6 +80,7 @@ module.exports ={
                 row:33,
                 column:49
             }
-        ]
+        ],
+        filter:'darkCircle'
     }
 };

@@ -1,4 +1,5 @@
-var gameCommands = require('./gameCommands')
+var mongo = require('mongodb'),
+    gameCommands = require('./gameCommands')
     coreServices = require('../coreServices'),
     worldMap = require('../game/server/worldMap'),
     PlayerDirections = require('../game/playerDirections'),
@@ -74,18 +75,72 @@ exports.getInitialGameInfo = function(param, cb){
         for(var playerProp in gameData.players)
         {
             var playerInfo = gameData.players[playerProp];
-            if(playerInfo.id.toString() != userInfo.id.toString() && playerInfo.map == userInfo.map)
+
+            if(gameData.mode == '2p')
             {
-                result.players[playerProp] = playerInfo;
+                if(playerInfo.id.toString() != userInfo.id.toString() && playerInfo.map == userInfo.map)
+                {
+                    result.players[playerProp] = playerInfo;
+                }
             }
-            else if(playerInfo.id.toString() != userInfo.id.toString() && playerInfo.trace)
+            else
             {
-                result.players[playerProp] = playerInfo;
-                result.maps[playerProp] = worldMap[playerInfo.map].src;
+                if(playerInfo.id.toString() != userInfo.id.toString() && playerInfo.trace)
+                {
+                    result.players[playerProp] = playerInfo;
+                    result.maps[playerProp] = worldMap[playerInfo.map].src;
+                }
             }
         }
 
-        cb(result);
+        var needUpdate = false;
+
+        if(gameData.mode == '1p' && userInfo.type == PlayerTypes.Girl)
+        {
+            needUpdate = true;
+
+            var map = worldMap[playerInfo.map];
+            if(map.guardianEncounter > 0)
+            {
+                var randomResult = Math.floor((Math.random() * 100) + 1);
+
+                if(randomResult >= 1 && randomResult <= map.guardianEncounter)
+                {
+                    var pos = map.posList[Math.floor(Math.random() * map.posList.length)];
+
+                    result.players.guardian = {
+                        id:  new mongo.ObjectID() ,
+                        type: PlayerTypes.Guardian,
+                        direction: pos.direction,
+                        map: playerInfo.map,
+                        auto: true,
+                        row: pos.row,
+                        column: pos.column
+
+                    };
+
+                    gameData.players.guardian = result.players.guardian;
+                }
+            }
+        }
+
+        if(! needUpdate)
+        {
+            cb(result);
+            return;
+        }
+
+        function onGameDataUpdated(updatedData){
+            if(updatedData.error){
+                cb(updatedData);
+                return;
+            }
+
+            cb(result);
+        }
+
+        gameCommands.save(gameData,onGameDataUpdated);
+
     });
 };
 
@@ -153,7 +208,30 @@ exports.getNewAreaInfo = function(param, cb){
         }
 
         //process enemy generation
+        if(gameData.mode == '1p' && userInfo.type == PlayerTypes.Girl)
+        {
+            var map = worldMap[playerInfo.map];
+            if(map.guardianEncounter > 0)
+            {
+                var randomResult = Math.floor((Math.random() * 100) + 1);
 
+                if(randomResult >= 1 && randomResult <= map.guardianEncounter)
+                {
+                    var pos = map.posList[Math.floor(Math.random() * map.posList.length)];
+
+                    result.players.guardian = {
+                        id:  new mongo.ObjectID() ,
+                        type: PlayerTypes.Guardian,
+                        direction: pos.direction,
+                        map: playerInfo.map,
+                        auto: true,
+                        row: pos.row,
+                        column: pos.column
+                    };
+                    gameData.players.guardian = result.players.guardian;
+                }
+            }
+        }
 
         //save current state
         function onGameDataUpdated(updatedData){
@@ -161,21 +239,6 @@ exports.getNewAreaInfo = function(param, cb){
             {
                 cb(updatedData);
                 return;
-            }
-
-            //find other players who are in the same map or if trace is set to true
-            for(var playerProp in gameData.players)
-            {
-                var playerInfo = gameData.players[playerProp];
-                if(playerInfo.id.toString() != userInfo.id.toString() && playerInfo.map == userInfo.map)
-                {
-                    result.players[playerProp] = playerInfo;
-                }
-//                else if(playerInfo.id != userInfo.id && playerInfo.trace)
-//                {
-//                    result.players[playerProp] = playerInfo;
-//                    result.maps[playerProp] = worldMap[playerInfo.map].src;
-//                }
             }
 
             cb(result);

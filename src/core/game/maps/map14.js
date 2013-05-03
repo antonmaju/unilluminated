@@ -70,5 +70,6 @@ module.exports ={
                 column:19
             }
         ]
-    }
+    },
+    filter: 'darkCircle'
 };

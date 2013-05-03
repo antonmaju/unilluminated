@@ -17,8 +17,6 @@ function getCurrentUserId(req){
     return currentUserId;
 }
 
-
-
 module.exports ={
     settings: {
         beforeFilters : [filters.authorize()]
@@ -109,14 +107,18 @@ module.exports ={
                     auto: !isHeroine,
                     trace: true
                 };
-                game.players.guardian ={
-                    id:  isHeroine ? new mongo.ObjectID() :  currentUserId,
-                    type: GameSystem.PlayerTypes.Guardian,
-                    direction: PlayerDirections.Right,
-                    map: 'Map7',
-                    auto: isHeroine,
-                    random: isHeroine
-                };
+
+                if(! isHeroine)
+                {
+                    game.players.guardian ={
+                        id:  isHeroine ? new mongo.ObjectID() :  currentUserId,
+                        type: GameSystem.PlayerTypes.Guardian,
+                        direction: PlayerDirections.Right,
+                        map: 'Map7',
+                        auto: isHeroine,
+                        random: isHeroine
+                    };
+                }
             }
             else{
 

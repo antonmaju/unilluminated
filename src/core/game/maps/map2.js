@@ -71,5 +71,6 @@ module.exports ={
                 column:13
             }
         ]
-    }
+    },
+    filter: 'dark'
 };

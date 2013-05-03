@@ -74,6 +74,10 @@ module.exports = (function(){
         }
     };
 
+    Player.prototype.setDirection = function(direction){
+        this._activeDirection = direction;
+    };
+
     Player.prototype.setDirectionBasedOnPosition = function(row, column){
         if(row > this.row)
             this._activeDirection = Directions.Bottom;

@@ -66,9 +66,10 @@ Game.prototype._initDependencies = function(){
 };
 
 Game.prototype._initFilters = function(){
-    this._filterManager.register('filterBase', require('./filters/filterBase'));
+    this._filterManager.register('none', require('./filters/filterBase'));
+    this._filterManager.register('dark', require('./filters/darkFilter'));
     this._filterManager.register('darkCircle', require('./filters/darkCircleFilter'));
-    this._filterManager.set('darkCircle');
+    this._filterManager.set('none');
 };
 
 Game.prototype._initDOMEventHandlers = function(){
@@ -274,6 +275,8 @@ Game.prototype._initPlayers = function(){
     var self = this;
     var playersInfo = this._current.players;
 
+
+
     if(this._players){
         for(var i=0; i< this._players.length; i++){
             this._players[i].destroy();
@@ -304,7 +307,9 @@ Game.prototype._initPlayers = function(){
                 }
             }
         }
-        var positionInfo = playerMap.exits[playerInfo.direction][0];
+        var positionInfo =(playerInfo.row != null && playerInfo.column != null) ?
+            {row: playerInfo.row, column: playerInfo.column} :
+            playerMap.exits[playerInfo.direction][0];
 
         var playerOptions = {
             imageManager: this._imageManager,
@@ -327,11 +332,15 @@ Game.prototype._initPlayers = function(){
             this._player = player;
             this._playerType = playerType;
             this._map = playerMap;
+            this._filterManager.set(this._map.filter);
             this._mapRenderer.setPlayer(player);
             this._mapRenderer.setGrid(playerMap.grid);
         }
         else
         {
+            if(playerInfo.direction != null)
+                player.setDirection(playerInfo.direction);
+
             player.behavior = new GuardianBehavior({
                 widthSize: player.getWidthSize(),
                 heightSize:player.getHeightSize()

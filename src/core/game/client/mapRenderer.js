@@ -48,7 +48,6 @@ module.exports = (function(){
         this._setTiles();
         this._calculateViewport();
         this._renderCache();
-
     };
 
     MapRenderer.prototype.setPlayer = function(player){
