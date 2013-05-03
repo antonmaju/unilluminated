@@ -69,9 +69,9 @@ module.exports = (function(){
 
             this._counter = 0;
             if(seen && this._state == PlayerMode.Wander){
-                this.emit('stateChanged', PlayerMode.Chase);
+                this.emit('stateChanged', { oldState: this._state , newState: PlayerMode.Chase});
             }else if(! seen && this._state == PlayerMode.Chase){
-                this.emit('stateChanged', PlayerMode.Wander);
+                this.emit('stateChanged',  { oldState: this._state, newState: PlayerMode.Wander});
             }
 
             if(this._state == PlayerMode.Chase)
@@ -88,14 +88,14 @@ module.exports = (function(){
     GuardianBehavior.prototype._init = function(){
         var self=this;
 
-        this.on('stateChanged', function(state){
-            switch(state){
+        this.on('stateChanged', function(data){
+            switch(data.newState){
                 case PlayerMode.Chase:
-                    this._state = state;
+                    this._state = data.newState;
                     this._behavior = this._chaseBehavior;
                     break;
                 case PlayerMode.Wander:
-                    this._state = state;
+                    this._state = data.newState;
                     this._behavior = this._wanderBehavior;
                     break;
             }

@@ -9,7 +9,14 @@ var Game = require('../game'),
     PlayerTypes = require('../playerTypes'),
     WanderBehavior = require('./wanderBehavior'),
     GuardianBehavior = require('./guardianBehavior'),
+    PlayerMode = require('../playerMode'),
+    AudioManager = require('./audioManager'),
+    FilterManager = require('./filterManager'),
+    ImageManager = require('./imageManager'),
+    MapRenderer = require('./mapRenderer'),
+    ViewManager = require('./viewManager'),
     InputBuffer = require('./inputBuffer');
+
 var isMobile = {
     Android: function() {
         return navigator.userAgent.match(/Android/i);
@@ -44,6 +51,26 @@ function getOppositeDirection(direction){
             return Directions.Top;
     }
 }
+
+Game.prototype._initDependencies = function(){
+    this._filterManager = new FilterManager();
+    this._imageManager = new ImageManager();
+    this._viewManager = new ViewManager();
+
+    this._mapRenderer = new MapRenderer({
+        filterManager: this._filterManager,
+        imageManager: this._imageManager,
+        context : this.options.context
+    });
+
+};
+
+Game.prototype._initFilters = function(){
+    this._filterManager.register('none', require('./filters/filterBase'));
+    this._filterManager.register('dark', require('./filters/darkFilter'));
+    this._filterManager.register('darkCircle', require('./filters/darkCircleFilter'));
+    this._filterManager.set('none');
+};
 
 Game.prototype._initDOMEventHandlers = function(){
     var self = this;
@@ -95,7 +122,7 @@ Game.prototype._initPlayerHandlers = function(){
 
         $('#btnAct')
             .click(function(evt){
-               console.log("action");
+                console.log("action");
             });
 
         $('#btnDirectionUp')
@@ -114,8 +141,6 @@ Game.prototype._initPlayerHandlers = function(){
             .click(function(evt){
                 self._inputBuffer.addInput(PlayerActions.MoveBottom);
             });
-
-
 
     }
     if(isMobile.any())
@@ -159,33 +184,61 @@ Game.prototype._initEventHandlers = function(){
 
     this._inputBuffer = new InputBuffer(this._inputInterval);
 
-
     this._initDOMEventHandlers();
 
     this.on('initializing', function(data){
 
-        this.options.viewManager.setView('loading');
+        this._viewManager.setView('loading');
         this.render(+ new Date);
 
-        this.options.imageManager.download(function(){
-
+        function emitResourceRequest(){
             socket.emit('resourceRequest', {
                 id: self.options.id,
                 userId: self.options.userId
             });
+        }
+
+        this._imageManager.download(function(){
+            soundManager.setup({
+                url:'/soundmanager2/swf/',
+                debugMode: false,
+                onready: function() {
+                    self._audioManager.init();
+                    emitResourceRequest();
+                },
+                ontimeout: function(){
+                    self._audioManager.enabled = false;
+                    emitResourceRequest();
+                }
+
+            });
+
         });
+    });
+
+    self.on('evaluatingSound', function(){
+        if(this._chasers <= 0){
+            this._audioManager.play('harp');
+        } else {
+            this._audioManager.play('dissonant');
+        }
     });
 
     socket.on('resourceResponse', function(data){
         self._current = data;
         self._initPlayers();
-        self.options.viewManager.setView('map');
+        self._viewManager.setView('map');
+        self._audioManager.play('harp');
     });
 
     socket.on('movedToNewArea', function(data){
         self._current = data;
         self._initPlayers();
-        self.options.viewManager.setView('map');
+        self._viewManager.setView('map');
+    });
+
+    socket.on('gameEnded', function(data){
+        document.location.href = '/game/'+self.options.id;
     });
 
     this._initPlayerHandlers();
@@ -193,8 +246,9 @@ Game.prototype._initEventHandlers = function(){
 
 Game.prototype._initPlayerEvents = function(player){
     var self = this;
+
     player.on('movingToNewArea', function(direction){
-        self.options.viewManager.setView('loading');
+        self._viewManager.setView('loading');
         self.options.socket.emit('movingToNewArea',{
             id: self.options.id,
             userId: player.playerId,
@@ -204,7 +258,7 @@ Game.prototype._initPlayerEvents = function(player){
 };
 
 Game.prototype._initViews = function(){
-    var mgr = this.options.viewManager;
+    var mgr = this._viewManager;
 
     mgr.addView(new LoadingView({
         context: this.options.context
@@ -212,13 +266,16 @@ Game.prototype._initViews = function(){
 
     mgr.addView(new MapView({
         context: this.options.context,
-        mapRenderer: this.options.mapRenderer
+        mapRenderer: this._mapRenderer
     }));
 };
+
 
 Game.prototype._initPlayers = function(){
     var self = this;
     var playersInfo = this._current.players;
+
+
 
     if(this._players){
         for(var i=0; i< this._players.length; i++){
@@ -232,11 +289,13 @@ Game.prototype._initPlayers = function(){
     this._playerType = null;
     this._map = null;
 
+    this._chasers = 0;
 
     for(var playerType in playersInfo)
     {
         var playerInfo = playersInfo[playerType];
         var playerMap = this._current.maps[playerType];
+        
         if(!playerMap)
         {
             for(var mapType in this._current.maps)
@@ -248,14 +307,16 @@ Game.prototype._initPlayers = function(){
                 }
             }
         }
-        var positionInfo = playerMap.exits[playerInfo.direction][0];
+        var positionInfo =(playerInfo.row != null && playerInfo.column != null) ?
+            {row: playerInfo.row, column: playerInfo.column} :
+            playerMap.exits[playerInfo.direction][0];
 
         var playerOptions = {
-            imageManager: this.options.imageManager,
+            imageManager: this._imageManager,
             playerType: playerInfo.type,
             row: positionInfo.row,
             column: positionInfo.column,
-            mapRenderer: this.options.mapRenderer,
+            mapRenderer: this._mapRenderer,
             context: this.options.context,
             playerId: playerInfo.id,
             isSingleMap: playerInfo.id != self.options.userId //will be changed later
@@ -271,20 +332,19 @@ Game.prototype._initPlayers = function(){
             this._player = player;
             this._playerType = playerType;
             this._map = playerMap;
-            this.options.mapRenderer.setPlayer(player);
-            this.options.mapRenderer.setGrid(playerMap.grid);
+            this._filterManager.set(this._map.filter);
+            this._mapRenderer.setPlayer(player);
+            this._mapRenderer.setGrid(playerMap.grid);
         }
         else
         {
-            //set AI
-            //if(playerInfo.type == PlayerTypes.Guardian)
-            //{
-                player.behavior = new GuardianBehavior({
-                    widthSize: player.getWidthSize(),
-                    heightSize:player.getHeightSize()
-                });
-            //}
+            if(playerInfo.direction != null)
+                player.setDirection(playerInfo.direction);
 
+            player.behavior = new GuardianBehavior({
+                widthSize: player.getWidthSize(),
+                heightSize:player.getHeightSize()
+            });
 
             player.behavior.setMap(playerMap);
             player.behavior.setPosition({row: positionInfo.row, column: positionInfo.column});
@@ -298,6 +358,20 @@ Game.prototype._initPlayers = function(){
 
                 return handleNextMove;
 
+            }(player));
+
+            player.behavior.on('stateChanged', function(player){
+
+                function handleModeChange(data){
+                    if(data.oldState == PlayerMode.Chase)
+                        self._chasers --;
+                    else if(data.newState == PlayerMode.Chase)
+                        self._chasers ++;
+
+                    self.emit('evaluatingSound');
+                }
+
+                return handleModeChange;
             }(player));
         }
 
@@ -316,7 +390,6 @@ Game.prototype._initPlayers = function(){
     }
 };
 
-
 /***
  * Get current fps
  * @param time current timestamp
@@ -332,7 +405,57 @@ Game.prototype._getFps = function(time){
 
 
 Game.prototype._initAssets = function(){
-    this.options.imageManager.queueItems(AssetFiles);
+
+    this._audioManager = new AudioManager();
+    this._imageManager.queueItems(AssetFiles);
+};
+
+Game.prototype._evaluateState = function(){
+    if(! this._player) return;
+    var socket = this.options.socket;
+
+    for(var i=0; i<this._players.length; i++)
+    {
+        var player = this._players[i];
+
+        if(this._player.playerId == player.playerId || this._player.map.id != player.map.id) continue;
+
+        if(this._player.getType() == PlayerTypes.Girl)
+        {
+            if(this._player.collidesWith(player))
+            {
+                socket.emit('gameOverRequest', {
+                    id: this.options.id,
+                    userId: this.options.userId,
+                    winnerId: player.playerId
+                });
+                return;
+            }
+        }
+        else if(this._player.getType() == PlayerTypes.Guardian)
+        {
+            if(player.getType() != PlayerTypes.Girl) continue;
+
+            if(this._player.collidesWith(player))
+            {
+                socket.emit('gameOverRequest', {
+                    id: this.options.id,
+                    userId: this.options.userId,
+                    winnerId: this._player.playerId
+                });
+                return;
+            }
+        }
+    }
+
+    if(this._player.isOnArea(5))
+    {
+        socket.emit('gameOverRequest',  {
+            id: this.options.id,
+            userId: this._player.playerId,
+            winnerId: this._player.playerId
+        });
+    }
 };
 
 Game.prototype.render = function(step){
@@ -343,39 +466,50 @@ Game.prototype.render = function(step){
 
     if(time - this._lastDrawTime >= this._drawInterval)
     {
-        self.options.viewManager.currentView.animate(time);
-        if(self.options.viewManager.currentView.id == 'map')
+        self._filterManager.get().applyPreRenderGame({
+            context: context
+        });
+
+        self._viewManager.currentView.animate(time);
+        if(self._viewManager.currentView.id == 'map')
         {
             for(var i =0; i<self._players.length; i++)
             {
                 var player = self._players[i];
                 if(player.behavior)
-                {
                     player.behavior.getNextMove();
-                }
+
                 player.paint(time);
             }
-
         }
+
+        self._filterManager.get().applyPostRenderGame({
+            context: context
+        });
+
         this._lastDrawTime = time;
+        this._evaluateState();
     }
 
     requestNextAnimationFrame(function(tm){self.render(tm);});
 };
 
+
 Game.prototype._init = function()
 {
     this._inputInterval = 50;
+    this._initDependencies();
     this._initEventHandlers();
     this._initViews();
+    this._initFilters();
     this._initAssets();
     this._drawInterval = 150;
     this._lastDrawTime = + new Date;
 };
 
 Game.prototype.resize = function(){
-    if(this.options.viewManager.currentView)
-        this.options.viewManager.currentView.resize();
+    if(this._viewManager.currentView)
+        this._viewManager.currentView.resize();
 };
 
 module.exports = Game;

@@ -63,6 +63,7 @@ module.exports ={
                 row:2,
                 column:39
             }
-        ]
+        ],
+        filter:'darkCircle'
     }
 };

@@ -48,7 +48,6 @@ module.exports = (function(){
         this._setTiles();
         this._calculateViewport();
         this._renderCache();
-
     };
 
     MapRenderer.prototype.setPlayer = function(player){
@@ -68,41 +67,26 @@ module.exports = (function(){
 
         var context = this.options.context;
         var canvas = context.canvas;
-        var internalContext= this.options.internalContext;
 
-//        internalContext.clearRect(0,0, canvas.width, canvas.height);
-
+        this.options.filterManager.get().applyPreRenderMap({
+            context : context,
+            player : this._player,
+            startRow: this._startRow,
+            startColumn : this._startColumn,
+            gridSize: this.gridSize
+        });
 
         context.drawImage(this._cacheCanvas, Math.floor(this._startColumn * this.gridSize),Math.floor(this._startRow * this.gridSize) ,
             canvas.width, canvas.height, 0, 0,
             canvas.width, canvas.height);
 
-//        for(var i=this._startRow; i< this._startRow + this._rowPerScreen && i < this.totalRow; i++)
-//        {
-//            var cameraRow = i-this._startRow;
-//            for(var j= this._startColumn; j< this._startColumn + this._columnPerScreen && j < this.totalColumn; j++)
-//            {
-//                var cameraColumn = j-this._startColumn;
-//                var areaType = AreaTypes[this._grid[i][j].toString()];
-//                var img = null;
-//                var imgSource = null;
-//                if(areaType.bgKey)
-//                {
-//                    imgSource = imageSource[areaType.bgKey];
-//                    img = this.options.imageManager.get(imgSource.src);
-//                    internalContext.drawImage(img,0,imgSource.top,imgSource.width,imgSource.height, cameraColumn * this.gridSize,cameraRow* this.gridSize,
-//                        this.gridSize, this.gridSize);
-//                }
-//                if(areaType.srcKey)
-//                {
-//                    imgSource = imageSource[areaType.srcKey];
-//                    img = this.options.imageManager.get(imgSource.src);
-//                    internalContext.drawImage(img, 0,imgSource.top,imgSource.width,imgSource.height, cameraColumn * this.gridSize, cameraRow* this.gridSize,
-//                        this.gridSize, this.gridSize);
-//                }
-//            }
-//        }
-//        context.drawImage(internalContext.canvas, 0,0);
+        this.options.filterManager.get().applyPostRenderMap({
+            context : context,
+            player : this._player,
+            startRow: this._startRow,
+            startColumn : this._startColumn,
+            gridSize: this._gridSize
+        });
     };
     MapRenderer.prototype._calculateCamera = function(){
         if(!this._player) return;
@@ -158,6 +142,10 @@ module.exports = (function(){
 
         this._cacheContext.clearRect(0,0, this._cacheCanvas.width, this._cacheCanvas.height);
 
+        this.options.filterManager.get().applyPreRenderInternalMap({
+            context: this._cacheContext
+        });
+
         for(var i= 0; i<this.totalRow; i++)
         {
             for(var j=0; j<this.totalColumn; j++)
@@ -183,6 +171,11 @@ module.exports = (function(){
 
             }
         }
+
+        this.options.filterManager.get().applyPostRenderInternalMap({
+            context: this._cacheContext
+        });
+
     }
 
     return MapRenderer;

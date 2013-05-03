@@ -8,5 +8,6 @@ module.exports = {
     MapRenderer: require('./mapRenderer'),
     PlayerDirections: require('../playerDirections'),
     PlayerTypes : require('../playerTypes'),
+    FilterManager : require('./filterManager'),
     Game : require('./game')
 };

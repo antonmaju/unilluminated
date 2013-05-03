@@ -1,14 +1,12 @@
 module.exports ={
 
     'grass':{
-        //src:'/images/game/grass.png',
         src:'bg_sprite',
         width: 256,
         height: 256,
         top: 3840
     },
     'ground':{
-        //src:'/images/game/cave_ground.png',
         src:'bg_sprite',
         width: 256,
         height: 256,
