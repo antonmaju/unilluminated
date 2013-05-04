@@ -9,7 +9,7 @@ var Game = require('../game'),
     PlayerTypes = require('../playerTypes'),
     WanderBehavior = require('./wanderBehavior'),
     GuardianBehavior = require('./guardianBehavior'),
-    PlayerMode = require('../playerMode'),
+    PlayerMode = require('./playerMode'),
     AudioManager = require('./audioManager'),
     FilterManager = require('./filterManager'),
     ImageManager = require('./imageManager'),
@@ -275,6 +275,8 @@ Game.prototype._initPlayers = function(){
     var self = this;
     var playersInfo = this._current.players;
 
+    this._chasers = 0;
+    this.emit('evaluatingSound');
 
 
     if(this._players){
