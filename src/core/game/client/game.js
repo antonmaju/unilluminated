@@ -334,7 +334,6 @@ Game.prototype._initPlayers = function(){
             this._player = player;
             this._playerType = playerType;
             this._map = playerMap;
-            console.log(this._map.filter);
             this._filterManager.set(this._map.filter);
             this._mapRenderer.setPlayer(player);
             this._mapRenderer.setGrid(playerMap.grid);

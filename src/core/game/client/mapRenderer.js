@@ -76,8 +76,19 @@ module.exports = (function(){
             gridSize: this.gridSize
         });
 
-        context.drawImage(this._cacheCanvas, Math.floor(this._startColumn * this.gridSize),
-            Math.floor(this._startRow * this.gridSize),
+        var startClipX = this._startColumn * this.gridSize;
+        var startClipY = this._startRow * this.gridSize;
+
+        if(startClipX + canvas.width > this._cacheCanvas.width)
+        {
+            console.log('test');
+            startClipX = this._cacheCanvas.width - canvas.width;
+        }
+
+        if(startClipY + canvas.height > this._cacheCanvas.height)
+            startClipY = this._cacheCanvas.height - canvas.height;
+
+        context.drawImage(this._cacheCanvas,startClipX, startClipY,
             canvas.width, canvas.height, 0, 0,
             canvas.width, canvas.height);
 
@@ -86,7 +97,7 @@ module.exports = (function(){
             player : this._player,
             startRow: this._startRow,
             startColumn : this._startColumn,
-            gridSize: this._gridSize
+            gridSize: this.gridSize
         });
     };
     MapRenderer.prototype._calculateCamera = function(){
@@ -104,7 +115,8 @@ module.exports = (function(){
         if(this._startColumn <0)
             this._startColumn =0;
         else if(this._player.column + this. _idealCameraColRange >= this.totalColumn)
-            this._startColumn = this.totalColumn - (this. _idealCameraColRange *2) -1;
+            this._startColumn = this.totalColumn - (this. _idealCameraColRange *2) ;
+
 
 
     };
