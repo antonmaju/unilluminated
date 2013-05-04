@@ -2,10 +2,11 @@ module.exports = {
     Map1: {
         src: require('../maps/map1'),
         links:{
-            'R':'Map2',
+            //'R':'Map2',
+            'R':'Map72',
             'L' : '*'
         },
-        guardianEncounter: 0,
+        guardianEncounter: 0
     },
     Map2: {
         src: require('../maps/map2'),
@@ -30,7 +31,7 @@ module.exports = {
     Map4: {
         src: require('../maps/map4'),
         links:{
-            'T':'Map2',
+            'T':'Map72',
             'R':'Map5'
         },
         guardianEncounter: 30,
@@ -73,7 +74,7 @@ module.exports = {
     Map7: {
         src: require('../maps/map7'),
         links:{
-            'L':'Map3',
+            'L':'Map73',
             'R':'Map8'
         },
         guardianEncounter:100,
@@ -82,7 +83,7 @@ module.exports = {
     Map8: {
         src: require('../maps/map8'),
         links:{
-            'L':'Map7',
+            'L':'Map77',
             'T':'Map10',
             'R':'Map11'
         },
@@ -93,6 +94,11 @@ module.exports = {
         src: require('../maps/map10'),
         links:{
             'B':'Map8'
+        }
+    },Map6: {
+        src: require('../maps/map6'),
+        links:{
+            'B':'Map73'
         },
         guardianEncounter: 25,
         posList :[{row:3, column:0, direction:'R'}]
@@ -101,6 +107,29 @@ module.exports = {
         src: require('../maps/map11'),
         links:{
             'L':'Map8'
+        }
+    },
+    /*new map*/
+    Map72: {
+        src: require('../maps/map72'),
+        links:{
+            'R':'Map73',
+            'B':'Map4',
+            'L':'Map1'
+        }
+    },
+    Map73: {
+        src: require('../maps/map73'),
+        links:{
+            'L':'Map72',
+            'T':'Map6',
+            'R':'Map77'
+        }
+    }, Map77: {
+        src: require('../maps/map77'),
+        links:{
+            'L':'Map73',
+            'R':'Map8'
         },
         guardianEncounter:100,
         posList : [{row: 0, column:15, direction:'R' }]

@@ -240,7 +240,7 @@ module.exports ={
     },
     '45':{
         desc:'cave_edge4',
-        srcKey:'cave-edge-bottom',
+        srcKey:'cave-edge4',
         bgKey:'ground',
         isWalkable:false
     },
