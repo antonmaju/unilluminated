@@ -275,6 +275,8 @@ Game.prototype._initPlayers = function(){
     var self = this;
     var playersInfo = this._current.players;
 
+    this._chasers = 0;
+    this.emit('evaluatingSound');
 
 
     if(this._players){
