@@ -6,7 +6,7 @@ module.exports = {
             'R':'Map72',
             'L' : '*'
         },
-        guardianEncounter: 0,
+        guardianEncounter: 0
     },
     Map2: {
         src: require('../maps/map2'),

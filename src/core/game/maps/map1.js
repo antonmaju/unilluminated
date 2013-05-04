@@ -59,7 +59,7 @@ module.exports = {
             }
         ]
     },
-    filter: 'none'
+    filter: 'dark'
 };
 
 
