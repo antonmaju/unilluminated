@@ -76,7 +76,8 @@ module.exports = (function(){
             gridSize: this.gridSize
         });
 
-        context.drawImage(this._cacheCanvas, Math.floor(this._startColumn * this.gridSize),Math.floor(this._startRow * this.gridSize) ,
+        context.drawImage(this._cacheCanvas, Math.floor(this._startColumn * this.gridSize),
+            Math.floor(this._startRow * this.gridSize),
             canvas.width, canvas.height, 0, 0,
             canvas.width, canvas.height);
 
@@ -96,20 +97,20 @@ module.exports = (function(){
         if(this._startRow < 0)
             this._startRow = 0;
         else if(this._player.row + this._idealCameraRowRange >= this.totalRow)
-            this._startRow = this.totalRow - (this. _idealCameraRowRange * 2);
+            this._startRow = this.totalRow - (this. _idealCameraRowRange * 2) -1;
 
 
         this._startColumn = this._player.column- this. _idealCameraColRange ;
         if(this._startColumn <0)
             this._startColumn =0;
         else if(this._player.column + this. _idealCameraColRange >= this.totalColumn)
-            this._startColumn = this.totalColumn - (this. _idealCameraColRange *2);
+            this._startColumn = this.totalColumn - (this. _idealCameraColRange *2) -1;
 
 
     };
     MapRenderer.prototype._calculateViewport = function(){
         var canvas = this.options.context.canvas;
-        this.gridSize = canvas.width / this._columnPerScreen;
+        this.gridSize =canvas.width / this._columnPerScreen;
 
         this._idealCameraColRange =  Math.floor(this._columnPerScreen/2);
         this._idealCameraRowRange =  Math.floor(this._rowPerScreen/2);
@@ -119,6 +120,7 @@ module.exports = (function(){
     MapRenderer.prototype._setTiles = function(){
         this._columnPerScreen=8;
         this._rowPerScreen=6;
+
         if(window.innerWidth > 480)
         {
             this._columnPerScreen=12;
