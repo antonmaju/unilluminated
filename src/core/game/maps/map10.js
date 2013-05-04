@@ -54,15 +54,15 @@ module.exports ={
     exits :{
         'B':[
             {
-                row:49,
+                row:48,
                 column:22
             },
             {
-                row:49,
+                row:48,
                 column:23
             },
             {
-                row:49,
+                row:48,
                 column:24
             }
         ]

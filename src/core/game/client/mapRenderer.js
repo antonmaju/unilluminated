@@ -124,11 +124,11 @@ module.exports = (function(){
             this._columnPerScreen=12;
             this._rowPerScreen=9;
         }
-        if(window.innerWidth > 600)
+     /*   if(window.innerWidth > 600)
         {
             this._columnPerScreen=16;
             this._rowPerScreen=12;
-        }
+        }*/
     };
 
     MapRenderer.prototype._renderCache = function(){
