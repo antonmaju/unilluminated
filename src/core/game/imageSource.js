@@ -1,3 +1,6 @@
+/**
+ * This object contains image information
+ */
 module.exports ={
 
     'grass':{

@@ -44,7 +44,7 @@ module.exports = {
             'R':'Map13'
         },
         guardianEncounter: 25,
-        posList:[{row:3, column:0, direction:'R' }]
+        posList:[{row:36, column:1, direction:'R' }]
     },
     Map13: {
         src: require('../maps/map13'),

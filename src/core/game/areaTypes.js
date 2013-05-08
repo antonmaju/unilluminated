@@ -1,3 +1,6 @@
+/**
+ * This object contains all possible area types
+ */
 module.exports ={
     '1': {
         desc : 'grass',
