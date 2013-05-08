@@ -5,6 +5,9 @@ var coreServices = require('../core/coreServices'),
 
 
 module.exports = {
+    /**
+     * Renders index page (home/index)
+     */
     index: {
         route: '/',
         method: 'get',
@@ -12,6 +15,9 @@ module.exports = {
             controllerHelper.renderView('home/index',{}, req, resp);
         }
     },
+    /**
+     * Renders main page (home/main)
+     */
     main :{
         route :'/main-menu',
         method: 'get',
@@ -19,6 +25,9 @@ module.exports = {
             controllerHelper.renderView('home/main',{}, req, resp);
         }
     },
+    /**
+     * Renders selection page based on mode
+     */
     selection: {
         route:'/selection/:mode(1p|2p)',
         method: 'get',
@@ -26,6 +35,9 @@ module.exports = {
             controllerHelper.renderView('home/selection',{mode:req.params.mode}, req, resp);
         }
     },
+    /**
+     * Renders register page
+     */
     naming : {
         route : '/register',
         method: 'get',
@@ -33,6 +45,10 @@ module.exports = {
             controllerHelper.renderView('home/register',{}, req, resp);
         }
     },
+    /**
+     * Validates registered data
+     * if errors occurred render naming page with error in it
+     */
     register: {
         route: '/register',
         method: 'post',

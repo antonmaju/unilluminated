@@ -18,10 +18,15 @@ function getCurrentUserId(req){
 }
 
 module.exports ={
+    /**
+     * Sets home controller settings
+     */
     settings: {
         beforeFilters : [filters.authorize()]
     },
-
+    /**
+     * Renders game with specific id
+     */
     index: {
         route: '/game/:id',
         method:'get',
@@ -82,6 +87,9 @@ module.exports ={
             });
         }
     },
+    /**
+     * Creates new game instance with selected options
+     */
     create : {
         route : '/game/new/:mode(1p|2p)/:type(heroine|guardian)',
         method:'get',

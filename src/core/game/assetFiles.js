@@ -1,3 +1,6 @@
+/**
+ * This object contains all asset files
+ */
 module.exports = [{
     key:'bg_sprite',
     src:'/images/game/bg_sprite.gif'

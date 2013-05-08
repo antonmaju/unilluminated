@@ -1,3 +1,8 @@
+/**
+ * This view displays map screen
+ * @param {Object} options
+ * @constructor
+ */
 module.exports = (function(){
 
     var event = require('events'),
@@ -25,11 +30,18 @@ module.exports = (function(){
         });
 
     };
-
+    /**
+     * Resizes map
+     * @method
+     */
     MapView.prototype.resize = function(){
         this.options.mapRenderer.emit('resize');
     }
-
+    /**
+     * Renders map
+     * @param time
+     * @method
+     */
     MapView.prototype.animate = function(time){
         var context = this.options.context;
         var canvas = context.canvas;
