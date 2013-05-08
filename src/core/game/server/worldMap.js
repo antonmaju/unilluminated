@@ -11,7 +11,7 @@ module.exports = {
     Map2: {
         src: require('../maps/map2'),
         links:{
-            'R':'Map3',
+            'R':'Map73',
             'B':'Map4',
             'L':'Map1'
         },
@@ -130,8 +130,8 @@ module.exports = {
         links:{
             'L':'Map73',
             'R':'Map8'
-        },
-        guardianEncounter:100,
-        posList : [{row: 0, column:15, direction:'R' }]
+        }
+        ,guardianEncounter:100,
+        posList : [{row: 0, column:15, direction:'B' }]
     }
 };
