@@ -2,12 +2,23 @@ module.exports = (function(){
 
     var FilterBase = require('./filterBase');
 
+    /**
+     * This filter creates a darkened version of map
+     * of map will be shown
+     * @constructor
+     */
     function DarkFilter(){
 
     }
 
     DarkFilter.prototype = Object.create(FilterBase.prototype);
 
+    /***
+     * Darkens the map area after rendering map in internal canvas
+     * @param {Object} options
+     * Options object consists of:
+     * - context: canvas context
+     */
     DarkFilter.prototype.applyPostRenderInternalMap = function(options){
         var context = options.context;
         var canvas = context.canvas;

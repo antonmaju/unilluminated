@@ -2,12 +2,26 @@ module.exports = (function(){
 
     var FilterBase = require('./filterBase');
 
+    /**
+     * This filter creates a darkened version of map , and performs clipping so only small circular part
+     * of map will be shown
+     * @constructor
+     */
     function DarkCircleFilter(){
-
     }
 
     DarkCircleFilter.prototype = Object.create(FilterBase.prototype);
 
+    /**
+     * Performs circular clipping before rendering map in viewport
+     * @param {Object} options
+     * Options param consists of:
+     * - context : canvas context
+     * - player : current player instance
+     * - startRow: start row of map
+     * - startColumn: start column of map
+     * - gridSize: map's grid size
+     */
     DarkCircleFilter.prototype.applyPreRenderMap = function(options)
     {
         var context = options.context;
@@ -36,6 +50,12 @@ module.exports = (function(){
         context.clip();
     };
 
+    /***
+     * Darkens the map area after rendering map in internal canvas
+     * @param {Object} options
+     * Options object consists of:
+     * - context: canvas context
+     */
     DarkCircleFilter.prototype.applyPostRenderInternalMap = function(options){
         var context = options.context;
         var canvas = context.canvas;
@@ -70,6 +90,10 @@ module.exports = (function(){
         context.putImageData(imageData,0,0);
     };
 
+    /**
+     * Restores context state after rendering view
+     * @param options
+     */
     DarkCircleFilter.prototype.applyPostRenderGame = function(options){
         var context = options.context;
 

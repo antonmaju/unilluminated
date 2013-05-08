@@ -6,6 +6,11 @@ module.exports = (function(){
         astar = require('./astar'),
         event = require('events');
 
+    /**
+     * This class represents wander AI
+     * @param {object} options
+     * @constructor
+     */
     function WanderBehavior(options){
         event.EventEmitter.call(this);
 
@@ -29,15 +34,27 @@ module.exports = (function(){
 
     WanderBehavior.prototype = Object.create(event.EventEmitter.prototype);
 
+    /**
+     * Sets current map
+     * @param {object} map
+     */
     WanderBehavior.prototype.setMap = function(map){
         this._map = map;
         this.reset();
     };
 
+    /***
+     * Sets current position information
+     * @param {object} pos
+     */
     WanderBehavior.prototype.setPosition= function(pos){
         this._position = pos;
     };
 
+    /***
+     * Gets current position
+     * @returns {object}
+     */
     WanderBehavior.prototype.getPosition = function(){
         return this._position;
     };
@@ -95,6 +112,10 @@ module.exports = (function(){
         }
     };
 
+    /**
+     * gets map
+     * @returns {object}
+     */
     WanderBehavior.prototype.getMap = function(){
         return this._map;
     };
@@ -224,6 +245,9 @@ module.exports = (function(){
 
     };
 
+    /**
+     * Requests AI to get next position
+     */
     WanderBehavior.prototype.getNextMove = function(){
 
         if(this._pathIndex >= this._path.length)
@@ -263,6 +287,9 @@ module.exports = (function(){
         }
     };
 
+    /**
+     * Resets this AI state
+     */
     WanderBehavior.prototype.reset= function(){
         this._path =[];
         this._pathIndex=0;

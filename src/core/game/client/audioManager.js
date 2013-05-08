@@ -1,5 +1,10 @@
 module.exports = (function(){
 
+    /***
+     * This class is responsible for managing audio assets
+     * @constructor
+     */
+
     function AudioManager(){
 
     }
@@ -8,6 +13,9 @@ module.exports = (function(){
         enabled : true,
         _currentSound: null,
         _activeId :null,
+        /**
+         * Initializes this instance
+         */
         init : function(){
             var files = [{
                 id:'harp',
@@ -23,6 +31,10 @@ module.exports = (function(){
             }
         },
 
+        /***
+         * Plays audio assets with the specified id
+         * @param {string} id
+         */
         play: function(id){
             if(! this.enabled) return;
 

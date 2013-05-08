@@ -2,10 +2,25 @@ var ds=require('./ds'),
     AreaTypes = require('../areaTypes'),
     commonUtils = require('../commonUtils') ;
 
+/**
+ * Calculates manhattan distance between 2 position
+ * @param {Object} start
+ * @param {Object} end
+ * @returns {int} distance
+ */
 function ManhattanDistance(start, end){
     return Math.abs(end.row-start.row) + Math.abs(end.column-start.column);
 };
 
+
+/**
+ * Gets arrays of walkable positions based on player position
+ * @param {Array} grid map grid
+ * @param {Object} pos position
+ * @param {int} widthSize  player width
+ * @param {int} heightSize player height
+ * @returns {Array} array of possible positions
+ */
 function getPossiblePositions(grid, pos, widthSize, heightSize){
     var connections = [];
 
@@ -24,15 +39,33 @@ function getPossiblePositions(grid, pos, widthSize, heightSize){
     return connections;
 }
 
+/**
+ * Gets string manifestation of a position
+ * @param {Object} pos
+ * @returns {string}
+ */
 function stringifyPosition(pos){
     return ''+pos.row+','+pos.column;
 }
 
+/***
+ * Converts position string to position object
+ * @param posString
+ * @returns {Object} position object
+ */
 function convertToPosition(posString){
     var arr = posString.split(',');
     return {row:parseInt(arr[0],10),column:parseInt(arr[1],10)};
 }
 
+/**
+ * Determines whether a position is intersecting with other position
+ * @param {Object} pos1
+ * @param {Object} pos2
+ * @param {int} widthSize
+ * @param {int} heightSize
+ * @returns {boolean}
+ */
 function isIntersect(pos1,pos2, widthSize, heightSize){
     for(var i=pos1.row; i< pos1.row + heightSize; i++ )
     {
@@ -44,9 +77,14 @@ function isIntersect(pos1,pos2, widthSize, heightSize){
     }
 
     return false;
-    //return pos1.row==pos2.row && pos1.column == pos2.column;
 }
 
+/***
+ * Returns path string indicating complete path to solution
+ * @param {Object} cameFrom
+ * @param {string} current position string
+ * @returns {*}
+ */
 function reconstructPath(cameFrom, current){
     var stringPos = current;
     if(cameFrom[stringPos]){
@@ -58,6 +96,11 @@ function reconstructPath(cameFrom, current){
     }
 }
 
+/***
+ * Converts path string to position array
+ * @param {string} positions path string
+ * @returns {Array}
+ */
 function convertPathStringsToPositions(positions){
     var posList = positions.split(';');
     var points =[];
@@ -68,6 +111,15 @@ function convertPathStringsToPositions(positions){
     return points;
 }
 
+/***
+ * Performs astar calculation
+ * @param {Array} grid
+ * @param {Object} start
+ * @param {Object} end
+ * @param {int} widthSize
+ * @param {int} heightSize
+ * @returns {Array}
+ */
 module.exports = function(grid, start, end, widthSize, heightSize){
 
     var heuristic = ManhattanDistance;

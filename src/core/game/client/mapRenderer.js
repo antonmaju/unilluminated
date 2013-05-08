@@ -5,6 +5,11 @@ module.exports = (function(){
     var imageSource = require('../imageSource');
     var event = require('events');
 
+    /**
+     * This class is responsible for rendering map to canvas
+     * @param {object} options
+     * @constructor
+     */
     function MapRenderer(options){
 
         event.EventEmitter.call(this);
@@ -37,10 +42,10 @@ module.exports = (function(){
         });
     };
 
-    MapRenderer.prototype.setGridSize = function(row, column){
-
-    };
-
+    /**
+     * Sets current map grid
+     * @param {Array} grid
+     */
     MapRenderer.prototype.setGrid = function(grid){
         this._grid = grid;
         this.totalRow = this._grid.length;
@@ -50,6 +55,10 @@ module.exports = (function(){
         this._renderCache();
     };
 
+    /**
+     * Sets current active player
+     * @param {object} player
+     */
     MapRenderer.prototype.setPlayer = function(player){
         this._player = player;
     };
@@ -59,6 +68,10 @@ module.exports = (function(){
         this.options.internalContext = internalContext;
     };
 
+
+    /**
+     * Renders map to canvas
+     */
     MapRenderer.prototype.render = function(){
         if(! this._grid)
             return;
@@ -100,6 +113,7 @@ module.exports = (function(){
             gridSize: this.gridSize
         });
     };
+
     MapRenderer.prototype._calculateCamera = function(){
         if(!this._player) return;
 
@@ -120,6 +134,7 @@ module.exports = (function(){
 
 
     };
+
     MapRenderer.prototype._calculateViewport = function(){
         var canvas = this.options.context.canvas;
         this.gridSize =canvas.width / this._columnPerScreen;

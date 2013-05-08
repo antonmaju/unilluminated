@@ -12,7 +12,7 @@ module.exports = (function(){
         currentView : null,
 
         /**
-         * Add a view to ViewManager instance
+         * Adds a view to ViewManager instance
          * @param {Object} view
          */
         addView : function(view){
@@ -20,7 +20,7 @@ module.exports = (function(){
         },
 
         /**
-         * Add multiple views to ViewManager instance
+         * Adds multiple views to ViewManager instance
          * @param views
          */
         addViews: function(views){
@@ -29,7 +29,7 @@ module.exports = (function(){
 
 
         /**
-         * Set current view
+         * Sets current view
          * @param {String} viewId
          */
         setView : function(viewId){

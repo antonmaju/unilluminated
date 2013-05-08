@@ -12,7 +12,7 @@ module.exports = (function(){
 
     ImageManager.prototype = {
         /**
-         * Add a new item to download queue
+         * Adds a new item to download queue
          * @param options
          */
         queueItem : function(options){
@@ -20,7 +20,7 @@ module.exports = (function(){
         },
 
         /**
-         * Add arrays of item to download queue
+         * Adds arrays of item to download queue
          * @param items
          */
         queueItems: function(items){

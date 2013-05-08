@@ -9,6 +9,11 @@ module.exports = (function(){
     var event = require('events'),
         GameUtils = require('../../commonUtils');
 
+    /**
+     * This view displays loading screen
+     * @param {Object} options
+     * @constructor
+     */
     function LoadingView(options){
         event.EventEmitter.call(this);
 

@@ -2,6 +2,10 @@ module.exports = (function(){
 
     var DS= {};
 
+    /***
+     * This class uses min-heap tree, needed by A* for storing its open set
+     * @constructor
+     */
     function PriorityQueue(){
         this._items = [];
     }
@@ -45,10 +49,19 @@ module.exports = (function(){
                 else break;
             }
         },
+        /**
+         * Adds new item to queue
+         * @param {object} item
+         * @param {int} priority
+         */
         enqueue : function(item, priority){
             this._items.push({item:item, priority: priority});
             this._heapifyUp(this._items.length -1);
         },
+        /***
+         * Removes item in front position
+         * @returns {object}
+         */
         dequeue : function(){
             var length = this._items.length;
             if(length == 0) return null;
@@ -60,6 +73,9 @@ module.exports = (function(){
             this._heapifyDown(0);
             return frontItem;
         },
+        /**
+        * Gets queue size
+        */
         size : function(){
             return this._items.length;
         }

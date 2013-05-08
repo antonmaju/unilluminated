@@ -21,7 +21,7 @@ exports.cssLoader = function(files){
 };
 
 /**
- * Return script tags in string
+ * Returns script tags in string
  * @param {Array} files  Collection od relative js path
  * @return {String} Script tags
  */
