@@ -1,3 +1,8 @@
+/**
+ * This view displays loading screen
+ * @param {Object} options
+ * @constructor
+ */
 module.exports = (function(){
 
 
@@ -22,6 +27,9 @@ module.exports = (function(){
 
     LoadingView.prototype = Object.create(event.EventEmitter.prototype);
 
+    /**
+     * Initializes loading screen
+     */
     LoadingView.prototype._init = function(){
 
         var self = this;
@@ -37,6 +45,11 @@ module.exports = (function(){
 
     };
 
+    /**
+     * Animates loading..... text
+     * @param time
+     * @method
+     */
     LoadingView.prototype.animate = function(time){
 
         if(time - this._lastTime < this.options.minInterval)

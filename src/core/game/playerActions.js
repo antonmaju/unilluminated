@@ -1,3 +1,6 @@
+/**
+ * This object contains enum of player actions
+ */
 module.exports = {
     MoveTop:1,
     MoveBottom:2,
