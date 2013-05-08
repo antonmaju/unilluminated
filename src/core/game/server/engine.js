@@ -1,7 +1,11 @@
 var engineCommands = require('../../commands/engineCommands'),
     worldMap = require('./worldMap');
 
-
+/**
+ * Handles socket io in server
+ * @param app
+ * @param io
+ */
 exports.start = function(app, io){
 
     io.sockets.on('connection', function(socket){
