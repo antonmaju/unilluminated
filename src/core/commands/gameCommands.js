@@ -12,6 +12,11 @@ function hasError(client, err, callback){
     return false;
 }
 
+/**
+ * Creates new Game document
+ * @param {Object} model
+ * @param {function} callback
+ */
 exports.create = function(model, callback){
     function validateModel(){
         if(! model.mode)
@@ -54,6 +59,12 @@ exports.create = function(model, callback){
     });
 };
 
+
+/**
+ * Saves changes of a Game document
+ * @param {Object} model
+ * @param {function} callback
+ */
 exports.save = function(model, callback){
     function validateModel(){
         if(! model._id)
@@ -99,7 +110,7 @@ exports.save = function(model, callback){
 };
 
 /**
- * get game information by its id
+ * Gets game information by its id
  * @param {ObjectId} id
  * @param {function} callback
  */

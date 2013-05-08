@@ -21,12 +21,12 @@ function getOppositeDirection(direction){
 }
 
 /**
- * Get current game information
+ * Gets current game information
  * @param {object} param
- * Param should consist of
+ * Param should consist of :
  * - id : game id
  * - userId : current user id
- * @param {function} callback
+ * @param {function} cb callback function
  */
 
 exports.getInitialGameInfo = function(param, cb){
@@ -146,13 +146,13 @@ exports.getInitialGameInfo = function(param, cb){
 
 
 /**
- * Get next area information
+ * Gets next area information
  * @param {object} param
  * Param should consist of:
  * - id : game id
  * - userId: current user id
  * - direction: current user direction
- * @param {function} callback
+ * @param {function} cb  callback function
  */
 exports.getNewAreaInfo = function(param, cb){
     var result = null;
@@ -248,6 +248,12 @@ exports.getNewAreaInfo = function(param, cb){
     });
 };
 
+
+/***
+ * Updates game state
+ * @param param
+ * @param cb
+ */
 exports.handleEndGame = function(param, cb){
     var result = null;
 

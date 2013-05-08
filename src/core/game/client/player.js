@@ -7,7 +7,11 @@ module.exports = (function(){
     var event = require('events');
     var PlayerModes = require('./playerMode');
 
-
+    /**
+     * This class encapsulates player information
+     * @param {object} options
+     * @constructor
+     */
     function Player(options){
         event.EventEmitter.call(this);
 
@@ -41,6 +45,10 @@ module.exports = (function(){
         return this.playerId == null;
     };
 
+    /**
+     * Moves player to new position based on direction
+     * @param {int} direction
+     */
     Player.prototype.move =function(direction){
 
         this._activeDirection = direction;
@@ -74,10 +82,19 @@ module.exports = (function(){
         }
     };
 
+    /**
+     * Sets player direction
+     * @param {int} direction
+     */
     Player.prototype.setDirection = function(direction){
         this._activeDirection = direction;
     };
 
+    /**
+     * Sets player direction based on position
+     * @param {int} row
+     * @param {int} column
+     */
     Player.prototype.setDirectionBasedOnPosition = function(row, column){
         if(row > this.row)
             this._activeDirection = Directions.Bottom;
@@ -89,31 +106,60 @@ module.exports = (function(){
             this._activeDirection = Directions.Left;
     };
 
+    /**
+     * Gets player type
+     * @returns {int}
+     */
     Player.prototype.getType = function(){
         return this.options.playerType;
     };
 
+    /**
+     * Gets player width size
+     * @returns {int}
+     */
     Player.prototype.getWidthSize= function(){
         return this.options.widthSize;
     };
 
+    /**
+     * Gets player height size
+     * @returns {int}
+     */
     Player.prototype.getHeightSize = function(){
         return this.options.heightSize;
     };
 
+    /**
+     * Gets player sight radius
+     * @returns {int}
+     */
     Player.prototype.getSightRadius = function(){
         return this.options.sightRadius;
     };
 
+    /**
+     * Sets player position
+     * @param {int} row
+     * @param {int} column
+     */
     Player.prototype.setPosition = function(row, column){
         this.row = row;
         this.column = column;
     };
 
+    /**
+     * Sets map
+     * @param {object} map
+     */
     Player.prototype.setMap = function(map){
         this.map = map;
     };
 
+    /**
+     * Draws current player
+     * @param {int} time
+     */
     Player.prototype.paint= function(time){
 
         this.emit('beforePaint', time);
@@ -136,6 +182,12 @@ module.exports = (function(){
         this.emit('afterPaint', time);
     };
 
+    /**
+     * Checks whether player can walk to new position
+     * @param {int} newRow
+     * @param {int} newColumn
+     * @returns {boolean}
+     */
     Player.prototype.canWalk = function(newRow, newColumn){
         var widthDiff = this.options.widthSize-1;
         var heightDiff = this.options.heightSize-1;
@@ -185,6 +237,10 @@ module.exports = (function(){
 
     };
 
+    /**
+     * Gets current occupied positions
+     * @returns {Array}
+     */
     Player.prototype.getOccupiedPositions = function(){
         var posList =[];
 
@@ -199,6 +255,11 @@ module.exports = (function(){
         return posList;
     };
 
+    /**
+     * Determines if this player collides with specified player instance
+     * @param {object} player
+     * @returns {boolean}
+     */
     Player.prototype.collidesWith = function(player){
         var ownPos = this.getOccupiedPositions();
         var otherPos = player.getOccupiedPositions();
@@ -215,6 +276,11 @@ module.exports = (function(){
         return false;
     };
 
+    /**
+     * Determines if this player is on specific area
+     * @param {string} areaId
+     * @returns {boolean}
+     */
     Player.prototype.isOnArea = function(areaId){
         var ownPos = this.getOccupiedPositions();
         for(var i=0; i<ownPos.length; i++)

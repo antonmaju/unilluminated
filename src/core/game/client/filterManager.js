@@ -1,11 +1,20 @@
 module.exports = (function(){
 
+    /**
+     * This class is reponsible for managing map filters
+     * @constructor
+     */
     function FilterManager(){
         this._filters={};
         this._currentId = null;
     }
 
     FilterManager.prototype ={
+        /**
+         * Registers new filter
+         * @param {string} id
+         * @param {Object} filterClass
+         */
         register: function(id, filterClass){
             if(! id || !filterClass) return;
 
@@ -13,9 +22,18 @@ module.exports = (function(){
                 filterClass: filterClass
             };
         },
+        /**
+         * Sets current active filter by its id
+         * @param {string} id
+         */
         set : function(id){
             this._currentId = id;
         },
+
+        /**
+         * Gets current active filter instance
+         * @returns {object}
+         */
         get: function(){
             if(! this._currentId)
                 return;

@@ -5,7 +5,11 @@ module.exports = (function(){
         ChaseBehavior = require('./chaseBehavior'),
         PlayerMode = require('./playerMode');
 
-
+    /**
+     * This class wraps guardian AI
+     * @param {object} options
+     * @constructor
+     */
     function GuardianBehavior(options){
         event.EventEmitter.call(this);
 
@@ -29,38 +33,70 @@ module.exports = (function(){
 
     GuardianBehavior.prototype = Object.create(event.EventEmitter.prototype);
 
+    /**
+     * Gets current AI state
+     * @returns {int}
+     */
     GuardianBehavior.prototype.getState = function(){
         return this._state;
     };
 
+    /**
+     * Sets enemy
+     * @param {object} enemy
+     */
     GuardianBehavior.prototype.setEnemy = function(enemy){
         this._enemy = enemy;
     };
 
+    /**
+     * Gets enemy
+     * @returns {*}
+     */
     GuardianBehavior.prototype.getEnemy = function(){
         return this._enemy;
     };
 
+    /**
+     * Sets current map
+     * @param {object} map
+     */
     GuardianBehavior.prototype.setMap = function(map){
         this._map = map;
         this._wanderBehavior.setMap(map);
         this._chaseBehavior.setMap(map);
     };
 
+    /**
+     * Gets current map
+     * @param map
+     * @returns {object} map
+     */
     GuardianBehavior.prototype.getMap = function(map){
         return this.getMap();
     };
 
+    /**
+     * Sets current position
+     * @param {object} pos
+     */
     GuardianBehavior.prototype.setPosition = function(pos){
         this._position = pos;
         this._wanderBehavior.setPosition(pos);
         this._chaseBehavior.setPosition(pos);
     };
 
+    /**
+     * Gets current position
+     * @returns {object}
+     */
     GuardianBehavior.prototype.getPosition = function(){
         return this._position;
     };
 
+    /**
+     * Requests AI to generate next position
+     */
     GuardianBehavior.prototype.getNextMove = function(){
         var enemy = this.getEnemy();
         if(this._counter >= this.options.evaluationStep){

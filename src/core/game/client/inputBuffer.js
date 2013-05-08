@@ -1,6 +1,11 @@
 module.exports = (function(){
     var event = require('events');
 
+    /**
+     * This class is responsible for storing input in queue mechanism
+     * @param interval
+     * @constructor
+     */
     function InputBuffer(interval){
         this._queue = [];
         this._interval = interval;
@@ -9,6 +14,10 @@ module.exports = (function(){
 
     InputBuffer.prototype = Object.create(event.EventEmitter.prototype);
 
+    /**
+     * Adds new input
+     * @param {int} input
+     */
     InputBuffer.prototype.addInput = function(input){
         this._queue.push(input);
         this.emit('inputAdded', input);

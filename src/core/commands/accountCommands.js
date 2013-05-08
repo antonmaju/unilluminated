@@ -13,8 +13,8 @@ function hasError(client, err, callback){
 
 
 /**
- * Create a new account
- * @param {string} name
+ * Creates a new account
+ * @param {Object} model
  * @param {function} callback
  */
 exports.create = function(model, callback){
@@ -53,8 +53,8 @@ exports.create = function(model, callback){
 
 
 /**
- * Delete an account by its id
- * @param {string} name
+ * Deletes an account by its id
+ * @param {string} name  account name
  * @param {function} callback
  */
 exports.delete = function(name, callback){

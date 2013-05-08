@@ -39,6 +39,11 @@ var isMobile = {
 };
 
 
+/**
+ * Gets the opposite direction
+ * @param {int} direction
+ * @returns {int}
+ */
 function getOppositeDirection(direction){
     switch(direction){
         case Directions.Top:
@@ -393,7 +398,7 @@ Game.prototype._initPlayers = function(){
 };
 
 /***
- * Get current fps
+ * Gets current fps
  * @param time current timestamp
  * @return {Number} fps number
  */
@@ -460,6 +465,10 @@ Game.prototype._evaluateState = function(){
     }
 };
 
+/**
+ * Renders game view
+ * @param {int} step
+ */
 Game.prototype.render = function(step){
     time = + new Date;
     var self = this;
@@ -509,6 +518,9 @@ Game.prototype._init = function()
     this._lastDrawTime = + new Date;
 };
 
+/**
+ * Resizes current game view
+ */
 Game.prototype.resize = function(){
     if(this._viewManager.currentView)
         this._viewManager.currentView.resize();

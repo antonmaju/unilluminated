@@ -3,7 +3,7 @@ var config = require('../config'),
     htmlHelpers = require('./htmlHelpers');
 
 /**
- * Wrap model passed with additional information
+ * Wraps model passed with additional information
  * @param {Object} model
  * @param {Object} req
  */

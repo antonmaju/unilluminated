@@ -2,7 +2,7 @@ var config = require('../config'),
     mongo = require('mongodb');
 
 /**
- * Get mongodb client
+ * Gets mongodb client
  * @param {function} callback.
  */
 exports.getClient = function(callback){

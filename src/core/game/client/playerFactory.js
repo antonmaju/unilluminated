@@ -6,6 +6,11 @@ module.exports = (function(){
 
 
     var factory ={
+        /**
+         * Creates new player instance
+         * @param {object} options
+         * @returns {Player}
+         */
         create: function(options){
             var imageKeys = {};
             var widthSize= 1;
