@@ -1,9 +1,14 @@
 {
-    "mongoServer"   : "your mongo server",
+    "sessionStore"  : "your session store. The possible values are 'memory','redis', and 'mongo'",
+    "mongoServer"   : "your mongo host",
     "mongoPort"     : "your mongo port",
     "mongoDatabase" : "unilluminated",
     "mongoUser"     : "your mongo User if any",
     "mongoPassword" : "your mongo password if any",
+    "redisServer"   : "your redis host",
+    "redisPort"     : "your redis port",
+    "redisIndex"   : "your redis db index",
+    "redisPassword": "your redis password",
     "assetsUrl"     : "your asset url",
     "webUrl"        : "your web url",
     "sessionSecret" : "your session secret"

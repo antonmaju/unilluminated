@@ -10,10 +10,39 @@ var express = require('express'),
     controllerRegistry = require('./controllers/controllerRegistry') ,
     GameEngine = require('./core/game/server/engine'),
     MongoStore = require('./core/utils/mongoStore')(express),
+    RedisStore = require('connect-redis')(express),
     config = require('./core/config'),
     nconf = require('nconf');
 
 var app = express();
+
+
+function getSessionParam(){
+    var sessionParam = {secret:nconf.get('sessionSecret')};
+    var sessionStoreMode = nconf.get('sessionStore');
+
+    if(sessionStoreMode == 'redis'){
+        sessionParam.cookie= {maxAge: 1000 * 7200};
+        sessionParam.store = new RedisStore({
+            host: config.redisServer,
+            port: config.redisPort,
+            ttl:3600,
+            db : config.redisIndex,
+            pass:config.redisPassword
+        });
+    }
+    else if(sessionStoreMode == 'mongo'){
+        sessionParam.store = new MongoStore({
+            host: config.mongoServer,
+            port: config.mongoPort,
+            db : config.mongoDatabase,
+            user: config.mongoUser,
+            password: config.mongoPassword
+        });
+    }
+
+    return sessionParam;
+}
 
 
 app.configure(function(){
@@ -29,13 +58,7 @@ app.configure(function(){
     app.use(express.logger('dev'));
     app.use(express.bodyParser());
     app.use(express.cookieParser());
-    app.use(express.session({secret:nconf.get('sessionSecret'), store: new MongoStore({
-        host: config.mongoServer,
-        port: config.mongoPort,
-        db : config.mongoDatabase,
-        user: config.mongoUser,
-        password: config.mongoPassword
-    })}));
+    app.use(express.session(getSessionParam()));
     app.use(express.methodOverride());
     app.use(app.router);
     app.use(express.static(path.join(__dirname, 'public')));

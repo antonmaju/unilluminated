@@ -11,6 +11,10 @@ module.exports = {
     mongoDatabase :nconf.get('mongoDatabase'),
     mongoUser :nconf.get('mongoUser'),
     mongoPassword :nconf.get('mongoPassword'),
+    redisServer :nconf.get('redisServer'),
+    redisPort : parseInt(nconf.get('redisPort'),10),
+    redisIndex : parseInt(nconf.get('redisIndex'),10),
+    redisPassword: nconf.get('redisPassword'),
     assetsUrl : nconf.get('assetsUrl'),
     webUrl : nconf.get('webUrl')
 };
