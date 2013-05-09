@@ -10,7 +10,9 @@ var express = require('express'),
     controllerRegistry = require('./controllers/controllerRegistry') ,
     GameEngine = require('./core/game/server/engine'),
     MongoStore = require('./core/utils/mongoStore')(express),
+    redis = require('redis'),
     RedisStore = require('connect-redis')(express),
+    SocketRedisStore = require('socket.io/lib/stores/redis'),
     config = require('./core/config'),
     nconf = require('nconf');
 
@@ -42,6 +44,32 @@ function getSessionParam(){
     }
 
     return sessionParam;
+}
+
+function getRedisClient(){
+    var client = redis.createClient(config.redisPort, config.redisServer);
+
+    if(config.redisPassword){
+        client.auth(config.redisPassword, function(err){ if (err) throw err;  });
+    }
+
+    if(config.redisIndex)
+        client.select(config.redisIndex);
+
+    return client;
+}
+
+function setSocketIoStore(io){
+    var storeMode = nconf.get('socketIoStore');
+
+    if(storeMode != 'redis') return;
+
+    io.set('store',new SocketRedisStore({
+        redis: redis,
+        redisPub : getRedisClient(),
+        redisSub : getRedisClient(),
+        redisClient : getRedisClient()
+    }));
 }
 
 
@@ -76,9 +104,14 @@ app.configure('development', function(){
 var server = http.createServer(app);
 var io = require('socket.io').listen(server);
 
-io.enable('browser client minification');
-io.enable('browser client etag');
-io.enable('browser client gzip');
+
+io.configure(function(){
+    io.enable('browser client minification');
+    io.enable('browser client etag');
+    io.enable('browser client gzip');
+    setSocketIoStore(io);
+});
+
 
 controllerRegistry.register(app);
 GameEngine.start(app, io);

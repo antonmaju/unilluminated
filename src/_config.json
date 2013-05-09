@@ -1,5 +1,6 @@
 {
     "sessionStore"  : "your session store. The possible values are 'memory','redis', and 'mongo'",
+    "socketIoStore"  : "your socket io store. The possible values are 'memory' and 'redis'",
     "mongoServer"   : "your mongo host",
     "mongoPort"     : "your mongo port",
     "mongoDatabase" : "unilluminated",
