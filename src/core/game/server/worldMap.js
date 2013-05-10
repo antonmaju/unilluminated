@@ -60,16 +60,16 @@ module.exports = {
             'L':'Map13',
             'B':'Map14'
         },
-        guardianEncounter: 0,
-        posList :[{row:3, column:0, direction:'R'}]
+        guardianEncounter: 50,
+        posList :[{row:1, column:25, direction:'L'}]
     },
     Map14: {
         src: require('../maps/map14'),
         links:{
             'T':'Map9'
         },
-        guardianEncounter: 0,
-        posList:[{row: 7, column:0 , direction:'R'}]
+        guardianEncounter: 25,
+        posList:[{row: 1, column:24 , direction:'R'}]
     },
     Map7: {
         src: require('../maps/map7'),
@@ -94,7 +94,9 @@ module.exports = {
         src: require('../maps/map10'),
         links:{
             'B':'Map8'
-        }
+        },
+        guardianEncounter: 60,
+        posList :[{row:1 , column: 5, direction:'L'}]
     },Map6: {
         src: require('../maps/map6'),
         links:{
@@ -133,5 +135,21 @@ module.exports = {
         }
         ,guardianEncounter:100,
         posList : [{row: 0, column:15, direction:'B' }]
+    },
+    Map15: {
+        src: require('../maps/map15'),
+        links:{
+            'T':'Map11'
+        },
+        guardianEncounter: 80,
+        posList:[{row: 1, column:5 , direction:'L'}]
+    },
+    Map12: {
+        src: require('../maps/map12'),
+        links:{
+            'L':'Map11'
+        },
+        guardianEncounter: 80,
+        posList:[{row: 1, column:36 , direction:'R'}]
     }
 };
