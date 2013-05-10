@@ -122,14 +122,14 @@ module.exports = (function(){
         if(this._startRow < 0)
             this._startRow = 0;
         else if(this._player.row + this._idealCameraRowRange >= this.totalRow)
-            this._startRow = this.totalRow - (this. _idealCameraRowRange * 2) -1;
+            this._startRow = this.totalRow - (this. _idealCameraRowRange * 2) ;
 
 
         this._startColumn = this._player.column- this. _idealCameraColRange ;
         if(this._startColumn <0)
             this._startColumn =0;
         else if(this._player.column + this. _idealCameraColRange >= this.totalColumn)
-            this._startColumn = this.totalColumn - (this. _idealCameraColRange *2) ;
+            this._startColumn = this.totalColumn - (this. _idealCameraColRange *2);
 
 
 
