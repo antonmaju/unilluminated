@@ -9,5 +9,6 @@ module.exports = {
     PlayerDirections: require('../playerDirections'),
     PlayerTypes : require('../playerTypes'),
     FilterManager : require('./filterManager'),
+    GameStates : require('../gameStates'),
     Game : require('./game')
 };

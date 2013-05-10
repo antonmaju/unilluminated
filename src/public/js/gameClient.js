@@ -136,7 +136,7 @@ $(function(){
 
     $container.show();
     resizeArea();
-    game.emit('initializing');
+    game.setState(GameSystem.GameStates.Initializing);
 
 });
 

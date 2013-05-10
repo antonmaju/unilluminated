@@ -3,6 +3,7 @@ var Game = require('../game'),
     MapView = require('./views/mapView'),
     AssetFiles = require('../assetFiles'),
     imageSource = require('../imageSource'),
+    GameStates = require('../gameStates'),
     playerFactory = require('./playerFactory'),
     Directions = require('../playerDirections'),
     PlayerActions = require('../playerActions'),
@@ -191,10 +192,10 @@ Game.prototype._initEventHandlers = function(){
 
     this._initDOMEventHandlers();
 
-    this.on('initializing', function(data){
+    function initializing(){
 
-        this._viewManager.setView('loading');
-        this.render(+ new Date);
+        self._viewManager.setView('loading');
+        self.render(+ new Date);
 
         function emitResourceRequest(){
             socket.emit('resourceRequest', {
@@ -203,7 +204,7 @@ Game.prototype._initEventHandlers = function(){
             });
         }
 
-        this._imageManager.download(function(){
+        self._imageManager.download(function(){
             soundManager.setup({
                 url:'/soundmanager2/swf/',
                 debugMode: false,
@@ -215,11 +216,26 @@ Game.prototype._initEventHandlers = function(){
                     self._audioManager.enabled = false;
                     emitResourceRequest();
                 }
-
             });
-
         });
+    }
+
+    this.on('stateChanged', function(data){
+
+        switch(data.newState)
+        {
+            case GameStates.Initializing:
+                initializing();
+                break;
+
+            case GameStates.Finished:
+                document.location.href = '/game/'+self.options.id;
+                break;
+        }
+
     });
+
+
 
     self.on('evaluatingSound', function(){
         if(this._chasers <= 0){
@@ -243,7 +259,7 @@ Game.prototype._initEventHandlers = function(){
     });
 
     socket.on('gameEnded', function(data){
-        document.location.href = '/game/'+self.options.id;
+        self.setState(GameStates.Finished);
     });
 
     this._initPlayerHandlers();
@@ -499,7 +515,9 @@ Game.prototype.render = function(step){
         });
 
         this._lastDrawTime = time;
-        this._evaluateState();
+
+        if(this._state != GameStates.Finished)
+            this._evaluateState();
     }
 
     requestNextAnimationFrame(function(tm){self.render(tm);});

@@ -72,7 +72,6 @@ function setSocketIoStore(io){
     }));
 }
 
-
 app.configure(function(){
     app.set('port', nconf.get('port') ||   3000);
     app.set('views', __dirname + '/views');
@@ -90,8 +89,6 @@ app.configure(function(){
     app.use(express.methodOverride());
     app.use(app.router);
     app.use(express.static(path.join(__dirname, 'public')));
-
-
 });
 
 require('./core/sideTasks')(app);
