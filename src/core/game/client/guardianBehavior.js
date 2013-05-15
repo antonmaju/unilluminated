@@ -117,7 +117,6 @@ module.exports = (function(){
         }
         else
             this._counter++;
-        console.log(this._state);
         this._behavior.getNextMove();
     };
 
@@ -135,7 +134,6 @@ module.exports = (function(){
                     this._behavior = this._wanderBehavior;
                     break;
             }
-            console.log(this._position);
             this._behavior.setPosition(this._position);
         });
 

@@ -120,7 +120,7 @@ module.exports = {
             'B':'Map4',
             'L':'Map1'
         },
-        guardianEncounter: 100,
+        guardianEncounter: 5,
         posList :[{row: 5,column:2, direction:'B' }]
     },
     Map73: {
