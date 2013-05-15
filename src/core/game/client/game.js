@@ -18,26 +18,26 @@ var Game = require('../game'),
     ViewManager = require('./viewManager'),
     InputBuffer = require('./inputBuffer');
 
-var isMobile = {
-    Android: function() {
-        return navigator.userAgent.match(/Android/i);
-    },
-    BlackBerry: function() {
-        return navigator.userAgent.match(/BlackBerry/i);
-    },
-    iOS: function() {
-        return navigator.userAgent.match(/iPhone|iPad|iPod/i);
-    },
-    Opera: function() {
-        return navigator.userAgent.match(/Opera Mini|Opera Mobi/i);
-    },
-    Windows: function() {
-        return navigator.userAgent.match(/IEMobile/i);
-    },
-    any: function() {
-        return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
-    }
-};
+    var isMobile = {
+        Android: function() {
+            return navigator.userAgent.match(/Android/i);
+        },
+        BlackBerry: function() {
+            return navigator.userAgent.match(/BlackBerry/i);
+        },
+        iOS: function() {
+            return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+        },
+        Opera: function() {
+            return navigator.userAgent.match(/Opera Mini|Opera Mobi/i);
+        },
+        Windows: function() {
+            return navigator.userAgent.match(/IEMobile/i);
+        },
+        any: function() {
+            return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
+        }
+    };
 
 
 /**
@@ -105,6 +105,9 @@ Game.prototype._initSinglePlayerHandlers = function(){
             case PlayerActions.MoveBottom:
                 self._player.move(Directions.Bottom);
                 break;
+            case PlayerActions.Hide:
+                self._player.toggleHide();
+                break;
         }
     });
 };
@@ -128,9 +131,8 @@ Game.prototype._initPlayerHandlers = function(){
 
         $('#btnAct')
             .click(function(evt){
-                console.log("action");
+                self._inputBuffer.addInput(PlayerActions.Hide);
             });
-
         $('#btnDirectionUp')
             .click(function(evt){
                 self._inputBuffer.addInput(PlayerActions.MoveTop);
@@ -173,6 +175,9 @@ Game.prototype._initPlayerHandlers = function(){
                 break;
             case 38:
                 self._inputBuffer.addInput(PlayerActions.MoveTop);
+                break;
+            case 32:
+                self._inputBuffer.addInput(PlayerActions.Hide);
                 break;
         }
 

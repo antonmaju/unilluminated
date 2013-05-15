@@ -162,6 +162,19 @@ module.exports = (function(){
      */
     Player.prototype.paint= function(time){
 
+        if(this.mode == PlayerModes.Hide)
+        {
+            var diff =Math.ceil((time - this._lastHideTime)/1000);
+            this._currentCountdown = this.options.maxCountdown - diff;
+            if(this._currentCountdown < 0)
+                this._currentCountdown = 0;
+        }
+        if(this.mode == PlayerModes.Hide && this._currentCountdown == 0)
+        {
+            this.toggleHide();
+            return;
+        }
+
         this.emit('beforePaint', time);
 
         var gridSize = this.options.mapRenderer.gridSize;
@@ -170,9 +183,21 @@ module.exports = (function(){
         var context = this.options.context;
         var canvas = context.canvas;
 
-        var imgSource = ImageSource[this.options.imageKeys[this._activeDirection]];
 
+        var imgSource = ImageSource[this.options.imageKeys[this._activeDirection]];
+        if(this.mode == PlayerModes.Hide )
+        {
+            imgSource = ImageSource[this.options.camouflageKey];
+            var fontSize = Math.ceil(canvas.width /40);
+            context.save();
+            context.textAlign = 'left';
+            context.fillStyle = 'red';
+            context.font = fontSize+'px Arial';
+            context.fillText(this._currentCountdown+ ' s', canvas.width *.1, canvas.height *.9);
+            context.restore();
+        }
         var img = this.options.imageManager.get(imgSource.src);
+
 
         context.drawImage(img,
             0, imgSource.top, imgSource.width, imgSource.height,
@@ -211,6 +236,10 @@ module.exports = (function(){
                     break;
                 }
             }
+        }
+        if(this.mode == PlayerModes.Hide )
+        {
+            walkable = false;
         }
         return walkable;
 
@@ -309,6 +338,24 @@ module.exports = (function(){
         return direction;
     };
 
+    /**
+     * Switch player modes to hide or wander
+     */
+    Player.prototype.toggleHide = function(){
+
+        if(this.mode == PlayerModes.Hide )
+        {
+            this.mode = PlayerModes.Wander;
+        }
+        else
+        {
+            this.mode = PlayerModes.Hide;
+            this._lastHideTime = + new Date;
+            this._currentCountdown = this.options.maxCountdown;
+        }
+       // alert(this.mode);
+
+    };
 
     Player.prototype.destroy = function(){
         this.removeAllListeners();
