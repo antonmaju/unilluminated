@@ -252,5 +252,10 @@ module.exports ={
         srcKey:'end-of-area',
         bgKey : 'grass-road',
         isWalkable : true
+    },
+    '47': {
+        desc: 'hiding-stone',
+        srcKey: 'stone',
+        isWalkable : false
     }
 };

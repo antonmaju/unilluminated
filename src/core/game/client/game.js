@@ -510,8 +510,8 @@ Game.prototype.render = function(step){
                 var player = self._players[i];
                 if(player.behavior)
                     player.behavior.getNextMove();
-
                 player.paint(time);
+                //console.log(player.mode);
             }
         }
 
