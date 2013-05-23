@@ -57,6 +57,21 @@ function getOppositeDirection(direction){
             return Directions.Top;
     }
 }
+/**
+ * View timer when player hide
+ * @param options
+ */
+function viewHideTimer(options){
+
+    var canvas = options.context.canvas;
+    var fontSize = Math.ceil(canvas.width /40);
+    options.context.save();
+    options.context.textAlign = 'left';
+    options.context.fillStyle = 'red';
+    options.context.font = fontSize+'px Arial';
+    options.context.fillText(options.player._currentCountdown+ ' s', canvas.width *.1, canvas.height *.9);
+    options.context.restore();
+}
 
 Game.prototype._initDependencies = function(){
     this._filterManager = new FilterManager();
@@ -296,7 +311,6 @@ Game.prototype._initViews = function(){
     }));
 };
 
-
 Game.prototype._initPlayers = function(){
     var self = this;
     var playersInfo = this._current.players;
@@ -511,9 +525,17 @@ Game.prototype.render = function(step){
                 if(player.behavior)
                     player.behavior.getNextMove();
                 player.paint(time);
+                //
+                if (player.mode == PlayerMode.Hide ){
+                    var optViewHide={};
+                    optViewHide.context = context;
+                    optViewHide.player = player;
+                    viewHideTimer(optViewHide);
+                }
                 //console.log(player.mode);
             }
         }
+
 
         self._filterManager.get().applyPostRenderGame({
             context: context

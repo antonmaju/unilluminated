@@ -6,7 +6,7 @@ module.exports = (function(){
     var ImageSource = require('../imageSource');
     var event = require('events');
     var PlayerModes = require('./playerMode');
-
+    var FilterManager = require('./filterManager');
     /**
      * This class encapsulates player information
      * @param {object} options
@@ -88,6 +88,14 @@ module.exports = (function(){
      */
     Player.prototype.setDirection = function(direction){
         this._activeDirection = direction;
+    };
+
+    Player.prototype.setFilter = function(filter){
+        //var playerFilter = options.
+        playerFilter  =  require('./filters/'+ filter +'Filter');
+        this.playerFilter = new playerFilter();
+        //console.log(this.playerFilter);
+        //var opt = {};
     };
 
     /**
@@ -197,59 +205,18 @@ module.exports = (function(){
                 this._hideCanvas.width = this.getWidthSize() *gridSize;
                 this._hideCanvas.height = this.getHeightSize() * gridSize;
                 this._hideContext = this._hideCanvas.getContext('2d');
+
                 var hideImg = this.options.imageManager.get(imgSource.src);
                 this._hideContext.drawImage(hideImg,0, imgSource.top, imgSource.width, imgSource.height,
-                0,0,this._hideCanvas.width,this._hideCanvas.height);
-                //////////////////////////////////// nyoba dark stone /
+                    0,0,this._hideCanvas.width,this._hideCanvas.height);
 
 
-                    var imageData = this._hideContext.getImageData(0,0,
-                        this.getWidthSize() *gridSize,this.getHeightSize() * gridSize);
-
-                    var data = imageData.data;
-                    
-                    var saturationQuantity = 0.7;
-
-                    var blend =[54,68,96,174]
-
-                    //apply saturation then overlay with #1b2230 for night effect
-                    for(var i=0; i<= data.length -4; i+=4)
-                    {
-                        if(data[i+3] == 0)
-                            continue;
-
-
-                        var maxValue = Math.max(data[i], data[i+1], data[i+2]);
-
-                        if(data[i] !=  maxValue)
-                            data[i] += (maxValue - data[i]) * saturationQuantity;
-
-                        if(data[i+1] !=  maxValue)
-                            data[i+1] += (maxValue - data[i+1]) * saturationQuantity;
-
-                        if(data[i+2] != maxValue)
-                            data[i+2] += (maxValue - data[i+2]) * saturationQuantity;
-
-
-                        for(var j=i; j<=i+3; j++)
-                            data[j] =(data[j]> 128) ? (2 * blend[j-i] * data[j] / 255) : (255 - 2 * (255 - blend[j-i]) * (255 - data[j]) / 255);
-
-                    }
-
-                    this._hideContext.putImageData(imageData,0,0);
-
-
-                ///////////////////////////////////////////////////////
+                this.setFilter(this.map.filter);
+                this.playerFilter.applyFilterForPlayer({
+                    context : this._hideContext
+                });
 
             }
-
-            var fontSize = Math.ceil(canvas.width /40);
-            context.save();
-            context.textAlign = 'left';
-            context.fillStyle = 'red';
-            context.font = fontSize+'px Arial';
-            context.fillText(this._currentCountdown+ ' s', canvas.width *.1, canvas.height *.9);
-            context.restore();
 
 
             context.drawImage(this._hideCanvas,
