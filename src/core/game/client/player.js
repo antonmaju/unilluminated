@@ -89,13 +89,20 @@ module.exports = (function(){
     Player.prototype.setDirection = function(direction){
         this._activeDirection = direction;
     };
-
+    /**
+     * set filter for player
+     * @param filter
+     */
     Player.prototype.setFilter = function(filter){
-        //var playerFilter = options.
-        playerFilter  =  require('./filters/'+ filter +'Filter');
+        if( filter == 'none' )
+        {
+            var playerFilter  =  require('./filters/filterBase');
+        }
+        else{
+            var playerFilter  =  require('./filters/'+ filter +'Filter');
+        }
         this.playerFilter = new playerFilter();
-        //console.log(this.playerFilter);
-        //var opt = {};
+
     };
 
     /**
@@ -390,6 +397,7 @@ module.exports = (function(){
 
     Player.prototype.destroy = function(){
         this.removeAllListeners();
+        this._hideCanvas = null;
     };
 
     return Player;

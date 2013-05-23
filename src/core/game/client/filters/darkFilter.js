@@ -52,7 +52,10 @@ module.exports = (function(){
 
         context.putImageData(imageData,0,0);
     };
-
+    /**
+     * Apply filter for player (when hide)
+     * @param options
+     */
     DarkFilter.prototype.applyFilterForPlayer= function (options){
         var context = options.context;
         var canvas = context.canvas;
