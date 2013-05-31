@@ -2,9 +2,15 @@ var testSettings = require('../testSettings');
 
 var should = require('should'),
     mongo = require('mongodb'),
+    coreServices = require('../../core/coreServices'),
+    controllerHelper = coreServices.controllerHelpers,
     gameCommands = require('../../core/commands/gameCommands'),
-    gameController = require('../../controllers/gameController');
-
+    gameController = require('../../controllers/gameController'),
+    GameStates = require('../../core/game/gameStates'),
+    GameSystem = require('../../core/game/server/serverRegistry'),
+    PlayerDirections = GameSystem.PlayerDirections,
+    typeConverter = coreServices.typeConverter,
+    filters = coreServices.filters;
 
 describe('gameController', function(){
 
@@ -14,6 +20,14 @@ describe('gameController', function(){
 
     function next(){
         nextTriggered = true;
+    }
+    function getCurrentUserId(req){
+        var currentUserId = req.session.userId;
+
+        if (typeof(currentUserId) == 'string')
+            currentUserId = typeConverter.fromString.toObjectId(currentUserId);
+
+        return currentUserId;
     }
 
     beforeEach(function(done){
@@ -96,7 +110,6 @@ describe('gameController', function(){
             gameCommands.getById = function(game, result){
                 result({ });
             };
-
             gameController.index.handler(req, resp, next);
             gameCommands.getById = originalMethod;
             resp.url.should.equal('/main-menu');
@@ -107,12 +120,24 @@ describe('gameController', function(){
         it('render page if data found', function(done){
             var id = new mongo.ObjectID();
             req.params.id = id.toString();
+            var playerId = getCurrentUserId(req);
             var originalMethod = gameCommands.getById;
             gameCommands.getById = function(game, result){
                 result({
                 doc:{
-                    id  :id,
-                    mode: 1
+                      //id  :id,
+                      mode: '1p',
+                      players : {
+                          girl : {
+                              id :  playerId,
+                              type : GameSystem.PlayerTypes.Girl,
+                              direction: PlayerDirections.Left,
+                              map : 'Map1',
+                              //auto: !isHeroine,
+                              trace: true
+                          }
+                      }
+
                 }});
             };
 

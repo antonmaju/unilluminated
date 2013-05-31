@@ -7,7 +7,6 @@ var config = require('../config'),
  */
 exports.getClient = function(callback){
     var client = new mongo.Db(config.mongoDatabase, new mongo.Server(config.mongoServer,config.mongoPort,{}), {safe: true});
-
     client.open(function(err, p_client){
         if(err)
         {
