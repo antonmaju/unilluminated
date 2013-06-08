@@ -1,0 +1,15 @@
+extends ../layout
+
+block privateCss
+    != html.cssLoader(['/stylesheets/home.css'])
+
+block content
+    #home.main-screen
+        h2
+            img#logo(alt='Unilluminated', src='#{config.assetsUrl}/images/game/title.png')
+            div
+                a.button(href='/register') Start
+
+
+
+

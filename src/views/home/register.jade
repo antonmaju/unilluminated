@@ -1,0 +1,21 @@
+extends ../layout
+
+block privateCss
+    != html.cssLoader(['/stylesheets/home.css'])
+
+block content
+    #naming.main-screen
+
+        form(method='post')
+
+            fieldset
+                .label Please input your character name
+
+                input#name(type='text', name='name')
+
+                - if (locals.errors && locals.errors.length > 0)
+                    .error
+                        = locals.errors[0].message
+
+                div
+                    input.button(type='submit', value='Register')

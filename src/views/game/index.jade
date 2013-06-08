@@ -1,0 +1,29 @@
+extends ../layout
+
+block privateCss
+    != html.cssLoader(['/stylesheets/game.css'])
+
+block privateJs
+    script(src='/socket.io/socket.io.js')
+    script(type='text/javascript')
+        var settings ={
+            webUrl : '!{config.webUrl}',
+            id     : '!{model.id}',
+            userId : '!{model.userId}',
+            mode   : '!{model.mode}',
+            assetsUrl:'!{config.assetsUrl}'
+        }
+    != html.jsLoader(['/js/requestNextAnimationFrame.js','/soundmanager2/script/soundmanager2-jsmin.js','/js/gameClient.min.js'])
+
+
+block content
+    #container
+        canvas#canvas
+            |Your browser does not support canvas
+    div#btnContainerAll
+            #btnDirectionUp.btn
+            #btnDirectionLeft.btn
+            #btnDirectionRight.btn
+            #btnDirectionDown.btn
+    div#btnContainerRight
+            #btnAct.btnAction
