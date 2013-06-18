@@ -94,12 +94,10 @@ module.exports = (function(){
      * @param filter
      */
     Player.prototype.setFilter = function(filter){
-        if( filter == 'none' )
+        var playerFilter  =  require('./filters/filterBase');
+        if(filter != 'none' )
         {
-            var playerFilter  =  require('./filters/filterBase');
-        }
-        else{
-            var playerFilter  =  require('./filters/'+ filter +'Filter');
+            playerFilter  =  require('./filters/'+ filter +'Filter');
         }
         this.playerFilter = new playerFilter();
 

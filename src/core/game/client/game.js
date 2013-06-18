@@ -532,7 +532,6 @@ Game.prototype.render = function(step){
                     optViewHide.player = player;
                     viewHideTimer(optViewHide);
                 }
-                //console.log(player.mode);
             }
         }
 

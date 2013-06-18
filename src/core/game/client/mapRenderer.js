@@ -94,7 +94,6 @@ module.exports = (function(){
 
         if(startClipX + canvas.width > this._cacheCanvas.width)
         {
-            console.log('test');
             startClipX = this._cacheCanvas.width - canvas.width;
         }
 
