@@ -6,7 +6,7 @@ module.exports = (function(){
     var ImageSource = require('../imageSource');
     var event = require('events');
     var PlayerModes = require('./playerMode');
-
+    var FilterManager = require('./filterManager');
     /**
      * This class encapsulates player information
      * @param {object} options
@@ -89,6 +89,19 @@ module.exports = (function(){
     Player.prototype.setDirection = function(direction){
         this._activeDirection = direction;
     };
+    /**
+     * set filter for player
+     * @param filter
+     */
+    Player.prototype.setFilter = function(filter){
+        var playerFilter  =  require('./filters/filterBase');
+        if(filter != 'none' )
+        {
+            playerFilter  =  require('./filters/'+ filter +'Filter');
+        }
+        this.playerFilter = new playerFilter();
+
+    };
 
     /**
      * Sets player direction based on position
@@ -162,6 +175,19 @@ module.exports = (function(){
      */
     Player.prototype.paint= function(time){
 
+        if(this.mode == PlayerModes.Hide)
+        {
+            var diff = Math.ceil((time - this._lastHideTime)/1000);
+            this._currentCountdown = this.options.maxCountdown - diff;
+            if(this._currentCountdown < 0)
+                this._currentCountdown = 0;
+        }
+        if(this.mode == PlayerModes.Hide && this._currentCountdown == 0)
+        {
+            this.toggleHide();
+            return;
+        }
+
         this.emit('beforePaint', time);
 
         var gridSize = this.options.mapRenderer.gridSize;
@@ -170,14 +196,49 @@ module.exports = (function(){
         var context = this.options.context;
         var canvas = context.canvas;
 
+
         var imgSource = ImageSource[this.options.imageKeys[this._activeDirection]];
 
-        var img = this.options.imageManager.get(imgSource.src);
 
-        context.drawImage(img,
-            0, imgSource.top, imgSource.width, imgSource.height,
-            curColumn * gridSize,curRow * gridSize,
-            this.getWidthSize() *gridSize,this.getHeightSize() * gridSize);
+        if(this.mode == PlayerModes.Hide )
+        {
+            imgSource = ImageSource[this.options.camouflageKey];
+
+            if(! this._hideCanvas)
+            {
+                this._hideCanvas = document.createElement('canvas');
+                this._hideCanvas.width = this.getWidthSize() *gridSize;
+                this._hideCanvas.height = this.getHeightSize() * gridSize;
+                this._hideContext = this._hideCanvas.getContext('2d');
+
+                var hideImg = this.options.imageManager.get(imgSource.src);
+                this._hideContext.drawImage(hideImg,0, imgSource.top, imgSource.width, imgSource.height,
+                    0,0,this._hideCanvas.width,this._hideCanvas.height);
+
+
+                this.setFilter(this.map.filter);
+                this.playerFilter.applyFilterForPlayer({
+                    context : this._hideContext
+                });
+
+            }
+
+
+            context.drawImage(this._hideCanvas,
+                0, 0, this._hideCanvas.width, this._hideCanvas.height,
+                curColumn * gridSize,curRow * gridSize,
+                this.getWidthSize() *gridSize,this.getHeightSize() * gridSize);
+        }
+        else{
+            var img = this.options.imageManager.get(imgSource.src);
+
+            context.drawImage(img,
+                0, imgSource.top, imgSource.width, imgSource.height,
+                curColumn * gridSize,curRow * gridSize,
+                this.getWidthSize() *gridSize,this.getHeightSize() * gridSize);
+        }
+
+
 
         this.emit('afterPaint', time);
     };
@@ -211,6 +272,10 @@ module.exports = (function(){
                     break;
                 }
             }
+        }
+        if(this.mode == PlayerModes.Hide )
+        {
+            walkable = false;
         }
         return walkable;
 
@@ -309,9 +374,28 @@ module.exports = (function(){
         return direction;
     };
 
+    /**
+     * Switch player modes to hide or wander
+     */
+    Player.prototype.toggleHide = function(){
+
+        if(this.mode == PlayerModes.Hide )
+        {
+            this.mode = PlayerModes.Wander;
+        }
+        else
+        {
+            this.mode = PlayerModes.Hide;
+            this._lastHideTime = + new Date;
+            this._currentCountdown = this.options.maxCountdown;
+        }
+       // alert(this.mode);
+
+    };
 
     Player.prototype.destroy = function(){
         this.removeAllListeners();
+        this._hideCanvas = null;
     };
 
     return Player;

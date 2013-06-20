@@ -18,26 +18,26 @@ var Game = require('../game'),
     ViewManager = require('./viewManager'),
     InputBuffer = require('./inputBuffer');
 
-var isMobile = {
-    Android: function() {
-        return navigator.userAgent.match(/Android/i);
-    },
-    BlackBerry: function() {
-        return navigator.userAgent.match(/BlackBerry/i);
-    },
-    iOS: function() {
-        return navigator.userAgent.match(/iPhone|iPad|iPod/i);
-    },
-    Opera: function() {
-        return navigator.userAgent.match(/Opera Mini|Opera Mobi/i);
-    },
-    Windows: function() {
-        return navigator.userAgent.match(/IEMobile/i);
-    },
-    any: function() {
-        return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
-    }
-};
+    var isMobile = {
+        Android: function() {
+            return navigator.userAgent.match(/Android/i);
+        },
+        BlackBerry: function() {
+            return navigator.userAgent.match(/BlackBerry/i);
+        },
+        iOS: function() {
+            return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+        },
+        Opera: function() {
+            return navigator.userAgent.match(/Opera Mini|Opera Mobi/i);
+        },
+        Windows: function() {
+            return navigator.userAgent.match(/IEMobile/i);
+        },
+        any: function() {
+            return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
+        }
+    };
 
 
 /**
@@ -56,6 +56,21 @@ function getOppositeDirection(direction){
         case Directions.Bottom:
             return Directions.Top;
     }
+}
+/**
+ * View timer when player hide
+ * @param options
+ */
+function viewHideTimer(options){
+
+    var canvas = options.context.canvas;
+    var fontSize = Math.ceil(canvas.width /40);
+    options.context.save();
+    options.context.textAlign = 'left';
+    options.context.fillStyle = 'red';
+    options.context.font = fontSize+'px Arial';
+    options.context.fillText(options.player._currentCountdown+ ' s', canvas.width *.1, canvas.height *.9);
+    options.context.restore();
 }
 
 Game.prototype._initDependencies = function(){
@@ -105,6 +120,9 @@ Game.prototype._initSinglePlayerHandlers = function(){
             case PlayerActions.MoveBottom:
                 self._player.move(Directions.Bottom);
                 break;
+            case PlayerActions.Hide:
+                self._player.toggleHide();
+                break;
         }
     });
 };
@@ -128,9 +146,8 @@ Game.prototype._initPlayerHandlers = function(){
 
         $('#btnAct')
             .click(function(evt){
-                console.log("action");
+                self._inputBuffer.addInput(PlayerActions.Hide);
             });
-
         $('#btnDirectionUp')
             .click(function(evt){
                 self._inputBuffer.addInput(PlayerActions.MoveTop);
@@ -173,6 +190,9 @@ Game.prototype._initPlayerHandlers = function(){
                 break;
             case 38:
                 self._inputBuffer.addInput(PlayerActions.MoveTop);
+                break;
+            case 32:
+                self._inputBuffer.addInput(PlayerActions.Hide);
                 break;
         }
 
@@ -290,7 +310,6 @@ Game.prototype._initViews = function(){
         mapRenderer: this._mapRenderer
     }));
 };
-
 
 Game.prototype._initPlayers = function(){
     var self = this;
@@ -505,10 +524,17 @@ Game.prototype.render = function(step){
                 var player = self._players[i];
                 if(player.behavior)
                     player.behavior.getNextMove();
-
                 player.paint(time);
+                //
+                if (player.mode == PlayerMode.Hide ){
+                    var optViewHide={};
+                    optViewHide.context = context;
+                    optViewHide.player = player;
+                    viewHideTimer(optViewHide);
+                }
             }
         }
+
 
         self._filterManager.get().applyPostRenderGame({
             context: context

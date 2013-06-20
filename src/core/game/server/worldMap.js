@@ -6,7 +6,8 @@ module.exports = {
             'R':'Map72',
             'L' : '*'
         },
-        guardianEncounter: 0
+        guardianEncounter: 0,
+        posList :[{row: 6,column:20, direction:'R' }]
     },
     Map2: {
         src: require('../maps/map2'),
@@ -118,7 +119,9 @@ module.exports = {
             'R':'Map73',
             'B':'Map4',
             'L':'Map1'
-        }
+        },
+        guardianEncounter: 5,
+        posList :[{row: 5,column:2, direction:'B' }]
     },
     Map73: {
         src: require('../maps/map73'),

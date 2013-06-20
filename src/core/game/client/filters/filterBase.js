@@ -53,6 +53,13 @@ module.exports = function(){
          */
         applyPostRenderGame : function(options){
 
+        },
+        /**
+         * Performs rendering for player when hide
+         * @param {Object} options
+         */
+         applyFilterForPlayer : function(options){
+
         }
     };
 
