@@ -49,6 +49,7 @@ module.exports = (function(){
      */
     WanderBehavior.prototype.setPosition= function(pos){
         this._position = pos;
+        this.reset();
     };
 
     /***

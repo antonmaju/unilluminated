@@ -99,17 +99,17 @@ module.exports = (function(){
      */
     GuardianBehavior.prototype.getNextMove = function(){
         var enemy = this.getEnemy();
+
         if(this._counter >= this.options.evaluationStep){
             var seen = GameUtils.isPlayerSeen(enemy, this._position.row, this._position.column,
                 this.options.sightRadius);
 
             this._counter = 0;
-            if(seen && this._state == PlayerMode.Wander){
+            if(seen && this._state == PlayerMode.Wander  ){
                 this.emit('stateChanged', { oldState: this._state , newState: PlayerMode.Chase});
             }else if(! seen && this._state == PlayerMode.Chase){
                 this.emit('stateChanged',  { oldState: this._state, newState: PlayerMode.Wander});
             }
-
             if(this._state == PlayerMode.Chase)
             {
                 this._behavior.setTarget({row: enemy.row, column: enemy.column});
@@ -117,7 +117,6 @@ module.exports = (function(){
         }
         else
             this._counter++;
-
         this._behavior.getNextMove();
     };
 
