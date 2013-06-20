@@ -1,7 +1,9 @@
 The Unilluminated
 =============
 
-The Unilluminated is a simple 2d HTML5 game. You can try the demo page [here](http://www.unilluminated.com)
+The Unilluminated is a simple 2d HTML5 game. You can try the demo page [here](http://www.unilluminated.com) . 
+
+The user documentation is [here](http://antonmaju.github.io/unilluminated) .
 
 ## Requirements ##
 - Mongo Db 2.2 or higher
