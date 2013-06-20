@@ -117,7 +117,6 @@ exports.save = function(model, callback){
 exports.getById = function(id, callback){
     var gameId = id;
 
-
     if(typeof gameId == 'string')
         gameId = typeConverter.fromString.toObjectId(gameId);
 

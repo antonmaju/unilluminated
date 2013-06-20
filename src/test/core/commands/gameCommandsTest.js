@@ -11,12 +11,18 @@ var should = require('should'),
 
 var collName = 'Game';
 
-config.mongoDatabase = 'unilluminated-test';
+config.sessionStore  = "mongo";
+config.socketIoStore  = "memory";
+config.mongoServer   = '127.0.0.1';
+config.mongoPort     = 27017;
+config.mongoDatabase = "unilluminated-test";
+config.assetsUrl     = "http://localhost:3000";
+config.webUrl        = "http://localhost";
+config.sessionSecret = "your session secret";
 
 describe('GameCommands', function(){
 
     describe('#create()', function(){
-
         beforeEach(function(done){
             testHelpers.clear(collName, done);
         });
