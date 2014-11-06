@@ -1,0 +1,14 @@
+var app = require('../app');
+var debug = require('debug')('unilluminated');
+var GameEngine = require('../core/game/server/engine');
+var controllerRegistry = require('../controllers/controllerRegistry');
+
+
+var server = app.listen(app.get('port'));
+var io = require('socket.io')(server);
+
+controllerRegistry.register(app);
+GameEngine.start(app, io);
+
+console.log(' server and io started');
+console.log(app.get('env'));

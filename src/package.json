@@ -1,20 +1,30 @@
 {
     "name": "unilluminated",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "description": "HTML5 game",
     "private": true,
     "scripts": {
-        "start": "node app"
+        "start": "node bin/www"
     },
     "dependencies": {
-        "express": "3.0.6",
-        "jade": "*",
-        "socket.io": "= 0.9.10",
-        "less-middleware": "= 0.1.8",
-        "mongodb": "= 1.1.11",
-        "should" : ">= 1.2.1",
-        "nconf" : ">= 0.6.7",
-        "redis": "0.7.x",
-        "connect-redis": ">= 1.4.5"
+        "express": "~4.10.1",
+        "jade": "~1.7.0",
+        "socket.io": "~1.2.0",
+        "mongodb": "~1.4.19",
+        "should" : "~4.1.0",
+        "nconf" : "~0.6.9",
+        "cookie-session":"~1.0.2",
+        "body-parser": "~1.9.1",
+        "cookie-parser": "~1.3.0",
+        "q": "~1.0.1",
+        "morgan": "~1.4.0",
+        "serve-favicon": "~2.1.6",
+        "debug": "~2.1.0"
+    },
+    "devDependencies":{
+        "grunt": "~ 0.4.5",
+        "grunt-contrib-less": "~0.12.0",
+        "grunt-browserify":"~3.2.0",
+        "grunt-contrib-uglify":"~0.6.0"
     }
 }

@@ -5,14 +5,14 @@ block privateCss
 
 block privateJs
     script(src='/socket.io/socket.io.js')
-    script(type='text/javascript')
+    script(type='text/javascript').
         var settings ={
             webUrl : '!{config.webUrl}',
             id     : '!{model.id}',
             userId : '!{model.userId}',
             mode   : '!{model.mode}',
-            assetsUrl:'!{config.assetsUrl}'
-        }
+            assetsUrl : '!{config.assetsUrl}'
+        };
     != html.jsLoader(['/js/requestNextAnimationFrame.js','/soundmanager2/script/soundmanager2-jsmin.js','/js/gameClient.min.js'])
 
 
